@@ -1,0 +1,272 @@
+---
+title: "Research Workshop Marketing Analysis"
+author: "Claire Curry (STEM Services)"
+date: '2023-01-09'
+output:
+  word_document: 
+    reference_docx: word_styles.docx
+    fig_width: 10
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2)
+# Load custom function for "other" block
+source("ggwordcloud_analysis_complete_ou_colors.R")
+# set working directory to be one above the scripts folder.  but is relative to .rmd file??
+```
+
+
+```{r data_import, include=FALSE}
+
+# Creating and splitting current levels for marketing
+marketing_current_categories <- c("Announcement in Class by Instructor",
+                                  "Announcement in Class by Librarian",
+                                  "Non-Library Calendar or Newsletter",
+                                  "Another Libraries Workshop",
+                                  "Walk-in",
+                                  "Digital Signage in Non-Library Building",
+                                  "Digital Signage in a Library Building",
+                                  "Social Media - Other",
+                                  "Social Media - Instagram",
+                                  "Social Media - Facebook",
+                                  "Social Media - Twitter",
+                                  "Personal recommendation from OU Librarian",
+                                  "Class requirement",
+                                  "Departmental/program requirement",
+                                  "OU Libraries website",
+                                  "Direct Email from OU Librarian to Departmental Listserv",
+                                  "Direct Email from OU Libraries Workshop Listserv",
+                                  "Direct Email from OU Libraries (Source Unknown)",
+                                  "Flyer (Paper or Digital Unspecified)",
+                                  "Flyer (Paper or Paper Signage)",
+                                  "Supervisor (Forwarded email, word of mouth)",
+                                  "Colleagues (Forwarded email, word of mouth)")
+
+
+# Event registration 
+Room339 <- read.csv("../raw_data/preworkshop/Room339_lc_events_20230105043223.csv")
+RoomLL123 <- read.csv("../raw_data/preworkshop/LL123_lc_events_20230105043507.csv")
+RoomGeneral <- read.csv("../raw_data/preworkshop/General_lc_events_20230105043258.csv")
+RoomLearningLabClassroom <- read.csv("../raw_data/preworkshop/LearningLabClassroom_lc_events_20230105043409.csv")
+_
+# Merge
+Registered <- rbind(Room339,
+                    RoomLL123,
+                    RoomGeneral,
+                    RoomLearningLabClassroom
+)
+
+## Convert old categories to equivalent new
+Registered$How.did.you.hear.about.this.workshop.[Registered$How.did.you.hear.about.this.workshop.=="Email from University Libraries"] <- "Direct Email from OU Libraries (Source Unknown)"
+Registered$How.did.you.hear.about.this.workshop.[Registered$How.did.you.hear.about.this.workshop.=="Colleagues"] <- "Colleagues (Forwarded email, word of mouth)"
+Registered$How.did.you.hear.about.this.workshop.[Registered$How.did.you.hear.about.this.workshop.=="Supervisor"] <- "Supervisor (Forwarded email, word of mouth)"
+Registered$How.did.you.hear.about.this.workshop.[Registered$How.did.you.hear.about.this.workshop.=="Department/Program Requirement"] <- "Departmental/program requirement"
+Registered$How.did.you.hear.about.this.workshop.[Registered$How.did.you.hear.about.this.workshop.=="Flyer"] <- "Flyer (Paper or Digital Unspecified)"
+Registered$How.did.you.hear.about.this.workshop.[Registered$How.did.you.hear.about.this.workshop.=="Walk-in"] <- "Other (please describe)" #correcting that walk-in should not be a pre-registration option
+
+Registered$ReducedCategories <- Registered$How.did.you.hear.about.this.workshop.
+Registered$ReducedCategories[!(Registered$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
+Registered$OtherDescriptions[!(Registered$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- Registered$If.other..please.describe.[!(Registered$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
+
+
+# Post-workshop surveys from libwizard only
+FeedbackActuallyAttended <- read.csv("../raw_data/postworkshop/report.csv")
+
+
+## Convert old categories to equivalent new
+FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.=="Email from OU Libraries"] <- "Direct Email from OU Libraries (Source Unknown)"
+FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.=="Colleagues"] <- "Colleagues (Forwarded email, word of mouth)"
+FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.=="Supervisor"] <- "Supervisor (Forwarded email, word of mouth)"
+FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.=="Flyer"] <- "Flyer (Paper or Digital Unspecified)"
+
+FeedbackActuallyAttended$ReducedCategories <- FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.
+FeedbackActuallyAttended$ReducedCategories[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
+FeedbackActuallyAttended$OtherDescriptions[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
+```
+
+# Executive summary
+The top three marketing methods that bring in the highest counts of attendees who fill out our post-workshop surveys (hereafter, "attendees" and "attendance") are emails, word-of-mouth, and the OU Libraries website
+
+The marketing methods with the highest response "intensities" (relative proportion of attendees) were class requirements (making liaison outreach to instructors critical), librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and the OU Libraries website.
+
+Thus, our overall most effective marketing methods are emails, the OU Libraries website, word-of-mouth, and outreach to instructors.
+
+
+\newpage
+
+
+# Absolute effectiveness (counts of attendees) by marketing method
+
+## Overall counts of attendees by marketing method and registration status
+These data for people who filled out a post-workshop survey (ie are confirmed to have attended a workshop) and answer the question "How did you hear about this workshop?".  They are grouped by pre-registered or not pre-registered (passerby walk-ins, class workshops where registration wasn't required).  We do not get 100% completion of surveys.
+
+```{r attendees, echo=FALSE, message = FALSE, warning = FALSE}
+marketing_breakdown_initial <- ggplot(data = FeedbackActuallyAttended,
+       aes(x = ReducedCategories,
+           fill = Did.you.pre.register.for.this.workshop.))+
+  geom_bar()+
+  theme(axis.text.x = element_text(angle = 0,
+                                   hjust = 1,
+                                   size = 16),
+        axis.text.y = element_text(angle = 0,
+                                   hjust = 1,
+                                   size = 8),
+        panel.background = element_blank(),
+        legend.text=element_text(size=16),
+        strip.text.y = element_text(size = 16),
+        axis.title=element_text(size=16))+
+ # facet_grid(type~.)+
+  scale_fill_manual(values = c("#8D1732",
+                               "#000000"))+
+   #                            "#298ac4",
+  #                             "#94c893",
+   #                            "#cccccc"))+
+  coord_flip()+
+  labs (y = "Number of participants filling out post-workshop surveys",
+        x = "Marketing methods",
+        fill = "Pre-registered?")
+marketing_breakdown_initial
+```
+
+
+\newpage
+
+
+## Marketing methods for selection "Other (please describe)" with at least two words
+
+These words suggest that professors, librarians, and previous workshops were included in methods that reached these attendees.  Later data cleaning to incorporate emails/professors/word-of-mouth into the existing categories could be useful.
+
+```{r other, echo = FALSE, message = FALSE, warning = FALSE}
+
+
+other_source_Preregistered <- ggwordcloud_analysis_complete (df = FeedbackActuallyAttended,
+                                                             min_words = 2,
+                                                             max_size = 70,
+                                                             column = "OtherDescriptions",
+                                                             border_margins= 0)
+
+other_source_Preregistered
+
+```
+
+
+
+\newpage
+
+
+
+# Marketing sources for people who registered for workshops (attendance yet unknown)
+These data are from people who filled out the pre-registration form to attend a workshop.  When they filled out this form, we do not know if they will go on to actually attend the workshop.  Most of the people in the previous section will have registered, so there is overlap between the datasets, but the post-workshop surveys are anonymous so we cannot connect them directly.  The next section shows a broad-level view of the relative effectiveness of methods for people who register vs people who follow through and attend.
+
+```{r all_registered, echo = FALSE, message = FALSE, warning = FALSE, include = TRUE}
+
+
+marketing_breakdown_registration <- ggplot(data = Registered,
+       aes(x = ReducedCategories))+
+  geom_bar()+
+  theme(axis.text.x = element_text(angle = 0,
+                                   hjust = 1,
+                                   size = 16),
+        axis.text.y = element_text(angle = 0,
+                                   hjust = 1,
+                                   size = 8),
+        panel.background = element_blank(),
+        legend.text=element_text(size=16),
+        strip.text.y = element_text(size = 16),
+        axis.title=element_text(size=16))+
+ # facet_grid(type~.)+
+  coord_flip()+
+  labs (y = "People pre-registered for the workshops 
+        (attendance yet unknown)",
+        x = "Marketing methods",
+        fill = "")
+marketing_breakdown_registration
+```
+
+```{r other_registered, echo = FALSE, message = FALSE, warning = FALSE, include = FALSE}
+## Marketing sources for people who attended the workshop and selected "Other (please describe)"
+
+
+other_source_registrations <- ggwordcloud_analysis_complete (df = Registered,
+                                                             min_words = 2,
+                                                             max_size = 16,
+                                                             column = "OtherDescriptions")
+
+other_source_registrations
+
+```
+
+
+
+\newpage
+
+
+# Relative effectiveness in marketing methods
+
+We do not get 100% survey responses at our workshops.  However, I wanted to see to see if some marketing methods are proportionately more effective in getting pre-registrants to actually show up at the workshop.  The differences are overall statistically significantly different (Chi-squared = 71.5, df =- 20, p < 0.0001).
+
+Below is a chart that represents this visually as a ratio of attendance to pre-registrant counts.  The vertical beige bar shows approximately where about the same proportion (i.e., 0.5 out of 1, or 50/100) of people who pre-registered (red) ended up actually attending and filling out a survey (black).
+
+
+
+
+
+```{r effectiveness, echo = FALSE, message = FALSE, warning = FALSE, include = FALSE}
+# Merge two datasets.
+registered_only <- data.frame("DataType" = "pre_registered",
+                              "ReducedCategories" = Registered[,"ReducedCategories"])
+actually_attended_only <- data.frame("DataType" = "surveyed_attendees",
+                              "ReducedCategories" = FeedbackActuallyAttended[,"ReducedCategories"])
+
+# contingency table
+all_marketing <- rbind(registered_only,
+      actually_attended_only)
+
+# difference in proportions between registered source and attending source?
+chisq.test(table(all_marketing))
+```
+
+```{r effectiveness_figure, echo = FALSE}
+
+marketing_effectiveness <- ggplot(data = all_marketing,
+       aes(x = ReducedCategories,
+           fill = DataType))+
+  geom_bar(
+    position = "fill"
+    )+
+  theme(axis.text.x = element_text(angle = 90,
+                                   hjust = 1,
+                                   vjust = 0.5,
+                                   size = 16),
+        axis.text.y = element_text(angle = 0,
+                                   hjust = 1,
+                                   size = 8),
+        panel.background = element_blank(),
+        legend.text=element_text(size=8),
+        strip.text.y = element_text(size = 8),
+        axis.title=element_text(size=16))+
+ # facet_grid(type~.)+
+  scale_fill_manual(values = c("#8D1732",
+                               "#000000"
+                                        ))+
+   #                            "#298ac4",
+  #                             "#94c893",
+   #                            "#cccccc"))+
+  coord_flip()+
+  labs (y = "Ratio of registration to attendance + survey",
+        x = "Marketing methods",
+        fill = "Registration vs Attendance")+
+  geom_hline(yintercept = 0.5, linewidth = 8, color = "#cccccc")+
+
+  annotate("text", 
+           y = 0.5, x = 1, label = "0.5 is equal ratio of registration and attendance", angle = 90, hjust = 0, vjust = 0.5)
+marketing_effectiveness
+
+```
+
+A completely red bar indicates that none of the people who completed the pre-registration survey later completed a post-workshop survey.  It is possible some of those attendees showed up but did not complete the offered post-workshop survey.  People who pre-registered and heard about the workshop via Twitter, Facebook, Other Social Media Not Specified, Announcement in Class by Librarian, and paper fliers have this result, suggesting those media may not be resulting in attendees or not resulting in attendees willing to provide feedback.
+
+A completely black bar indicates that pre-registration did not occur but people attended anyways (you see these attendees as the red caps to the black bars in the previous section).  This occurred more with people who attended a workshop given in a class ("Class Requirement"; that category suggests either we visited the class, which does not involve LibCal registration, or that the instructor asked people to attend a workshop outside of class).  With online workshops requiring pre-registration, we don't necessarily expect any bar to be completely black (all walk-ins).  However, in-person workshops can accept passer-by walk-ins who didn't pre-register or people who saw the event via any other marketing method (again, see the previous section's chart) and just showed up without pre-registering. Zoom workshops could have other registrants also forward the Zoom link.
+
+Thus, any method with some black has some attendance, and methods with larger amounts of black indicate relatively stronger responses.  Thus, the highest response "intensity" are for class requirements, librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and people who find events by examining the OU Libraries website.

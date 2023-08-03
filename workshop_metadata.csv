@@ -1,0 +1,21 @@
+WorkshopNameAsInQualtrics,WorkshopCode,CurrentlyUsedName
+Bash for Beginners,BBASH,TRUE
+Beginner LaTeX,BLATEX,TRUE
+Citation Management with Zotero,ZOTERO,TRUE
+Data Management Plan Tool for Funding,DMPTOOLS,TRUE
+"Durable Data, Your Career, and Open Science Framework",OSFLONG,TRUE
+Managing Research Projects with OSF,OSF1HOUR,TRUE
+Survival Skills 101: Back-ups,BACKUPS101,TRUE
+Survival Skills 101: Data-driven Visualizations,VIZ101,TRUE
+Survival Skills 101: Formatting Data for Analysis,TIDY101,TRUE
+Survival Skills 101: Managing Research Data,MRD101,TRUE
+Version Control with Git/Github 101,GIT,TRUE
+Visualization in Python with Matplotlib,MATPLOTLIB,TRUE
+Visualization in R with 'ggplot2',GGPLOT2,TRUE
+Survival Skills: Backups 101,BACKUPS101,FALSE
+Survival Skills: Data-driven Visualizations,VIZ101,FALSE
+Survival Skills: Managing Research Data,MRD101,FALSE
+Survival Skills: Tidy Data 101,TIDY101,FALSE
+Repetitive Tasks in R,RREP,TRUE
+Understanding the Scholarly Publishing Process,PUBLISHING,TRUE
+Shortcuts and Hints for Shell (Intermediate Bash),IBASH,TRUE
