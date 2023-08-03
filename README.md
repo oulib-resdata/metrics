@@ -1,9 +1,9 @@
 # Summary
 
-This OSF storage contains assessment and registration data for OU Libraries research workshops.
+This OSF storage contains assessment and registration data for OU Libraries research workshops.  Clone this repository to your machine, then download the raw_data folder from OSF (contact Claire or Brianna if you need permissions or data) and place it inside the repository.
 
 
-#Output and figures
+# Output and figures
 
 This folder contains individual figures created.  These are not complete reports and do not contain any context.
 
