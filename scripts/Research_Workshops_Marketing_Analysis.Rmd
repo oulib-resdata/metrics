@@ -9,6 +9,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
+# FUNCTIONS AND LIBRARIES
+
 knitr::opts_chunk$set(echo = FALSE)
 library(ggplot2)
 # Load custom function for "other" block
@@ -16,8 +18,11 @@ source("ggwordcloud_analysis_complete_ou_colors.R")
 # set working directory to be one above the scripts folder.  but is relative to .rmd file??
 ```
 
+```{r data_import_attendance, include=FALSE}
+last_two_years_attendance <- read.csv("../raw_data/postworkshop/WorkshopAttendanceJD.csv")
+```
 
-```{r data_import, include=FALSE}
+```{r data_import_marketing_and_feedback, include=FALSE}
 
 # Creating and splitting current levels for marketing
 marketing_current_categories <- c("Announcement in Class by Instructor",
@@ -71,6 +76,8 @@ Registered$OtherDescriptions[!(Registered$How.did.you.hear.about.this.workshop. 
 
 
 # Post-workshop surveys from libwizard only
+## Used for both feedback AND marketing
+
 FeedbackActuallyAttended <- read.csv("../raw_data/postworkshop/report.csv")
 
 
@@ -84,8 +91,26 @@ FeedbackActuallyAttended$ReducedCategories <- FeedbackActuallyAttended$How.did.y
 FeedbackActuallyAttended$ReducedCategories[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
 FeedbackActuallyAttended$OtherDescriptions[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
 ```
+# Attendance
+## Executive summary
 
-# Executive summary
+
+\newpage
+
+## Workshop attendance by format
+
+### Figures
+
+### Statistical analysis
+
+
+\newpage
+
+## Workshop attendance by topic
+
+
+# Marketing
+## Executive summary
 The top three marketing methods that bring in the highest counts of attendees who fill out our post-workshop surveys (hereafter, "attendees" and "attendance") are emails, word-of-mouth, and the OU Libraries website
 
 The marketing methods with the highest response "intensities" (relative proportion of attendees) were class requirements (making liaison outreach to instructors critical), librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and the OU Libraries website.
@@ -96,9 +121,9 @@ Thus, our overall most effective marketing methods are emails, the OU Libraries 
 \newpage
 
 
-# Absolute effectiveness (counts of attendees) by marketing method
+## Absolute effectiveness (counts of attendees) by marketing method
 
-## Overall counts of attendees by marketing method and registration status
+### Overall counts of attendees by marketing method and registration status
 These data for people who filled out a post-workshop survey (ie are confirmed to have attended a workshop) and answer the question "How did you hear about this workshop?".  They are grouped by pre-registered or not pre-registered (passerby walk-ins, class workshops where registration wasn't required).  We do not get 100% completion of surveys.
 
 ```{r attendees, echo=FALSE, message = FALSE, warning = FALSE}
@@ -133,7 +158,7 @@ marketing_breakdown_initial
 \newpage
 
 
-## Marketing methods for selection "Other (please describe)" with at least two words
+### Marketing methods for selection "Other (please describe)" with at least two words
 
 These words suggest that professors, librarians, and previous workshops were included in methods that reached these attendees.  Later data cleaning to incorporate emails/professors/word-of-mouth into the existing categories could be useful.
 
@@ -156,7 +181,7 @@ other_source_Preregistered
 
 
 
-# Marketing sources for people who registered for workshops (attendance yet unknown)
+## Marketing sources for people who registered for workshops (attendance yet unknown)
 These data are from people who filled out the pre-registration form to attend a workshop.  When they filled out this form, we do not know if they will go on to actually attend the workshop.  Most of the people in the previous section will have registered, so there is overlap between the datasets, but the post-workshop surveys are anonymous so we cannot connect them directly.  The next section shows a broad-level view of the relative effectiveness of methods for people who register vs people who follow through and attend.
 
 ```{r all_registered, echo = FALSE, message = FALSE, warning = FALSE, include = TRUE}
@@ -202,7 +227,7 @@ other_source_registrations
 \newpage
 
 
-# Relative effectiveness in marketing methods
+## Relative effectiveness in marketing methods
 
 We do not get 100% survey responses at our workshops.  However, I wanted to see to see if some marketing methods are proportionately more effective in getting pre-registrants to actually show up at the workshop.  The differences are overall statistically significantly different (Chi-squared = 71.5, df =- 20, p < 0.0001).
 
