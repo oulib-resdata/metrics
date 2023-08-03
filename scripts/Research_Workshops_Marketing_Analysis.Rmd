@@ -1,7 +1,7 @@
 ---
-title: "Research Workshop Marketing Analysis"
-author: "Claire Curry (STEM Services)"
-date: '2023-01-09'
+title: "Research Workshop Attendance, Marketing, and Satisfaction"
+author: "Claire Curry (STEM Services) and Brianna Narr (Metrics Coordinator)"
+date: '2023-08-03'
 output:
   word_document: 
     reference_docx: word_styles.docx
@@ -49,7 +49,7 @@ Room339 <- read.csv("../raw_data/preworkshop/Room339_lc_events_20230105043223.cs
 RoomLL123 <- read.csv("../raw_data/preworkshop/LL123_lc_events_20230105043507.csv")
 RoomGeneral <- read.csv("../raw_data/preworkshop/General_lc_events_20230105043258.csv")
 RoomLearningLabClassroom <- read.csv("../raw_data/preworkshop/LearningLabClassroom_lc_events_20230105043409.csv")
-_
+
 # Merge
 Registered <- rbind(Room339,
                     RoomLL123,
