@@ -111,18 +111,14 @@ FeedbackActuallyAttended$OtherDescriptions[!(FeedbackActuallyAttended$How.did.yo
 
 ### Figures
 ```{r attendance_by_format_request, echo=FALSE, message = FALSE, warning = FALSE}
-last_two_years_attendance %>%
+last_two_years_attendance [last_two_years_attendance$Known.three.weeks.advertising == "Y" &
+                                                      last_two_years_attendance$Is.Course == "N" &
+                                                      last_two_years_attendance$Requested. == "N",]%>%
   ggplot(mapping = aes(x = Location.of.Outreach,
                        y = Total.Attendees,
-                       fill = Requested.))+
+                       fill = Is.Course))+
   geom_boxplot(notch = TRUE)
 
-last_two_years_attendance %>%
-  ggplot(mapping = aes(x = Requested.,
-                       y = Total.Attendees
-                       ))+
-  geom_boxplot()+
-  facet_wrap(~Topic)
 
 ```
 
@@ -272,21 +268,22 @@ workshop2023 %>%
 
 ### Statistical analysis
 
-
+A conditional inference tree with workshops with unknown advertising lead time shows that whether the workshop was presented in a course is the deciding factor in workshop attedance.  For non-courses (scheduled or on request), the spring vs fall semester is the deciding factor.  
 ```{r att_tree, echo=FALSE, message = FALSE, warning = FALSE}
 att_tree <- ctree(Total.Attendees ~ 
                     as.factor(Location.of.Outreach) +
-                    as.factor(Requested.) +
+                   # as.factor(Requested.) +
                     as.factor(Academic.Year) + 
                     as.factor(Topic) + 
                     as.factor(Location.of.Outreach) + 
                     as.factor(Multiple.Days.)+
-                    as.factor(Semester) #+ additional variables to include once we have them.
-                  # as.factor(Is.Course) +
-                  # as.factor(Marketing.Consistency) +
-                  # as.factor(Calendar.Year)
+                    as.factor(Semester) #+
+                    #as.factor(Is.Course) +
+                    #as.factor(Known.three.weeks.advertising)
                   ,
-                  data = last_two_years_attendance,
+                  data = last_two_years_attendance [last_two_years_attendance$Known.three.weeks.advertising == "Y" &
+                                                      last_two_years_attendance$Is.Course == "N" &
+                                                      last_two_years_attendance$Requested. == "N",],
                   control = ctree_control(
                                alpha = 0.05)) #cutoff for splits is p = 0.05 significance
 
