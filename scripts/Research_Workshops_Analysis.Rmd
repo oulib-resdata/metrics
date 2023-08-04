@@ -101,6 +101,14 @@ FeedbackActuallyAttended$ReducedCategories <- FeedbackActuallyAttended$How.did.y
 FeedbackActuallyAttended$ReducedCategories[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
 FeedbackActuallyAttended$OtherDescriptions[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
 ```
+# Workshop descriptive numbers
+- How many topics per semester
+- How many workshops per semester
+- How many instructors and helpers per semester
+- How many workshops by format
+- How many workshops by format by topic
+- How many workshops on request vs course vs scheduled
+
 # Attendance
 ## Executive summary
 
@@ -108,6 +116,10 @@ FeedbackActuallyAttended$OtherDescriptions[!(FeedbackActuallyAttended$How.did.yo
 \newpage
 
 ## Workshop attendance by format and request
+
+DSI request 2023/07: 
+- attendance numbers for each format (below in Figures and analysis)
+- person-effort expended per learners reached (need to collect more data on number of helpers and how many are DSI - probably manually?)
 
 ### Figures
 ```{r attendance_by_format_request, echo=FALSE, message = FALSE, warning = FALSE}
@@ -121,6 +133,12 @@ last_two_years_attendance [last_two_years_attendance$Known.three.weeks.advertisi
 
 
 ```
+
+## Workshop attendance over time
+Number of on-request workshops over time: I will be talking with Brianna at our next meeting about pulling and analyzing these numbers.  Scaffolding in some departments may also help with scaling the workload for this, but that’s at least a year out yet, from what I hear from that committee.  I have added your questions to our analysis list:
+  Attendance
+  On-requests vs scheduled
+
 
 ```{r attendance_by_year, echo=FALSE, message = FALSE, warning = FALSE}
 # Now plotting attendance numbers by workshop title by requested/not, by year
@@ -356,6 +374,9 @@ workshopfixed %>%
 ```
 
 \newpage
+## Workshop length vs attendance
+- hours in session vs attendance
+
 ## The Carpentries analysis
 ### Single day over multiple sessions vs two-day workshops
 ```{r carpentries_attendance, echo=FALSE, message = FALSE, warning = FALSE}
@@ -385,6 +406,20 @@ carpentries %>%
 
 ```
 
+
+# Workshop feedback
+
+## Executive summary
+
+
+## Questions
+
+### Satisfaction vs format
+- DSI request 2023/07:  quality of instruction in each format (online, in person, hybrid, and total) and request/course status.
+
+### Workshop length vs satisfaction
+- hours in session
+- word cloud relating to length?
 
 
 # Marketing
