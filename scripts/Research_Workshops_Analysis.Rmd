@@ -13,6 +13,7 @@ output:
 
 knitr::opts_chunk$set(echo = FALSE)
 library(ggplot2)
+library(partykit)
 library(tidyverse)
 library(viridis)
 
@@ -26,7 +27,7 @@ source("ggwordcloud_analysis_complete_ou_colors.R")
 last_two_years_attendance <- read.csv("../raw_data/postworkshop/WorkshopAttendanceJD.csv")
 
 # Preliminary analysis requested by CMC 2023/summer (does not include course-integrated workshops or Beth's data?)
-workshop <- read.csv ("../raw_data/WorkshopAttendanceUpdate.csv", header=TRUE,
+workshop <- read.csv ("../raw_data/postworkshop/WorkshopAttendanceUpdate.csv", header=TRUE,
                       stringsAsFactors=FALSE)
 
 ```
@@ -110,6 +111,22 @@ FeedbackActuallyAttended$OtherDescriptions[!(FeedbackActuallyAttended$How.did.yo
 
 ### Figures
 ```{r attendance_by_format_request, echo=FALSE, message = FALSE, warning = FALSE}
+last_two_years_attendance %>%
+  ggplot(mapping = aes(x = Location.of.Outreach,
+                       y = Total.Attendees,
+                       fill = Requested.))+
+  geom_boxplot(notch = TRUE)
+
+last_two_years_attendance %>%
+  ggplot(mapping = aes(x = Requested.,
+                       y = Total.Attendees
+                       ))+
+  geom_boxplot()+
+  facet_wrap(~Topic)
+
+```
+
+```{r attendance_by_year, echo=FALSE, message = FALSE, warning = FALSE}
 # Now plotting attendance numbers by workshop title by requested/not, by year
 # Oops I forgot to omit NA from the whole dataset, doing that now
 
@@ -183,7 +200,10 @@ workshop2020 %>%
         plot.title = element_text(size = 20, hjust = 0.5),
         axis.title = element_text(size = 14),
         axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2))+
-  geom_jitter(alpha = 0.55, size = 4, position = position_jitter (width = .08, height = .04), show.legend = FALSE, aes(color=Requested.)) +
+  geom_jitter(alpha = 0.55, size = 4, position = position_jitter (width = .08,
+                                                                  height = .04),
+              show.legend = FALSE,
+              aes(color=Requested.)) +
   ggtitle('2020 Attendees by Requested/Not')
 
 workshop2021 %>%
@@ -244,10 +264,34 @@ workshop2023 %>%
   geom_jitter(alpha = 0.55, size = 4, position = position_jitter (width = .08, height = .04), show.legend = FALSE, aes(color=Requested.)) +
   ggtitle('2023 Attendees by Requested/Not')
 ```
+```{r attendance_by_request_format_year, echo=FALSE, message = FALSE, warning = FALSE}
 
+
+
+```
 
 ### Statistical analysis
 
+
+```{r att_tree, echo=FALSE, message = FALSE, warning = FALSE}
+att_tree <- ctree(Total.Attendees ~ 
+                    as.factor(Location.of.Outreach) +
+                    as.factor(Requested.) +
+                    as.factor(Academic.Year) + 
+                    as.factor(Topic) + 
+                    as.factor(Location.of.Outreach) + 
+                    as.factor(Multiple.Days.)+
+                    as.factor(Semester) #+ additional variables to include once we have them.
+                  # as.factor(Is.Course) +
+                  # as.factor(Marketing.Consistency) +
+                  # as.factor(Calendar.Year)
+                  ,
+                  data = last_two_years_attendance,
+                  control = ctree_control(
+                               alpha = 0.05)) #cutoff for splits is p = 0.05 significance
+
+plot(att_tree)
+```
 
 \newpage
 
@@ -321,6 +365,8 @@ workshopfixed %>%
 
 
 ```
+
+
 
 # Marketing
 ## Executive summary
