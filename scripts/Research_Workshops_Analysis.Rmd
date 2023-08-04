@@ -102,12 +102,41 @@ FeedbackActuallyAttended$ReducedCategories[!(FeedbackActuallyAttended$How.did.yo
 FeedbackActuallyAttended$OtherDescriptions[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
 ```
 # Workshop descriptive numbers
-- How many topics per semester
-- How many workshops per semester
-- How many instructors and helpers per semester
+
 - How many workshops by format
 - How many workshops by format by topic
 - How many workshops on request vs course vs scheduled
+
+```{r workshop_descriptive_stats, echo=FALSE, message = FALSE, warning = FALSE}
+descriptive <- last_two_years_attendance %>%
+  group_by(Academic.Year,
+           Is.Course,
+           Requested.) %>%
+  summarize(offer_count = n())
+descriptive
+
+```
+- How many topics per semester
+
+```{r workshop_descriptive_stats_topics, echo=FALSE, message = FALSE, warning = FALSE}
+topics_desc <- last_two_years_attendance %>%
+  group_by(Academic.Year,
+           Semester,
+           Is.Course,
+           Requested.
+      ) %>%
+  summarize(topics_count = n_distinct(Topic))
+
+
+topics_desc
+
+
+
+```
+
+- How many workshops per semester
+
+TODO: How many instructors and helpers per semester
 
 # Attendance
 ## Executive summary
@@ -375,7 +404,7 @@ workshopfixed %>%
 
 \newpage
 ## Workshop length vs attendance
-- hours in session vs attendance
+- session length vs attendance
 
 ## The Carpentries analysis
 ### Single day over multiple sessions vs two-day workshops
