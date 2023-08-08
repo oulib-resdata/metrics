@@ -136,7 +136,9 @@ topics_desc
 
 - How many workshops per semester
 
-TODO: How many instructors and helpers per semester
+LATER TODO: How many instructors and helpers per semester
+  - BN gather number of helpers from Libraries collaborators + internal notes and total attendees
+
 
 # Attendance
 ## Executive summary
@@ -148,181 +150,24 @@ TODO: How many instructors and helpers per semester
 
 DSI request 2023/07: 
 - attendance numbers for each format (below in Figures and analysis)
-- person-effort expended per learners reached (need to collect more data on number of helpers and how many are DSI - probably manually?)
-
-### Figures
-```{r attendance_by_format_request, echo=FALSE, message = FALSE, warning = FALSE}
-last_two_years_attendance [last_two_years_attendance$Known.three.weeks.advertising == "Y" &
-                                                      last_two_years_attendance$Is.Course == "N" &
-                                                      last_two_years_attendance$Requested. == "N",]%>%
-  ggplot(mapping = aes(x = Location.of.Outreach,
-                       y = Total.Attendees,
-                       fill = Is.Course))+
-  geom_boxplot(notch = TRUE)
-
-
-```
-
-## Workshop attendance over time
-Number of on-request workshops over time: I will be talking with Brianna at our next meeting about pulling and analyzing these numbers.  Scaffolding in some departments may also help with scaling the workload for this, but that’s at least a year out yet, from what I hear from that committee.  I have added your questions to our analysis list:
-  Attendance
-  On-requests vs scheduled
-
-
-```{r attendance_by_year, echo=FALSE, message = FALSE, warning = FALSE}
-# Now plotting attendance numbers by workshop title by requested/not, by year
-# Oops I forgot to omit NA from the whole dataset, doing that now
-
-workshopfixed <- na.omit(workshop)
-
-workshop2018 <- workshopfixed %>% filter(grepl('2018', Event.Date.and.Time))
-
-workshop2019 <- workshopfixed %>% filter(grepl('2019', Event.Date.and.Time))
-
-workshop2020 <- workshopfixed %>% filter(grepl('2020', Event.Date.and.Time))
-
-workshop2021 <- workshopfixed %>% filter(grepl('2021', Event.Date.and.Time))
-
-workshop2022 <- workshopfixed %>% filter(grepl('2022', Event.Date.and.Time))
-
-workshop2023 <- workshopfixed %>% filter(grepl('2023', Event.Date.and.Time))
-
-workshop2018 %>%
-  ggplot (aes(x=Topic, y=Total.Attendees, col=Requested.)) +
-  geom_boxplot(outlier.shape = NA) +
-  scale_fill_viridis_d (aesthetics = "color") +
-  scale_x_discrete(labels=c('OSF', '2day R', 'Zotero')) +
-  theme(panel.background = element_rect(fill = "lightgray",
-                                        color = "white",
-                                        size = 0.5, linetype = "solid"),
-        panel.grid.major = element_line(size = 0.5, linetype = "solid",
-                                        color = "darkgray"),
-        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
-                                        color = "darkgray"),
-        plot.title = element_text(size = 20, hjust = 0.5),
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
-  )+
-  geom_jitter(alpha = 0.55, size = 4, position = position_jitter (width = .01, height = .05), show.legend = FALSE, aes(color=Requested.)) +
-  ggtitle('2018 Attendees by Requested/Not')
-
-workshop2019 %>%
-  ggplot (aes(x=Topic, y=Total.Attendees, col=Requested.)) +
-  geom_boxplot(outlier.shape = NA) +
-  scale_fill_viridis_d(aesthetics = "color") +
-  scale_x_discrete(labels=c('Backups', 'Data Viz', 'DMPTool', 'Formatting', 'ggplot2', 'Shell', 'LaTeX', 'Research.Files',
-                            'matplotlib', 'OSF', 'Presentations', 'Bash', 'Git', '2day Python', '2day R', 'Unknown', 'Zotero')) +
-  theme(panel.background = element_rect(fill = "lightgray",
-                                        color = "white",
-                                        size = 0.5, linetype = "solid"),
-        panel.grid.major = element_line(size = 0.5, linetype = "solid",
-                                        color = "darkgray"),
-        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
-                                        color = "darkgray"),
-        plot.title = element_text(size = 20, hjust = 0.5),
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
-  )+
-  geom_jitter(alpha = 0.55, size = 4, position = position_jitter (width = .08, height = .04), show.legend = FALSE, aes(color=Requested.)) +
-  ggtitle('2019 Attendees by Requested/Not')
-
-workshop2020 %>%
-  ggplot (aes(x=Topic, y=Total.Attendees, col=Requested.)) +
-  geom_boxplot(outlier.shape = NA) +
-  scale_fill_viridis_d(aesthetics = "color") +
-  scale_x_discrete(labels=c('Backups', 'Data Viz', 'Formatting', 'ggplot2', 'LaTeX', 'Research.Files',
-                            'matplotlib', 'OSF', 'Presentations', 'Repetitive.R', 'Bash', 'Git', 
-                            '2day Python', '2day R', 'Unknown', 'Zotero')) +
-  theme(panel.background = element_rect(fill = "lightgray",
-                                        color = "white",
-                                        size = 0.5, linetype = "solid"),
-        panel.grid.major = element_line(size = 0.5, linetype = "solid",
-                                        color = "darkgray"),
-        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
-                                        color = "darkgray"),
-        plot.title = element_text(size = 20, hjust = 0.5),
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2))+
-  geom_jitter(alpha = 0.55, size = 4, position = position_jitter (width = .08,
-                                                                  height = .04),
-              show.legend = FALSE,
-              aes(color=Requested.)) +
-  ggtitle('2020 Attendees by Requested/Not')
-
-workshop2021 %>%
-  ggplot (aes(x=Topic, y=Total.Attendees, col=Requested.)) +
-  geom_boxplot(outlier.shape = NA) +
-  scale_fill_viridis_d(aesthetics = "color") +
-  scale_x_discrete(labels=c('Backups', 'Data Viz', 'Digi.News', 'Formatting', 'ggplot2', 'LaTeX', 'Research.Files', 'MATLAB', 
-                            'matplotlib', 'OSF', 'Presentations', 'Repetitive.R', 'Bash', 'Git', 'OpenRefine', 'SQL', 
-                            'Tableau', '2day Python', 'Unknown', 'Zotero')) +
-  theme(panel.background = element_rect(fill = "lightgray",
-                                        color = "white",
-                                        size = 0.5, linetype = "solid"),
-        panel.grid.major = element_line(size = 0.5, linetype = "solid",
-                                        color = "darkgray"),
-        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
-                                        color = "darkgray"),
-        plot.title = element_text(size = 20, hjust = 0.5),
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2))+
-  geom_jitter(alpha = 0.55, size = 4, position = position_jitter (width = .08, height = .04), show.legend = FALSE, aes(color=Requested.)) +
-  ggtitle('2021 Attendees by Requested/Not')
-
-workshop2022 %>%
-  ggplot (aes(x=Topic, y=Total.Attendees, col=Requested.)) +
-  geom_boxplot(outlier.shape = NA) +
-  scale_fill_viridis_d(aesthetics = "color") +
-  scale_x_discrete(labels=c('Backups', 'Data Viz', 'Digi.News', 'Formatting', 'ggplot2', 'LaTeX', 'Research.Files', 'MATLAB',
-                            'OSF', 'Presentations', 'Repetitive.R', 'Git', 'Unknown', 'Computers', 'Zotero')) +
-  theme(panel.background = element_rect(fill = "lightgray",
-                                        color = "white",
-                                        size = 0.5, linetype = "solid"),
-        panel.grid.major = element_line(size = 0.5, linetype = "solid",
-                                        color = "darkgray"),
-        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
-                                        color = "darkgray"),
-        plot.title = element_text(size = 20, hjust = 0.5),
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2))+
-  geom_jitter(alpha = 0.55, size = 4, position = position_jitter (width = .08, height = .04), show.legend = FALSE, aes(color=Requested.)) +
-  ggtitle('2022 Attendees by Requested/Not')
-
-workshop2023 %>%
-  ggplot (aes(x=Topic, y=Total.Attendees, col=Requested.)) +
-  geom_boxplot(outlier.shape = NA) +
-  scale_fill_viridis_d(aesthetics = "color") +
-  scale_x_discrete(labels=c('AfAm.Newspapers', 'DMPTool', 'Formatting', 'ggplot2', 'LaTeX', 'Research.Files', 'OSF', 'Repetitive.R',
-                            'Meetings', 'R', 'Troubleshoot', '2day R', 'Unknown', 'Zotero')) +
-  theme(panel.background = element_rect(fill = "lightgray",
-                                        color = "white",
-                                        size = 0.5, linetype = "solid"),
-        panel.grid.major = element_line(size = 0.5, linetype = "solid",
-                                        color = "darkgray"),
-        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
-                                        color = "darkgray"),
-        plot.title = element_text(size = 20, hjust = 0.5),
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2))+
-  geom_jitter(alpha = 0.55, size = 4, position = position_jitter (width = .08, height = .04), show.legend = FALSE, aes(color=Requested.)) +
-  ggtitle('2023 Attendees by Requested/Not')
-```
-```{r attendance_by_request_format_year, echo=FALSE, message = FALSE, warning = FALSE}
-
-
-
-```
 
 ### Statistical analysis
+For scheduled workshops with a known three week advertising period, none of the following variables impact attendance numbers in a conditional inference tree analysis.
+- Format (in person vs virtual vs hybrid)
+- academic year
+- calendar year
+- semester (spring, summer, or fall)
+- workshop topic
+- multi-day vs single day scheduling
 
-A conditional inference tree with workshops with unknown advertising lead time shows that whether the workshop was presented in a course is the deciding factor in workshop attedance.  For non-courses (scheduled or on request), the spring vs fall semester is the deciding factor.  
+
 ```{r att_tree, echo=FALSE, message = FALSE, warning = FALSE}
 att_tree <- ctree(Total.Attendees ~ 
                     as.factor(Location.of.Outreach) +
-                   # as.factor(Requested.) +
+                   #as.factor(Requested.) +
                     as.factor(Academic.Year) + 
+                    as.factor(Calendar.Year)+
                     as.factor(Topic) + 
-                    as.factor(Location.of.Outreach) + 
                     as.factor(Multiple.Days.)+
                     as.factor(Semester) #+
                     #as.factor(Is.Course) +
@@ -337,9 +182,83 @@ att_tree <- ctree(Total.Attendees ~
 plot(att_tree)
 ```
 
+When we include whether a workshop was in a course, requested or not, and had a known three-week advertising period, only whether a workshop was in a course was a deciding factor in increased attendance numbers.
+
+```{r att_tree2, echo=FALSE, message = FALSE, warning = FALSE}
+att_tree2 <- ctree(Total.Attendees ~ 
+                    as.factor(Location.of.Outreach) +
+                    as.factor(Requested.) +
+                    as.factor(Academic.Year) + 
+                    as.factor(Calendar.Year)+
+                    as.factor(Topic) + 
+                    as.factor(Multiple.Days.)+
+                    as.factor(Semester) +
+                    as.factor(Is.Course) +
+                    as.factor(Known.three.weeks.advertising)
+                  ,
+                  data = last_two_years_attendance,
+                  control = ctree_control(
+                               alpha = 0.05)) #cutoff for splits is p = 0.05 significance
+
+plot(att_tree2)
+```
+
+### Figures
+Format was not significant, but since it was requested, here is the figure.
+
+```{r attendance_by_format_request, echo=FALSE, message = FALSE, warning = FALSE}
+last_two_years_attendance [last_two_years_attendance$Known.three.weeks.advertising == "Y" &
+                                                      last_two_years_attendance$Is.Course == "N" &
+                                                      last_two_years_attendance$Requested. == "N",]%>%
+  ggplot(mapping = aes(x = Location.of.Outreach,
+                       y = Total.Attendees,
+                       fill = Is.Course))+
+  geom_boxplot(notch = TRUE)
+
+
+```
+
+## Workshop attendance over time
+Number of on-request workshops over time: I will be talking with Brianna at our next meeting about pulling and analyzing these numbers.  Scaffolding in some departments may also help with scaling the workload for this, but that’s at least a year out yet, from what I hear from that committee.  I have added your questions to our analysis list:
+- Attendance (y)
+- On-requests vs scheduled (fill)
+- Calendar year + semester (x) (lump May into spring even if after semester is out - August before school can go into fall)
+
+```{r attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
+plot_time <- last_two_years_attendance %>% 
+  ggplot(mapping = aes(x = as.factor(Calendar.Year),
+                       y = Total.Attendees,
+                       fill = Requested.)) +
+  geom_boxplot(notch = TRUE)
+plot_time
+
+```
+
+## Workshop helper load for on-request workshops over time
+DSI request 2023/07: 
+- TODO: Libraries personnel to attendance ratios for On Request workshops.  which high-helper topics requested more over time and do we have enough data yet, are those increasing.
+
+# ```{r attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
+# plot_helpers <- last_two_years_attendance[last_two_years_attendance$Requested.=="Y",] %>%
+#   ggplot(mapping = aes(x = as.factor(Calendar.Year),
+#                        y = helpers/Total.Attendees,
+#                        fill = Topic)) +
+#   geom_boxplot(notch = TRUE)
+# plot_helpers
+# ```
+
+
 \newpage
 
+
+
 ## Workshop attendance by topic
+- TODO BN: modify to show 
+  - scheduled only
+  - not on request
+  - workshops with =>4 runs (two years)
+
+
 ```{r attendance_by_topic, echo=FALSE, message = FALSE, warning = FALSE}
 # First plotting attendance numbers by workshop title (regardless of format)
 # Narrowed it down to Topic and Total Attendees because it's easier
@@ -352,7 +271,7 @@ attend1fixed <- na.omit(attend1)
 
 attend1fixed %>%
   ggplot (aes(x=Topic, y=Total.Attendees, fill=Topic)) +
-  geom_boxplot(outlier.shape = NA) +
+  geom_boxplot(outlier.shape = NA, notch = TRUE) +
   scale_fill_viridis(discrete = TRUE) +
   scale_x_discrete(labels=c('AfAm.Newspapers', 'Backups', 'Data Viz', 'Digi News', 'DMPTools', 'Formatting', 'ggplot2', 
                             'Shell', 'LaTeX', 'Research.Files', 'MATLAB', 'matplotlib', 'OSF', 'Presentations', 'Repetitive.R',
@@ -374,39 +293,14 @@ attend1fixed %>%
 
 ```
 
-Some topics do not "advertise" well and get higher attendance when requested by users.
-```{r attendance_by_topic_request, echo=FALSE, message = FALSE, warning = FALSE}
-# A bonus visualization, of attendance numbers by workshop title by requested/not for all years!
-  
-workshopfixed %>%
-  ggplot (aes(x=Topic, y=Total.Attendees, col=Requested.)) +
-  geom_boxplot(outlier.shape = NA) +
-  scale_fill_viridis_d(aesthetics = "color") +
-  scale_x_discrete(labels=c('AfAm.Newspapers', 'Backups', 'Data Viz', 'Digi News', 'DMPTools', 'Formatting', 'ggplot2', 
-                            'Shell', 'LaTeX', 'Research.Files', 'MATLAB', 'matplotlib', 'OSF', 'Presentations', 'Repetitive.R',
-                            'Meetings', 'Bash', 'R', 'Git', 'OpenRefine', 'Python', 'SQL', 'Tableau', 'Troubleshoot', 
-                            '2day Python', '2day R','Unknown', 'Computers', 'Zotero')) +
-  theme(panel.background = element_rect(fill = "lightgray",
-                                        color = "white",
-                                        size = 0.5, linetype = "solid"),
-        panel.grid.major = element_line(size = 0.5, linetype = "solid",
-                                        color = "darkgray"),
-        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
-                                        color = "darkgray"),
-        plot.title = element_text(size = 20, hjust = 0.5),
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
-  )+
-  geom_jitter(alpha = 0.55, size = 4, position = position_jitter (width = .08, height = .04), show.legend = FALSE, aes(color=Requested.)) +
-  ggtitle('2018-2023 Workshop Attendees by Requested/Not')
 
-```
 
 \newpage
 ## Workshop length vs attendance
-- session length vs attendance
 
-## The Carpentries analysis
+### length of session
+- Low priority: session length vs attendance
+
 ### Single day over multiple sessions vs two-day workshops
 ```{r carpentries_attendance, echo=FALSE, message = FALSE, warning = FALSE}
 #Last one! Plotting attendance for carpentries by multi-day VS single-topic
