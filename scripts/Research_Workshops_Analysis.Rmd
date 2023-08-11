@@ -260,7 +260,6 @@ DSI request 2023/07:
 
 
 ```{r attendance_by_topic, echo=FALSE, message = FALSE, warning = FALSE}
-
 workshop [workshop$Requested. == "N" &
             workshop$Topic != "African American Newspapers and Primary Sources" &
             workshop$Topic != "Digital newspapers" &
@@ -307,7 +306,7 @@ workshop [workshop$Requested. == "N" &
 ```{r carpentries_attendance, echo=FALSE, message = FALSE, warning = FALSE}
 #Last one! Plotting attendance for carpentries by multi-day VS single-topic
 
-carpentries <- workshopfixed %>% filter(grepl('Standalone Bash|Standalone Carpentries R|Standalone Git|
+carpentries <- workshop %>% filter(grepl('Standalone Bash|Standalone Carpentries R|Standalone Git|
                                               Standalone Openrefine|Standalone Python|Standalone SQL|Two-day Carpentries with R|Two-day Carpentries with Python', Topic))
 
 carpentries %>%
@@ -336,8 +335,128 @@ carpentries %>%
 
 ## Executive summary
 
-
 ## Questions
+
+## Note from BN: I have no idea how the CSV formatting should go in Rmd, so here's what I did in my own editor
+
+```{r postworkshop_data, include=FALSE}
+postworkshopsurvey <- read.csv ("C:/Users/Brianna_Narr.ULHKH1JW3/Downloads/PostWorkshopSurveyFinal.csv", header=TRUE, stringsAsFactors=FALSE)
+
+rows <- as.numeric(count(postworkshopsurvey))
+
+postworkshopsurvey <- na.omit(postworkshopsurvey)
+
+```
+
+## Do you anticipate that this new knowledge can be applied towards your work?
+```{r workshop_feedback_newknowledge, echo=FALSE, message = FALSE, warning = FALSE}
+postworkshopsurvey %>%
+  ggplot(aes(x=Using.New.Knowledge., fill=Using.New.Knowledge.)) +
+  geom_bar()+
+  scale_fill_viridis_d (aesthetics = "fill") +
+  theme(panel.background = element_rect(fill = "lightgray",
+                                        color = "white",
+                                        size = 0.5, linetype = "solid"),
+        panel.grid.major = element_line(size = 0.5, linetype = "solid",
+                                        color = "darkgray"),
+        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
+                                        color = "darkgray"),
+        plot.title = element_text(size = 20, hjust = 0.5),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
+  )
+
+```
+
+## This workshop was valuable towards your program of study.
+```{r workshop_feedback_valuableforprogram, echo=FALSE, message = FALSE, warning = FALSE}
+postworkshopsurvey %>%
+  mutate(Valuable.for.Program = fct_relevel(Valuable.for.Program, "Strongly agree", "Agree", "Somewhat agree", 
+                                            "Neither agree nor disagree", "Somewhat disagree", 
+                                            "Strongly disagree", "Not applicable", "No answer")) %>%
+  ggplot(aes(x=Valuable.for.Program, fill=Valuable.for.Program)) +
+  scale_fill_viridis_d (aesthetics = "fill") +
+  theme(panel.background = element_rect(fill = "lightgray",
+                                        color = "white",
+                                        size = 0.5, linetype = "solid"),
+        panel.grid.major = element_line(size = 0.5, linetype = "solid",
+                                        color = "darkgray"),
+        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
+                                        color = "darkgray"),
+        plot.title = element_text(size = 20, hjust = 0.5),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
+  )
+
+```
+
+## This workshop was valuable towards your career.
+```{r workshop_feedback_valuableforcareer, echo=FALSE, message = FALSE, warning = FALSE}
+postworkshopsurvey %>%
+  mutate(Valuable.for.Career = fct_relevel(Valuable.for.Career, "Strongly agree", "Agree", "Somewhat agree", 
+                                           "Neither agree nor disagree", "Somewhat disagree", "Disagree", 
+                                           "Strongly disagree", "Not applicable", "No answer")) %>%
+  ggplot(aes(x=Valuable.for.Career, fill=Valuable.for.Career)) +
+  scale_fill_viridis_d (aesthetics = "fill") +
+  theme(panel.background = element_rect(fill = "lightgray",
+                                        color = "white",
+                                        size = 0.5, linetype = "solid"),
+        panel.grid.major = element_line(size = 0.5, linetype = "solid",
+                                        color = "darkgray"),
+        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
+                                        color = "darkgray"),
+        plot.title = element_text(size = 20, hjust = 0.5),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
+  )
+```
+
+## This workshop was valuable towards your teaching.
+```{r workshop_feedback_valuableforteaching, echo=FALSE, message = FALSE, warning = FALSE}
+postworkshopsurvey %>%
+  mutate(Valuable.for.Teaching = fct_relevel(Valuable.for.Teaching, "Strongly agree", "Agree", "Somewhat agree", 
+                                             "Neither agree nor disagree", "Somewhat disagree", "Disagree", 
+                                             "Strongly disagree", "Not applicable", "No answer")) %>%
+  ggplot(aes(x=Valuable.for.Teaching, fill=Valuable.for.Teaching)) +
+  scale_fill_viridis_d (aesthetics = "fill") +
+  theme(panel.background = element_rect(fill = "lightgray",
+                                        color = "white",
+                                        size = 0.5, linetype = "solid"),
+        panel.grid.major = element_line(size = 0.5, linetype = "solid",
+                                        color = "darkgray"),
+        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
+                                        color = "darkgray"),
+        plot.title = element_text(size = 20, hjust = 0.5),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
+  )
+
+```
+
+## How do you rate your skills after learning about this workshop topic?
+```{r workshop_feedback_valuableforteaching, echo=FALSE, message = FALSE, warning = FALSE}
+postworkshopsurvey %>%
+  mutate(Rate.Skills = fct_relevel(Rate.Skills, "Need more support and assistance if implementing",
+                                   "Can complete a related task independently but not to desired level",
+                                   "Can complete a related task independently to desired level",
+                                   "Can complete and expand on task, possibly assist others",
+                                   "Did not respond")) %>%
+  ggplot(aes(x=Rate.Skills, fill=Rate.Skills)) +
+  scale_fill_viridis_d (aesthetics = "fill") +
+  scale_x_discrete(labels=c("Needs more support", "Independent, but not to desired level", "Independent to desired level", 
+                            "Independent, could teach skill", "Did not respond")) +
+  theme(panel.background = element_rect(fill = "lightgray",
+                                        color = "white",
+                                        size = 0.5, linetype = "solid"),
+        panel.grid.major = element_line(size = 0.5, linetype = "solid",
+                                        color = "darkgray"),
+        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
+                                        color = "darkgray"),
+        plot.title = element_text(size = 20, hjust = 0.5),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
+  )
+```
 
 ### Satisfaction vs format
 - DSI request 2023/07:  quality of instruction in each format (online, in person, hybrid, and total) and request/course status.
