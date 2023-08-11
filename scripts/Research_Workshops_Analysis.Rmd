@@ -26,7 +26,7 @@ source("ggwordcloud_analysis_complete_ou_colors.R")
 # Analysis requested by JD 2023/08/03
 last_two_years_attendance <- read.csv("../raw_data/postworkshop/WorkshopAttendanceJD.csv")
 
-# Preliminary analysis requested by CMC 2023/summer (does not include course-integrated workshops or Beth's data?)
+# Preliminary analysis requested by CMC 2023/summer (does not include course-integrated workshops)
 workshop <- read.csv ("../raw_data/postworkshop/WorkshopAttendanceUpdate.csv", header=TRUE,
                       stringsAsFactors=FALSE)
 
@@ -253,30 +253,32 @@ DSI request 2023/07:
 
 
 ## Workshop attendance by topic
-- TODO BN: modify to show 
+- DONE BN: modify to show 
   - scheduled only
   - not on request
   - workshops with =>4 runs (two years)
 
 
 ```{r attendance_by_topic, echo=FALSE, message = FALSE, warning = FALSE}
-# First plotting attendance numbers by workshop title (regardless of format)
-# Narrowed it down to Topic and Total Attendees because it's easier
 
-attend1 <- workshop[,c('Topic', 'Total.Attendees')]
-
-attend1fixed <- na.omit(attend1)
-
-# Boxplot time!
-
-attend1fixed %>%
+workshop [workshop$Requested. == "N" &
+            workshop$Topic != "African American Newspapers and Primary Sources" &
+            workshop$Topic != "Digital newspapers" &
+            workshop$Topic != "DMPTool" &
+            workshop$Topic != "Intermediate shell" &
+            workshop$Topic != "matplotlib" &
+            workshop$Topic != "Smoother meetings" &
+            workshop$Topic != "Standalone Carpentries R" &
+            workshop$Topic != "Standalone Openrefine" &
+            workshop$Topic != "Standalone Python" &
+            workshop$Topic != "Standalone SQL" &
+            workshop$Topic != "Tableau" &
+            workshop$Topic != "Troubleshooting" & 
+            workshop$Topic != "Using computers",
+            ]%>%
   ggplot (aes(x=Topic, y=Total.Attendees, fill=Topic)) +
   geom_boxplot(outlier.shape = NA, notch = TRUE) +
   scale_fill_viridis(discrete = TRUE) +
-  scale_x_discrete(labels=c('AfAm.Newspapers', 'Backups', 'Data Viz', 'Digi News', 'DMPTools', 'Formatting', 'ggplot2', 
-                            'Shell', 'LaTeX', 'Research.Files', 'MATLAB', 'matplotlib', 'OSF', 'Presentations', 'Repetitive.R',
-                            'Meetings', 'Bash', 'R', 'Git', 'OpenRefine', 'Python', 'SQL', 'Tableau', 'Troubleshoot', 
-                            '2day Python', '2day R','Unknown', 'Computers', 'Zotero')) +
   theme(panel.background = element_rect(fill = "lightgray",
                                         color = "white",
                                         size = 0.5, linetype = "solid"),
@@ -289,7 +291,7 @@ attend1fixed %>%
         axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
   )+
   geom_jitter(color='black', alpha = 0.55, size = 2, position = position_jitter (width = .1), show.legend = FALSE) +
-  ggtitle('Attendees by Topic')
+  ggtitle('Attendees of Scheduled Workshops by Topic')
 
 ```
 
