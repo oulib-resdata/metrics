@@ -16,6 +16,9 @@ library(ggplot2)
 library(partykit)
 library(tidyverse)
 library(viridis)
+library(tm)
+library(SnowballC)
+library(wordcloud)
 
 # Load custom function for "other" block
 source("ggwordcloud_analysis_complete_ou_colors.R")
@@ -456,6 +459,107 @@ postworkshopsurvey %>%
         axis.title = element_text(size = 14),
         axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
   )
+```
+
+# Wordcloud code
+
+```{r workshop_feedback_liked_code, include=FALSE}
+workshopliked <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopLiked.txt")
+likedcorpus <- Corpus(VectorSource(workshopliked))
+
+likedcorpus <- tm_map(likedcorpus, content_transformer(tolower))
+likedcorpus <- tm_map(likedcorpus, removeNumbers)
+likedcorpus <- tm_map(likedcorpus, removeWords, stopwords("english"))
+likedcorpus <- tm_map(likedcorpus, removeWords, c("liked")) 
+likedcorpus <- tm_map(likedcorpus, removePunctuation)
+likedcorpus <- tm_map(likedcorpus, stripWhitespace)
+
+likeddocmatrix <- TermDocumentMatrix(likedcorpus)
+likedmatrix <- as.matrix(likeddocmatrix)
+v <- sort(rowSums(likedmatrix), decreasing = TRUE)
+likeddf <- data.frame(word = names(v), freq=v)
+
+col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
+
+```
+
+```{r workshop_feedback_needsimprovement_code, include=FALSE}
+workshopimprove <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopNeedsImprovement.txt")
+improvecorpus <- Corpus(VectorSource(workshopimprove))
+
+improvecorpus <- tm_map(improvecorpus, content_transformer(tolower))
+improvecorpus <- tm_map(improvecorpus, removeNumbers)
+improvecorpus <- tm_map(improvecorpus, removeWords, stopwords("english"))
+improvecorpus <- tm_map(improvecorpus, removeWords, c("think", "maybe")) 
+improvecorpus <- tm_map(improvecorpus, removePunctuation)
+improvecorpus <- tm_map(improvecorpus, stripWhitespace)
+
+improvedocmatrix <- TermDocumentMatrix(improvecorpus)
+improvematrix <- as.matrix(improvedocmatrix)
+v2 <- sort(rowSums(improvematrix), decreasing = TRUE)
+improvedf <- data.frame(word = names(v2), freq=v2)
+```
+
+```{r workshop_feedback_othertopics_code, include=FALSE}
+workshopothertopic <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherTopics.txt")
+othertopiccorpus <- Corpus(VectorSource(workshopothertopic))
+
+othertopiccorpus <- tm_map(othertopiccorpus, content_transformer(tolower))
+othertopiccorpus <- tm_map(othertopiccorpus, removeNumbers)
+othertopiccorpus <- tm_map(othertopiccorpus, removeWords, stopwords("english"))
+othertopiccorpus <- tm_map(othertopiccorpus, removeWords, c("think", "maybe")) 
+othertopiccorpus <- tm_map(othertopiccorpus, removePunctuation)
+othertopiccorpus <- tm_map(othertopiccorpus, stripWhitespace)
+
+othertopicsdocmatrix <- TermDocumentMatrix(othertopiccorpus)
+othertopicsmatrix <- as.matrix(othertopicsdocmatrix)
+v3 <- sort(rowSums(othertopicsmatrix), decreasing = TRUE)
+othertopicsdf <- data.frame(word = names(v3), freq=v3)
+```
+
+```{r workshop_feedback_othertopics_code, include=FALSE}
+workshopcomments <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherComments.txt")
+commentscorpus <- Corpus(VectorSource(workshopcomments))
+
+commentscorpus <- tm_map(commentscorpus, content_transformer(tolower))
+commentscorpus <- tm_map(commentscorpus, removeNumbers)
+commentscorpus <- tm_map(commentscorpus, removeWords, stopwords("english"))
+commentscorpus <- tm_map(commentscorpus, removeWords, c("think", "maybe")) 
+commentscorpus <- tm_map(commentscorpus, removePunctuation)
+commentscorpus <- tm_map(commentscorpus, stripWhitespace)
+
+commentsdocmatrix <- TermDocumentMatrix(commentscorpus)
+commentsmatrix <- as.matrix(commentsdocmatrix)
+v4 <- sort(rowSums(commentsmatrix), decreasing = TRUE)
+commentsdf <- data.frame(word = names(v4), freq=v4)
+```
+
+# Name one aspect of the workshop that you liked.
+```{r workshop_feedback_liked, echo=FALSE, message = FALSE, warning = FALSE}
+wordcloud(words = likeddf$word, freq = likeddf$freq, min.freq = 5,
+          max.words = 50, random.order = FALSE,
+          random.color = FALSE, colors=col)
+```
+
+# Name one aspect of the workshop that could be improved.
+```{r workshop_feedback_needsimprovement, echo=FALSE, message = FALSE, warning = FALSE}
+wordcloud(words = improvedf$word, freq = improvedf$freq, min.freq = 5,
+          max.words = 50, random.order = FALSE,
+          random.color = FALSE, colors=col)
+```
+
+# What other workshop topics would interest you?
+```{r workshop_feedback_otherworkshops, echo=FALSE, message = FALSE, warning = FALSE}
+wordcloud(words = othertopicsdf$word, freq = othertopicsdf$freq, min.freq = 5,
+          max.words = 50, random.order = FALSE,
+          random.color = FALSE, colors=col)
+```
+
+# Please let us know any other comments you have about the workshop.
+```{r workshop_feedback_othercomments, echo=FALSE, message = FALSE, warning = FALSE}
+wordcloud(words = commentsdf$word, freq = commentsdf$freq, min.freq = 5,
+          max.words = 50, random.order = FALSE,
+          random.color = FALSE, colors=col)
 ```
 
 ### Satisfaction vs format
