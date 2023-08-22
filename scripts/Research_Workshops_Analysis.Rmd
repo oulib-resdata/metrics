@@ -464,7 +464,7 @@ postworkshopsurvey %>%
 # Wordcloud code
 
 ```{r workshop_feedback_liked_code, include=FALSE}
-workshopliked <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopLiked.txt")
+workshopliked <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopLiked_Cleaned.txt")
 likedcorpus <- Corpus(VectorSource(workshopliked))
 
 likedcorpus <- tm_map(likedcorpus, removeNumbers)
