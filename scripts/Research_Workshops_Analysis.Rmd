@@ -467,11 +467,12 @@ postworkshopsurvey %>%
 workshopliked <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopLiked.txt")
 likedcorpus <- Corpus(VectorSource(workshopliked))
 
-likedcorpus <- tm_map(likedcorpus, content_transformer(tolower))
 likedcorpus <- tm_map(likedcorpus, removeNumbers)
-likedcorpus <- tm_map(likedcorpus, removeWords, stopwords("english"))
-likedcorpus <- tm_map(likedcorpus, removeWords, c("liked")) 
-likedcorpus <- tm_map(likedcorpus, removePunctuation)
+likedcorpus <- tm_map(likedcorpus, removeWords, c("liked", "the", "and", "was", "that", "very", 
+                                                  "with", "how", "for", "were", "all", "through",
+                                                  "you", "have", "like", "more", "but", "had", "could",
+                                                  "what", "get", "also", "not", "this", "way",
+                                                  "really", "about", "will", "our", "being")) 
 likedcorpus <- tm_map(likedcorpus, stripWhitespace)
 
 likeddocmatrix <- TermDocumentMatrix(likedcorpus)
