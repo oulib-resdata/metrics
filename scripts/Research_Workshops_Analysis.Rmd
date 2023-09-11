@@ -525,20 +525,25 @@ col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 ```
 
 ```{r workshop_feedback_othertopics_code, include=FALSE}
-workshopothertopic <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherTopics.txt")
-othertopiccorpus <- Corpus(VectorSource(workshopothertopic))
+workshoptopics<- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherTopics_Cleaned.txt")
+topicscorpus <- Corpus(VectorSource(workshoptopics))
 
-othertopiccorpus <- tm_map(othertopiccorpus, content_transformer(tolower))
-othertopiccorpus <- tm_map(othertopiccorpus, removeNumbers)
-othertopiccorpus <- tm_map(othertopiccorpus, removeWords, stopwords("english"))
-othertopiccorpus <- tm_map(othertopiccorpus, removeWords, c("think", "maybe")) 
-othertopiccorpus <- tm_map(othertopiccorpus, removePunctuation)
-othertopiccorpus <- tm_map(othertopiccorpus, stripWhitespace)
+topicscorpus <- tm_map(topicscorpus, removeNumbers)
+topicscorpus <- tm_map(topicscorpus, removeWords, c("the", "and", "was", "that", "very", 
+                                                  "with", "how", "for", "were", "all", "through",
+                                                  "you", "have", "like", "more", "but", "had", "could",
+                                                  "what", "get", "also", "not", "this", "way",
+                                                  "really", "about", "will", "our", "being", "would",
+                                                  "workshop", "there", "are", "can", "they", "think",
+                                                  "workshops", "when", "these")) 
+topicscorpus <- tm_map(topicscorpus, stripWhitespace)
 
-othertopicsdocmatrix <- TermDocumentMatrix(othertopiccorpus)
-othertopicsmatrix <- as.matrix(othertopicsdocmatrix)
-v3 <- sort(rowSums(othertopicsmatrix), decreasing = TRUE)
-othertopicsdf <- data.frame(word = names(v3), freq=v3)
+topicsdocmatrix <- TermDocumentMatrix(topicscorpus)
+topicsmatrix <- as.matrix(topicsdocmatrix)
+v <- sort(rowSums(topicsmatrix), decreasing = TRUE)
+topicsdf <- data.frame(word = names(v), freq=v)
+
+col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 ```
 
 ```{r workshop_feedback_othercomments_code, include=FALSE}
