@@ -541,21 +541,26 @@ v3 <- sort(rowSums(othertopicsmatrix), decreasing = TRUE)
 othertopicsdf <- data.frame(word = names(v3), freq=v3)
 ```
 
-```{r workshop_feedback_othertopics_code, include=FALSE}
-workshopcomments <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherComments.txt")
+```{r workshop_feedback_othercomments_code, include=FALSE}
+workshopcomments<- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherComments_Cleaned.txt")
 commentscorpus <- Corpus(VectorSource(workshopcomments))
 
-commentscorpus <- tm_map(commentscorpus, content_transformer(tolower))
 commentscorpus <- tm_map(commentscorpus, removeNumbers)
-commentscorpus <- tm_map(commentscorpus, removeWords, stopwords("english"))
-commentscorpus <- tm_map(commentscorpus, removeWords, c("think", "maybe")) 
-commentscorpus <- tm_map(commentscorpus, removePunctuation)
+commentscorpus <- tm_map(commentscorpus, removeWords, c("the", "and", "was", "that", "very", 
+                                                  "with", "how", "for", "were", "all", "through",
+                                                  "you", "have", "like", "more", "but", "had", "could",
+                                                  "what", "get", "also", "not", "this", "way",
+                                                  "really", "about", "will", "our", "being", "would",
+                                                  "workshop", "there", "are", "can", "they", "think",
+                                                  "workshops", "when", "these")) 
 commentscorpus <- tm_map(commentscorpus, stripWhitespace)
 
 commentsdocmatrix <- TermDocumentMatrix(commentscorpus)
 commentsmatrix <- as.matrix(commentsdocmatrix)
-v4 <- sort(rowSums(commentsmatrix), decreasing = TRUE)
-commentsdf <- data.frame(word = names(v4), freq=v4)
+v <- sort(rowSums(commentsmatrix), decreasing = TRUE)
+commentsdf <- data.frame(word = names(v), freq=v)
+
+col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 ```
 
 # Name one aspect of the workshop that you liked.
