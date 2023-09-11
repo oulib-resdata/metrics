@@ -221,6 +221,25 @@ last_two_years_attendance [last_two_years_attendance$Known.three.weeks.advertisi
 
 ```
 
+### Email length effect on registration
+
+```{r email_code, include=FALSE}
+emails <- read.csv("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/EmailLengthStudyFinal.csv")
+```
+
+```{r email_plot, echo=FALSE, message = FALSE, warning = FALSE}
+emailtree <- ctree(Total.Registrants ~ 
+                    as.factor(From) +
+                    as.factor(Long.or.Short) + 
+                    as.factor(Lead.Time..in.days.)
+                  ,
+                  data = emails,
+                  control = ctree_control(
+                    alpha = 0.05)) #cutoff for splits is p = 0.05 significance
+
+plot(emailtree)
+```
+
 ## Workshop attendance over time
 Number of on-request workshops over time: I will be talking with Brianna at our next meeting about pulling and analyzing these numbers.  Scaffolding in some departments may also help with scaling the workload for this, but that’s at least a year out yet, from what I hear from that committee.  I have added your questions to our analysis list:
 - Attendance (y)
