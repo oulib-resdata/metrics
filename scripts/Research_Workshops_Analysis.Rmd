@@ -504,20 +504,24 @@ col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 ```
 
 ```{r workshop_feedback_needsimprovement_code, include=FALSE}
-workshopimprove <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopNeedsImprovement.txt")
+workshopimprove<- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopNeedsImprovement_Cleaned.txt")
 improvecorpus <- Corpus(VectorSource(workshopimprove))
 
-improvecorpus <- tm_map(improvecorpus, content_transformer(tolower))
 improvecorpus <- tm_map(improvecorpus, removeNumbers)
-improvecorpus <- tm_map(improvecorpus, removeWords, stopwords("english"))
-improvecorpus <- tm_map(improvecorpus, removeWords, c("think", "maybe")) 
-improvecorpus <- tm_map(improvecorpus, removePunctuation)
+improvecorpus <- tm_map(improvecorpus, removeWords, c("the", "and", "was", "that", "very", 
+                                                  "with", "how", "for", "were", "all", "through",
+                                                  "you", "have", "like", "more", "but", "had", "could",
+                                                  "what", "get", "also", "not", "this", "way",
+                                                  "really", "about", "will", "our", "being", "would",
+                                                  "workshop", "there", "are", "can", "they", "think")) 
 improvecorpus <- tm_map(improvecorpus, stripWhitespace)
 
 improvedocmatrix <- TermDocumentMatrix(improvecorpus)
 improvematrix <- as.matrix(improvedocmatrix)
-v2 <- sort(rowSums(improvematrix), decreasing = TRUE)
-improvedf <- data.frame(word = names(v2), freq=v2)
+v <- sort(rowSums(improvematrix), decreasing = TRUE)
+improvedf <- data.frame(word = names(v), freq=v)
+
+col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 ```
 
 ```{r workshop_feedback_othertopics_code, include=FALSE}
