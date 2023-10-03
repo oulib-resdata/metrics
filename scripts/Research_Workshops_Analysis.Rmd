@@ -1,7 +1,7 @@
 ---
 title: "Research Workshop Attendance, Marketing, and Satisfaction"
-author: "Claire Curry (STEM Services) and Brianna Narr (Metrics Coordinator)"
-date: '2023-08-03'
+author: "C.M. Curry (STEM Services) and B. Narr (Metrics Coordinator)"
+date: '2023-10-03'
 output:
   word_document: 
     reference_docx: word_styles.docx
@@ -30,7 +30,8 @@ source("ggwordcloud_analysis_complete_ou_colors.R")
 last_two_years_attendance <- read.csv("../raw_data/postworkshop/WorkshopAttendanceJD.csv")
 
 # Preliminary analysis requested by CMC 2023/summer (does not include course-integrated workshops)
-workshop <- read.csv ("../raw_data/postworkshop/WorkshopAttendanceUpdate.csv", header=TRUE,
+workshop <- read.csv ("../raw_data/postworkshop/WorkshopAttendanceUpdate.csv",
+                      header=TRUE,
                       stringsAsFactors=FALSE)
 
 ```
@@ -221,24 +222,7 @@ last_two_years_attendance [last_two_years_attendance$Known.three.weeks.advertisi
 
 ```
 
-### Email length effect on registration
 
-```{r email_code, include=FALSE}
-emails <- read.csv("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/EmailLengthStudyFinal.csv")
-```
-
-```{r email_plot, echo=FALSE, message = FALSE, warning = FALSE}
-emailtree <- ctree(Total.Registrants ~ 
-                    as.factor(From) +
-                    as.factor(Long.or.Short) + 
-                    as.factor(Lead.Time..in.days.)
-                  ,
-                  data = emails,
-                  control = ctree_control(
-                    alpha = 0.05)) #cutoff for splits is p = 0.05 significance
-
-plot(emailtree)
-```
 
 ## Workshop attendance over time
 Number of on-request workshops over time: I will be talking with Brianna at our next meeting about pulling and analyzing these numbers.  Scaffolding in some departments may also help with scaling the workload for this, but that’s at least a year out yet, from what I hear from that committee.  I have added your questions to our analysis list:
@@ -785,3 +769,33 @@ A completely red bar indicates that none of the people who completed the pre-reg
 A completely black bar indicates that pre-registration did not occur but people attended anyways (you see these attendees as the red caps to the black bars in the previous section).  This occurred more with people who attended a workshop given in a class ("Class Requirement"; that category suggests either we visited the class, which does not involve LibCal registration, or that the instructor asked people to attend a workshop outside of class).  With online workshops requiring pre-registration, we don't necessarily expect any bar to be completely black (all walk-ins).  However, in-person workshops can accept passer-by walk-ins who didn't pre-register or people who saw the event via any other marketing method (again, see the previous section's chart) and just showed up without pre-registering. Zoom workshops could have other registrants also forward the Zoom link.
 
 Thus, any method with some black has some attendance, and methods with larger amounts of black indicate relatively stronger responses.  Thus, the highest response "intensity" are for class requirements, librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and people who find events by examining the OU Libraries website.
+
+## Marketing implementation details
+### Email length effect on registration
+
+```{r email_code, include=FALSE}
+#emails <- read.csv("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/EmailLengthStudyFinal.csv")
+emails <- read.csv("../raw_data/preworkshop/EmailLengthStudyFinal.csv")
+#Data source: https://osf.io/rvnsh
+```
+
+I used registrants instead of confirmed attendees, because that felt more relevant to the emails, and it was more consistently documented. The factors that were considered here were lead time (how much time between the email and the event) and length of email (long = one that was typed by one of you, short = automated libzoom email). Email length was the deciding factor for number of registrants! 
+```{r email_plot, echo=FALSE, message = FALSE, warning = FALSE}
+emailtree <- ctree(Total.Registrants ~ 
+                    as.factor(From) +
+                    as.factor(Long.or.Short) + 
+                    Lead.Time..in.days.
+                  ,
+                  data = emails,
+                  control = ctree_control(
+                    alpha = 0.05)) #cutoff for splits is p = 0.05 significance
+#hist(emails$Lead.Time..in.days.) shows most email lead times are 3 weeks
+plot(emailtree)
+```
+
+
+### Registration is a reasonable proxy for attendance
+```{r registration_vs_attendance, echo = FALSE, message = FALSE, warning = FALSE}
+cor.test()
+
+```
