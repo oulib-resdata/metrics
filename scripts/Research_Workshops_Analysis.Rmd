@@ -27,6 +27,28 @@ source("ggwordcloud_analysis_complete_ou_colors.R")
 ```
 
 ```{r data_import_attendance, include=FALSE}
+# Load data from OSF
+
+# Authenticate
+# Your OSF PAT should be in .REnviron file following these instructions:
+# https://docs.ropensci.org/osfr/reference/osf_auth.html
+
+
+## Retrieve project
+osf_node <- osf_retrieve_node("qjkvf")
+
+## List files in project
+osf_files <- osf_ls_files(osf_node)
+
+## Download the files
+osf_download(x = osf_files,
+             path = NULL, #default save to local working directory
+             recurse = TRUE, #download all nested files
+             conflicts = "overwrite", #OSF is the canonical version
+             progress = TRUE #show progress bar
+             )
+  
+  
 # Analysis requested by JD 2023/08/03
 last_two_years_attendance <- read.csv("../raw_data/postworkshop/WorkshopAttendanceJD.csv")
 
@@ -107,21 +129,18 @@ FeedbackActuallyAttended$ReducedCategories[!(FeedbackActuallyAttended$How.did.yo
 FeedbackActuallyAttended$OtherDescriptions[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
 ```
 # Workshop descriptive numbers
-
-- How many workshops by format
-- How many workshops by format by topic
-- How many workshops on request vs course vs scheduled
-
+We continue to offer more workshops on request (right panel), especially in courses.
 ```{r workshop_descriptive_stats, echo=FALSE, message = FALSE, warning = FALSE}
-descriptive <- last_two_years_attendance %>%
-  group_by(Academic.Year,
-           Is.Course,
-           Requested.) %>%
-  summarize(offer_count = n())
-descriptive
-
+ggplot(data = last_two_years_attendance,
+       mapping = aes(x = Academic.Year,
+                     fill = Is.Course))+
+  geom_bar()+
+  facet_grid(~Requested.)+
+  labs(y = "Number of workshops offered")
 ```
-- How many topics per semester
+
+
+We have increased the number of topics we've brought "on request" to groups and courses.  The number of distinct topics has declined in the last academic year, likely due to loss of specialist expertise with staff loss.
 
 ```{r workshop_descriptive_stats_topics, echo=FALSE, message = FALSE, warning = FALSE}
 topics_desc <- last_two_years_attendance %>%
@@ -132,14 +151,17 @@ topics_desc <- last_two_years_attendance %>%
       ) %>%
   summarize(topics_count = n_distinct(Topic))
 
-
 topics_desc
 
-
+ggplot(data = topics_desc,
+       mapping = aes(x = Academic.Year,
+                     y = topics_count,
+                     fill = Is.Course))+
+  geom_bar(stat = "identity")+
+  facet_grid(~Requested.)+
+  labs(y = "Number of unique topics offered")
 
 ```
-
-- How many workshops per semester
 
 LATER TODO: How many instructors and helpers per semester
   - BN gather number of helpers from Libraries collaborators + internal notes and total attendees
@@ -178,7 +200,8 @@ att_tree <- ctree(Total.Attendees ~
                     #as.factor(Is.Course) +
                     #as.factor(Known.three.weeks.advertising)
                   ,
-                  data = last_two_years_attendance [last_two_years_attendance$Known.three.weeks.advertising == "Y" &
+                  data = last_two_years_attendance [
+                    #last_two_years_attendance$Known.three.weeks.advertising == "Y" &
                                                       last_two_years_attendance$Is.Course == "N" &
                                                       last_two_years_attendance$Requested. == "N",],
                   control = ctree_control(
@@ -189,7 +212,7 @@ plot(att_tree)
 
 When we include whether a workshop was in a course, requested or not, and had a known three-week advertising period or not, only whether a workshop was in a course was still the only deciding factor in increased attendance numbers.
 
-Since the time between registration opening and workshop did not affect attendance.  As such, I propose we open all workshops at the start of the semester.  This change was approved by the committee in slack in Fall 2023 (2023/10/03) to be implemented for the Spring 2024 workshops.  We discussed adding a second reminder for already registered participants, but only one reminder is possible using LibCal automated emails.  We will now post once advertising the full schedule, and then continue doing the 3-weeks-advertising to remind people again.
+
 
 ```{r att_tree2, echo=FALSE, message = FALSE, warning = FALSE}
 att_tree2 <- ctree(Total.Attendees ~ 
@@ -777,7 +800,7 @@ A completely black bar indicates that pre-registration did not occur but people 
 Thus, any method with some black has some attendance, and methods with larger amounts of black indicate relatively stronger responses.  Thus, the highest response "intensity" are for class requirements, librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and people who find events by examining the OU Libraries website.
 
 ## Marketing implementation details
-### Email length effect on registration
+### Email detail level and timing
 
 ```{r email_code, include=FALSE}
 #emails <- read.csv("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/EmailLengthStudyFinal.csv")
@@ -786,6 +809,8 @@ emails <- read.csv("../raw_data/preworkshop/EmailLengthStudyFinal.csv")
 ```
 
 I used registrants instead of confirmed attendees, because that felt more relevant to the emails, and it was more consistently documented. The factors that were considered here were lead time (how much time between the email and the event) and length of email (long = one that was typed by one of you, short = automated libzoom email). Email length was the deciding factor for number of registrants! 
+
+Since the time between registration opening and workshop did not affect attendance.  As such, CMC proposed we open all workshops at the start of the semester.  This change was approved by the committee in slack in Fall 2023 (2023/10/03) to be implemented for the Spring 2024 workshops.  We discussed adding a second reminder for already registered participants, but only one reminder is possible using LibCal automated emails.  We will now post once advertising the full schedule, and then continue doing the 3-weeks-advertising to remind people again.
 ```{r email_plot, echo=FALSE, message = FALSE, warning = FALSE}
 emailtree <- ctree(Total.Registrants ~ 
                     as.factor(From) +
