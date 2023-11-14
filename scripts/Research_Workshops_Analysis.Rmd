@@ -389,8 +389,9 @@ carpentries %>%
 ## Note from BN: I have no idea how the CSV formatting should go in Rmd, so here's what I did in my own editor
 
 ```{r postworkshop_data, include=FALSE}
-postworkshopsurvey <- read.csv ("C:/Users/Brianna_Narr.ULHKH1JW3/Downloads/PostWorkshopSurveyFinal.csv", header=TRUE, stringsAsFactors=FALSE)
-
+postworkshopsurvey <- read.csv("../raw_data/postworkshop/PostWorkshopSurveyFinal.csv",
+         header = TRUE, 
+         stringsAsFactors = FALSE)
 rows <- as.numeric(count(postworkshopsurvey))
 
 postworkshopsurvey <- na.omit(postworkshopsurvey)
