@@ -26,7 +26,7 @@ source("ggwordcloud_analysis_complete_ou_colors.R")
 # set working directory to be one above the scripts folder.  but is relative to .rmd file??
 ```
 
-```{r data_import_attendance, include=FALSE}
+```{r data_osf, include=FALSE}
 # Load data from OSF
 
 # Authenticate
@@ -48,7 +48,11 @@ osf_download(x = osf_files,
              progress = TRUE #show progress bar
              )
   
-  
+```
+
+
+```{r data_import_attendance, include=FALSE}
+
 # Analysis requested by JD 2023/08/03
 last_two_years_attendance <- read.csv("../raw_data/postworkshop/WorkshopAttendanceJD.csv")
 
@@ -264,8 +268,18 @@ plot_time <- last_two_years_attendance %>%
   ggplot(mapping = aes(x = as.factor(Calendar.Year),
                        y = Total.Attendees,
                        fill = Requested.)) +
-  geom_boxplot(notch = TRUE)
+  geom_boxplot(notch = TRUE) +
+  labs (y = "People at each workshop")
 plot_time
+
+
+ggplot(data = last_two_years_attendance,
+       mapping = aes(x = Academic.Year,
+                     y = Total.Attendees,
+                     fill = Is.Course))+
+  geom_bar(stat = "identity")+
+  facet_grid(~Requested., labeller = label_both)+
+  labs(y = "Total people reached")
 
 ```
 
