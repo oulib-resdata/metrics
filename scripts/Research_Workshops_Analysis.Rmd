@@ -451,6 +451,20 @@ postworkshopsurvey$Date <-
 
 ```
 
+```{r, workshop_feedback_format_levels, echo = FALSE}
+postworkshopsurvey$Valuable.for.Program <- factor(x = postworkshopsurvey$Valuable.for.Program,
+                                                  levels = c("Strongly disagree",
+                                                             "Disagree",
+                                                             "Somewhat disagree",
+                                                             "Neither agree nor disagree",
+                                                             "Somewhat agree",
+                                                             "Agree",
+                                                             "Strongly agree",
+                                                             "Not applicable",
+                                                             "No answer"
+                                                  ))
+
+```
 
 
 ```{r, workshop_feedback_format_data, echo = FALSE}
@@ -482,6 +496,7 @@ postworkshopsurvey %>%
   )
 
 
+# heat  map as https://stackoverflow.com/questions/61676055/heatmap-data-visualization-with-categorical-count-and-time-in-r
 joined_post %>%
   group_by(Location.of.Outreach,
            Valuable.for.Program) %>%
