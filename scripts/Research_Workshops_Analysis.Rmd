@@ -511,11 +511,15 @@ chi_program <- chisq.test(x = na.post$Location.of.Outreach,
            y = na.post$Valuable.for.Program,
            simulate.p.value = TRUE)
 
-#plot if significant
+workshop_feedback_valuableforprogram_plot <- chi_program$p.value>=0.05
+```
+
+```{r, workshop_feedback_valuableforprogram_plot, eval = workshop_feedback_valuableforprogram_plot}
+#will only eval (ie plot) if test in previous chunk is significant
 # count is WRONG summary  here, because we may  have more people in a given category
 # proportion of total for row?
 # https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
-if (chi_program$p.value>=0.05){na.post %>%
+na.post %>%
   group_by(Location.of.Outreach,
            Valuable.for.Program) %>%
   summarize(count_per_feeling = n()) %>%
@@ -524,8 +528,7 @@ ggplot(
            y = count_per_feeling,
            fill = Valuable.for.Program)) +
   geom_col(position = "fill")+
-    scale_fill_viridis_d (aesthetics = "fill")} else
-{print("Not significant chi square, no graph")}
+    scale_fill_viridis_d (aesthetics = "fill")
 
 
 
