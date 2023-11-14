@@ -1,7 +1,7 @@
 ---
 title: "Research Workshop Attendance, Marketing, and Satisfaction"
 author: "C.M. Curry (STEM Services) and B. Narr (Metrics Coordinator)"
-date: '2023-10-03'
+date: '2023-11-14'
 output:
   word_document: 
     reference_docx: word_styles.docx
@@ -12,13 +12,14 @@ output:
 # FUNCTIONS AND LIBRARIES
 
 knitr::opts_chunk$set(echo = FALSE)
-library(ggplot2)
-library(partykit)
-library(tidyverse)
-library(viridis)
-library(tm)
-library(SnowballC)
-library(wordcloud)
+library(ggplot2)    #for plots
+library(osfr)       #downloading data from private OSF
+library(partykit)   # for decision tree statistical analysis
+library(tidyverse)  #for data munging
+library(viridis)    #color scheme
+library(tm)         #text analysis?
+library(SnowballC)  #text analysis
+library(wordcloud)  #word clouds
 
 # Load custom function for "other" block
 source("ggwordcloud_analysis_complete_ou_colors.R")
@@ -186,7 +187,9 @@ att_tree <- ctree(Total.Attendees ~
 plot(att_tree)
 ```
 
-When we include whether a workshop was in a course, requested or not, and had a known three-week advertising period, only whether a workshop was in a course was a deciding factor in increased attendance numbers.
+When we include whether a workshop was in a course, requested or not, and had a known three-week advertising period or not, only whether a workshop was in a course was still the only deciding factor in increased attendance numbers.
+
+Since the time between registration opening and workshop did not affect attendance.  As such, I propose we open all workshops at the start of the semester.  This change was approved by the committee in slack in Fall 2023 (2023/10/03) to be implemented for the Spring 2024 workshops.  We discussed adding a second reminder for already registered participants, but only one reminder is possible using LibCal automated emails.  We will now post once advertising the full schedule, and then continue doing the 3-weeks-advertising to remind people again.
 
 ```{r att_tree2, echo=FALSE, message = FALSE, warning = FALSE}
 att_tree2 <- ctree(Total.Attendees ~ 
@@ -206,6 +209,9 @@ att_tree2 <- ctree(Total.Attendees ~
 
 plot(att_tree2)
 ```
+
+
+
 
 ### Figures
 Format was not significant, but since it was requested, here is the figure.
