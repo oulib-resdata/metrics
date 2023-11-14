@@ -142,12 +142,16 @@ last_two_years_attendance$Event.Date.and.Time_2 <- mdy_hms(last_two_years_attend
 # separate year, month, date, times
 last_two_years_attendance$year <- year(last_two_years_attendance$Event.Date.and.Time_2)
 last_two_years_attendance$month <- month(last_two_years_attendance$Event.Date.and.Time_2)
-last_two_years_attendance$day <- wday(last_two_years_attendance$Event.Date.and.Time_2,
+last_two_years_attendance$day <- day(last_two_years_attendance$Event.Date.and.Time_2)
+last_two_years_attendance$wday <- wday(last_two_years_attendance$Event.Date.and.Time_2,
                                       week_start = 1, #1 = Monday,
                                       label = TRUE    # days of weeks as characters
                                       )
 last_two_years_attendance$hour <-
   format(last_two_years_attendance$Event.Date.and.Time_2, "%H")
+
+last_two_years_attendance$Date <-
+  format(last_two_years_attendance$Event.Date.and.Time_2, "%m/%d/%Y")
 
 # convert 00 hour to NA
 last_two_years_attendance[last_two_years_attendance$hour=="00", "hour"] <- NA
@@ -213,6 +217,7 @@ For scheduled workshops, none of the following variables impact attendance numbe
 - academic year
 - calendar year
 - semester (spring, summer, or fall)
+- time of day
 - workshop topic
 - multi-day vs single day scheduling
 
@@ -233,8 +238,7 @@ att_tree <- ctree(Total.Attendees ~
                   data = last_two_years_attendance [
                     #last_two_years_attendance$Known.three.weeks.advertising == "Y" &
                                                       last_two_years_attendance$Is.Course == "N" &
-                                                      last_two_years_attendance$Requested. == "N",
-                                                      last_two_years_attendance$hour != 0,],
+                                                      last_two_years_attendance$Requested. == "N",],
                   control = ctree_control(
                                alpha = 0.05)) #cutoff for splits is p = 0.05 significance
 
@@ -424,6 +428,38 @@ rows <- as.numeric(count(postworkshopsurvey))
 postworkshopsurvey <- na.omit(postworkshopsurvey)
 
 ```
+
+
+```{r, workshop_feedback_date_formats, include = FALSE}
+# Month, day, year, hour, minute, seconds
+postworkshopsurvey$Date_2 <- mdy_hms(postworkshopsurvey$Date,
+                                                           truncated = 3)
+
+
+# separate year, month, date, times
+postworkshopsurvey$year <- year(postworkshopsurvey$Date_2)
+postworkshopsurvey$month <- month(postworkshopsurvey$Date_2)
+postworkshopsurvey$day <- day(postworkshopsurvey$Date_2)
+postworkshopsurvey$wday <- wday(postworkshopsurvey$Date_2,
+                                      week_start = 1, #1 = Monday,
+                                      label = TRUE    # days of weeks as characters
+                                      )
+
+# Overwrite original column with formatted date
+postworkshopsurvey$Date <-
+  format(postworkshopsurvey$Date_2, "%m/%d/%Y")
+
+```
+
+
+```{r, workshop_feedback_format_data, echo = FALSE}
+joined_post <- left_join(postworkshopsurvey, 
+                         last_two_years_attendance,
+                         by = Date)
+
+
+```
+
 
 ## Do you anticipate that this new knowledge can be applied towards your work?
 ```{r workshop_feedback_newknowledge, echo=FALSE, message = FALSE, warning = FALSE}
