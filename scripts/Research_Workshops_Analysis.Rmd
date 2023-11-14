@@ -453,15 +453,16 @@ postworkshopsurvey$Date <-
 
 ```{r, workshop_feedback_format_levels, echo = FALSE}
 postworkshopsurvey$Valuable.for.Program <- factor(x = postworkshopsurvey$Valuable.for.Program,
-                                                  levels = c("Strongly disagree",
-                                                             "Disagree",
-                                                             "Somewhat disagree",
-                                                             "Neither agree nor disagree",
-                                                             "Somewhat agree",
-                                                             "Agree",
+                                                  levels = c("No answer",
+                                                             "Not applicable", 
                                                              "Strongly agree",
-                                                             "Not applicable",
-                                                             "No answer"
+                                                             "Agree",
+                                                             "Somewhat agree",
+                                                             "Neither agree nor disagree",
+                                                             "Somewhat disagree",
+                                                             "Disagree",
+                                                             "Strongly disagree"
+                                                             
                                                   ))
 
 ```
@@ -495,16 +496,40 @@ postworkshopsurvey %>%
         axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
   )
 
+```
 
-# heat  map as https://stackoverflow.com/questions/61676055/heatmap-data-visualization-with-categorical-count-and-time-in-r
-joined_post %>%
+There was no difference in workshop satisification relating to perception of the material as "valuable to my program of study" between workshop formats.
+```{r, workshop_feedback_valuableforprogram_stats, include = TRUE}
+# summarize into counts
+
+na.post <- joined_post %>%
+  filter(!is.na(Location.of.Outreach),
+         !is.na(Valuable.for.Program))
+
+# run test for significance
+chi_program <- chisq.test(x = na.post$Location.of.Outreach,
+           y = na.post$Valuable.for.Program,
+           simulate.p.value = TRUE)
+
+#plot if significant
+# count is WRONG summary  here, because we may  have more people in a given category
+# proportion of total for row?
+# https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
+if (chi_program$p.value>=0.05){na.post %>%
   group_by(Location.of.Outreach,
            Valuable.for.Program) %>%
   summarize(count_per_feeling = n()) %>%
-  ggplot(mapping = aes(x = Location.of.Outreach,
-                                            y = Valuable.for.Program,
-                       fill = count_per_feeling)) +
-  geom_tile()
+ggplot(
+       aes(x = Location.of.Outreach,
+           y = count_per_feeling,
+           fill = Valuable.for.Program)) +
+  geom_col(position = "fill")+
+    scale_fill_viridis_d (aesthetics = "fill")} else
+{print("Not significant chi square, no graph")}
+
+
+
+
 
 ```
 
