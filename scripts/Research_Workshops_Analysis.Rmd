@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = FALSE)
 library(ggplot2)    #for plots
 library(osfr)       #downloading data from private OSF
 library(partykit)   # for decision tree statistical analysis
-library(tidyverse)  #for data munging
+library(tidyverse)  #for data munging including dates
 library(viridis)    #color scheme
 library(tm)         #text analysis?
 library(SnowballC)  #text analysis
@@ -132,6 +132,31 @@ FeedbackActuallyAttended$ReducedCategories <- FeedbackActuallyAttended$How.did.y
 FeedbackActuallyAttended$ReducedCategories[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
 FeedbackActuallyAttended$OtherDescriptions[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
 ```
+
+```{r, data_import_date_cleaning, include = FALSE}
+# Month, day, year, hour, minute, seconds
+last_two_years_attendance$Event.Date.and.Time_2 <- mdy_hms(last_two_years_attendance$Event.Date.and.Time,
+                                                           truncated = 3)
+
+
+# separate year, month, date, times
+last_two_years_attendance$year <- year(last_two_years_attendance$Event.Date.and.Time_2)
+last_two_years_attendance$month <- month(last_two_years_attendance$Event.Date.and.Time_2)
+last_two_years_attendance$day <- wday(last_two_years_attendance$Event.Date.and.Time_2,
+                                      week_start = 1, #1 = Monday,
+                                      label = TRUE    # days of weeks as characters
+                                      )
+last_two_years_attendance$hour <-
+  format(last_two_years_attendance$Event.Date.and.Time_2, "%H")
+
+# convert 00 hour to NA
+last_two_years_attendance[last_two_years_attendance$hour=="00", "hour"] <- NA
+
+last_two_years_attendance$hour <- as.numeric(last_two_years_attendance$hour)
+
+```
+
+
 # Workshop descriptive numbers
 We continue to offer more workshops on request (right panel), especially in courses.
 ```{r workshop_descriptive_stats, echo=FALSE, message = FALSE, warning = FALSE}
@@ -183,7 +208,7 @@ DSI request 2023/07:
 - attendance numbers for each format (below in Figures and analysis)
 
 ### Statistical analysis
-For scheduled workshops with a known three week advertising period, none of the following variables impact attendance numbers in a conditional inference tree analysis.
+For scheduled workshops, none of the following variables impact attendance numbers in a conditional inference tree analysis.
 - Format (in person vs virtual vs hybrid)
 - academic year
 - calendar year
@@ -200,14 +225,16 @@ att_tree <- ctree(Total.Attendees ~
                     as.factor(Calendar.Year)+
                     as.factor(Topic) + 
                     as.factor(Multiple.Days.)+
-                    as.factor(Semester) #+
+                    as.factor(Semester) +
                     #as.factor(Is.Course) +
-                    #as.factor(Known.three.weeks.advertising)
+                    as.factor(Known.three.weeks.advertising) +
+                    hour
                   ,
                   data = last_two_years_attendance [
                     #last_two_years_attendance$Known.three.weeks.advertising == "Y" &
                                                       last_two_years_attendance$Is.Course == "N" &
-                                                      last_two_years_attendance$Requested. == "N",],
+                                                      last_two_years_attendance$Requested. == "N",
+                                                      last_two_years_attendance$hour != 0,],
                   control = ctree_control(
                                alpha = 0.05)) #cutoff for splits is p = 0.05 significance
 
@@ -621,6 +648,8 @@ wordcloud(words = commentsdf$word, freq = commentsdf$freq, min.freq = 5,
 
 ### Satisfaction vs format
 - DSI request 2023/07:  quality of instruction in each format (online, in person, hybrid, and total) and request/course status.
+
+
 
 ### Workshop length vs satisfaction
 - hours in session
