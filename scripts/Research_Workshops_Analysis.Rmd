@@ -452,12 +452,14 @@ postworkshopsurvey$Date <-
 ```
 
 
+
 ```{r, workshop_feedback_format_data, echo = FALSE}
 joined_post <- left_join(postworkshopsurvey, 
                          last_two_years_attendance,
-                         by = Date)
+                         by = c("Date"))
 
-
+## TODO NEED TO CLEAN TOPICS TO MATCH SURVEYS
+# Warning: Detected an unexpected many-to-many relationship between `x` and `y`.
 ```
 
 
@@ -478,6 +480,16 @@ postworkshopsurvey %>%
         axis.title = element_text(size = 14),
         axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
   )
+
+
+joined_post %>%
+  group_by(Location.of.Outreach,
+           Valuable.for.Program) %>%
+  summarize(count_per_feeling = n()) %>%
+  ggplot(mapping = aes(x = Location.of.Outreach,
+                                            y = Valuable.for.Program,
+                       fill = count_per_feeling)) +
+  geom_tile()
 
 ```
 
