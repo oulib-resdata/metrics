@@ -414,6 +414,7 @@ carpentries %>%
 # Workshop feedback
 
 ## Executive summary
+Tentative results suggest no difference in perception of workshop value by learners among learning formats (in person, hybrid, or online) and generally positive feedback.
 
 ## Questions
 
@@ -452,6 +453,9 @@ postworkshopsurvey$Date <-
 ```
 
 ```{r, workshop_feedback_format_levels, echo = FALSE}
+
+#This will need to be repeated for all three "valuable for" questions, so the levels are ordered in the plots.
+
 postworkshopsurvey$Valuable.for.Program <- factor(x = postworkshopsurvey$Valuable.for.Program,
                                                   levels = c("No answer",
                                                              "Not applicable", 
@@ -498,7 +502,11 @@ postworkshopsurvey %>%
 
 ```
 
-There was no difference in workshop satisification relating to perception of the material as "valuable to my program of study" between workshop formats.
+
+## This workshop was valuable towards your program of study.
+
+### Quantitative 
+There was no difference in workshop satisfaction relating to perception of the material as "valuable to my program of study" between workshop formats.
 ```{r, workshop_feedback_valuableforprogram_stats, include = TRUE}
 # summarize into counts
 
@@ -511,11 +519,11 @@ chi_program <- chisq.test(x = na.post$Location.of.Outreach,
            y = na.post$Valuable.for.Program,
            simulate.p.value = TRUE)
 
-workshop_feedback_valuableforprogram_plot <- chi_program$p.value>=0.05
+workshop_feedback_valuableforprogram_plot <- chi_program$p.value<=0.05
 ```
 
-```{r, workshop_feedback_valuableforprogram_plot, eval = workshop_feedback_valuableforprogram_plot}
-#will only eval (ie plot) if test in previous chunk is significant
+```{r, workshop_feedback_valuableforprogram_plot, eval = workshop_feedback_valuableforprogram_plot, include = workshop_feedback_valuableforprogram_plot}
+# will only eval or include (ie plot) if test in previous chunk is significant
 # count is WRONG summary  here, because we may  have more people in a given category
 # proportion of total for row?
 # https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
@@ -536,7 +544,7 @@ ggplot(
 
 ```
 
-## This workshop was valuable towards your program of study.
+### Qualitative feedback
 ```{r workshop_feedback_valuableforprogram, echo=FALSE, message = FALSE, warning = FALSE}
 postworkshopsurvey %>%
   mutate(Valuable.for.Program = fct_relevel(Valuable.for.Program, "Strongly agree", "Agree", "Somewhat agree", 
