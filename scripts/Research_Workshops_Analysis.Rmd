@@ -508,6 +508,13 @@ joined_post <- left_join(postworkshopsurvey,
 
 ## TODO NEED TO CLEAN TOPICS TO MATCH SURVEYS
 # Warning: Detected an unexpected many-to-many relationship between `x` and `y`.
+
+# summarize into counts
+
+na.post <- joined_post %>%
+  filter(!is.na(Location.of.Outreach),
+         !is.na(Valuable.for.Program))
+
 ```
 
 ## Executive summary
@@ -535,19 +542,39 @@ postworkshopsurvey %>%
         axis.title = element_text(size = 14),
         axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
   )
+```
+
+There was no significant difference in perception of learning new knowledge from the workshop among learning formats.
+```{r workshop_feedback_newknowledge_statistics, echo=FALSE, message = FALSE, warning = FALSE}
+# run test for significance
+chi_newkno <- chisq.test(x = na.post$Location.of.Outreach,
+           y = na.post$Using.New.Knowledge.,
+           simulate.p.value = TRUE)
+
+workshop_feedback_chi_newkno_plot <- chi_newkno$p.value<=0.05
 
 ```
+
+```{r, workshop_feedback_newknowledge_plot, eval = workshop_feedback_chi_newkno_plot, include = workshop_feedback_chi_newkno_plot}
+# will only eval or include (ie plot) if test in previous chunk is significant
+na.post %>%
+  group_by(Location.of.Outreach,
+           Using.New.Knowledge.) %>%
+  summarize(count_per_feeling = n()) %>%
+ggplot(
+       aes(x = Location.of.Outreach,
+           y = count_per_feeling,
+           fill = Using.New.Knowledge.)) +
+  geom_col(position = "fill")+
+    scale_fill_viridis_d (aesthetics = "fill")
+
+```
+
 
 
 ### This workshop was valuable towards your program of study.
 There was no difference in workshop satisfaction relating to perception of the material as "valuable to my program of study" between workshop formats.
 ```{r, workshop_feedback_valuableforprogram_stats, include = TRUE}
-# summarize into counts
-
-na.post <- joined_post %>%
-  filter(!is.na(Location.of.Outreach),
-         !is.na(Valuable.for.Program))
-
 # run test for significance
 chi_program <- chisq.test(x = na.post$Location.of.Outreach,
            y = na.post$Valuable.for.Program,
