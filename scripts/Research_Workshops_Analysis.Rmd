@@ -573,7 +573,49 @@ ggplot(
 
 
 ### This workshop was valuable towards your program of study.
-There was no difference in workshop satisfaction relating to perception of the material as "valuable to my program of study" between workshop formats.
+Most participants perceived the workshop as valuable towards their program of study.  Interestingly, "disagree" is never chosen by any of our several hundred respondents.
+
+```{r workshop_feedback_valuableforprogram, echo=FALSE, message = FALSE, warning = FALSE}
+postworkshopsurvey %>%
+  mutate(Valuable.for.Program = fct_relevel(Valuable.for.Program,
+                                            "Strongly agree",
+                                            "Agree",
+                                            "Somewhat agree", 
+                                            "Neither agree nor disagree",
+                                            "Somewhat disagree", 
+                                            "Disagree",
+                                            "Strongly disagree",
+                                            "Not applicable",
+                                            "No answer")) %>%
+  ggplot(mapping = aes(x=Valuable.for.Program,
+                       fill = Valuable.for.Program)) +
+  geom_bar(color = "black")+
+  scale_fill_manual(values=c(
+                             "#8D1732",
+                             "#8D1732",
+                             "#8D1732",
+                             "darkgray",
+                             "darkgray",
+                             "darkgray",
+                             "gray99",
+                             "gray99"
+                             ))+
+  theme_bw()+
+  theme(
+        plot.title = element_text(size = 20, hjust = 0.5),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12, 
+                                 angle = 45,
+                                 hjust = 1,
+                                 vjust = 0.2)
+  )+
+  labs(y = "Number of survey respondents with this answer",
+       x = "Response about value of workshop towards program of study",
+       fill = "Agreement on value")
+
+```
+
+There was no difference in perception of the material as "valuable to my program of study" between workshop formats (hybrid, online, or in person).
 ```{r, workshop_feedback_valuableforprogram_stats, include = TRUE}
 # run test for significance
 chi_program <- chisq.test(x = na.post$Location.of.Outreach,
@@ -598,42 +640,19 @@ ggplot(
            fill = Valuable.for.Program)) +
   geom_col(position = "fill")+
     scale_fill_viridis_d (aesthetics = "fill")
-
-
-
-
-
 ```
 
 
-```{r workshop_feedback_valuableforprogram, echo=FALSE, message = FALSE, warning = FALSE}
-postworkshopsurvey %>%
-  mutate(Valuable.for.Program = fct_relevel(Valuable.for.Program, "Strongly agree", "Agree", "Somewhat agree", 
-                                            "Neither agree nor disagree", "Somewhat disagree", 
-                                            "Strongly disagree", "Not applicable", "No answer")) %>%
-  ggplot(aes(x=Valuable.for.Program, fill=Valuable.for.Program)) +
-  scale_fill_viridis_d (aesthetics = "fill") +
-  theme(panel.background = element_rect(fill = "lightgray",
-                                        color = "white",
-                                        size = 0.5, linetype = "solid"),
-        panel.grid.major = element_line(size = 0.5, linetype = "solid",
-                                        color = "darkgray"),
-        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
-                                        color = "darkgray"),
-        plot.title = element_text(size = 20, hjust = 0.5),
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
-  )
-
-```
 
 ### This workshop was valuable towards your career.
+Most participants perceived the workshop as valuable towards their career.
 ```{r workshop_feedback_valuableforcareer, echo=FALSE, message = FALSE, warning = FALSE}
 postworkshopsurvey %>%
   mutate(Valuable.for.Career = fct_relevel(Valuable.for.Career, "Strongly agree", "Agree", "Somewhat agree", 
                                            "Neither agree nor disagree", "Somewhat disagree", "Disagree", 
                                            "Strongly disagree", "Not applicable", "No answer")) %>%
   ggplot(aes(x=Valuable.for.Career, fill=Valuable.for.Career)) +
+  geom_bar()+
   scale_fill_viridis_d (aesthetics = "fill") +
   theme(panel.background = element_rect(fill = "lightgray",
                                         color = "white",
@@ -648,13 +667,35 @@ postworkshopsurvey %>%
   )
 ```
 
+There was no difference in perception of the material as "valuable to my career" between workshop formats (hybrid, online, or in person).
+```{r, workshop_feedback_valuableforcareer_stats, include = TRUE}
+# run test for significance
+chi_career <- chisq.test(x = na.post$Location.of.Outreach,
+           y = na.post$Valuable.for.Career,
+           simulate.p.value = TRUE)
+
+workshop_feedback_valuableforcareer_plot <- chi_career$p.value<=0.05
+```
+There was no difference among career levels (classifications) for perception of value towards their careers.
+```{r, workshop_feedback_valuableforcareerclass_stats, include = TRUE}
+# run test for significance
+chi_careerclass <- chisq.test(x = na.post$Classification,
+           y = na.post$Valuable.for.Career,
+           simulate.p.value = TRUE)
+
+workshop_feedback_valuableforcareerclass_plot <- chi_careerclass$p.value<=0.05
+```
+
 ### This workshop was valuable towards your teaching.
+More respondents felt the workshops were not applicable towards their teaching but were otherwise positive. As our workshops are research focused, this is probably reasonable.
+
 ```{r workshop_feedback_valuableforteaching, echo=FALSE, message = FALSE, warning = FALSE}
 postworkshopsurvey %>%
   mutate(Valuable.for.Teaching = fct_relevel(Valuable.for.Teaching, "Strongly agree", "Agree", "Somewhat agree", 
                                              "Neither agree nor disagree", "Somewhat disagree", "Disagree", 
                                              "Strongly disagree", "Not applicable", "No answer")) %>%
   ggplot(aes(x=Valuable.for.Teaching, fill=Valuable.for.Teaching)) +
+  geom_bar()+
   scale_fill_viridis_d (aesthetics = "fill") +
   theme(panel.background = element_rect(fill = "lightgray",
                                         color = "white",
@@ -670,7 +711,20 @@ postworkshopsurvey %>%
 
 ```
 
+There was no difference in perception of the material as "valuable to my teaching" between workshop formats (hybrid, online, or in person).
+```{r, workshop_feedback_valuableforteaching_stats, include = TRUE}
+# run test for significance
+chi_teach <- chisq.test(x = na.post$Location.of.Outreach,
+           y = na.post$Valuable.for.Teaching,
+           simulate.p.value = TRUE)
+
+workshop_feedback_valuableforteach_plot <- chi_teach$p.value<=0.05
+```
+
+
+
 ### How do you rate your skills after learning about this workshop topic?
+We have a range of skill ratings after the workshop.  This could be an area for improvement but could also be dependent on whether we have targeted the right audience with the right level of materials.
 ```{r workshop_feedback_valuableforteaching, echo=FALSE, message = FALSE, warning = FALSE}
 postworkshopsurvey %>%
   mutate(Rate.Skills = fct_relevel(Rate.Skills, "Need more support and assistance if implementing",
@@ -679,6 +733,7 @@ postworkshopsurvey %>%
                                    "Can complete and expand on task, possibly assist others",
                                    "Did not respond")) %>%
   ggplot(aes(x=Rate.Skills, fill=Rate.Skills)) +
+  geom_bar()+
   scale_fill_viridis_d (aesthetics = "fill") +
   scale_x_discrete(labels=c("Needs more support", "Independent, but not to desired level", "Independent to desired level", 
                             "Independent, could teach skill", "Did not respond")) +
@@ -695,8 +750,20 @@ postworkshopsurvey %>%
   )
 ```
 
+There was no difference in perception of future abilities to use skills from the workshop between formats (hybrid, online, or in person).
+```{r, workshop_feedback_skills_stats, include = TRUE}
+# run test for significance
+chi_skills <- chisq.test(x = na.post$Location.of.Outreach,
+           y = na.post$Rate.Skills,
+           simulate.p.value = TRUE)
+
+workshop_feedback_skills_plot <- chi_skills$p.value<=0.05
+```
+
+
 ## Qualitative feedback (Wordcloud code)
 
+### "What did you like about the workshop?"
 ```{r workshop_feedback_liked_code, include=FALSE}
 workshopliked <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopLiked_Cleaned.txt")
 likedcorpus <- Corpus(VectorSource(workshopliked))
@@ -718,6 +785,7 @@ col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 
 ```
 
+### "What about the workshop needed improvement?"
 ```{r workshop_feedback_needsimprovement_code, include=FALSE}
 workshopimprove<- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopNeedsImprovement_Cleaned.txt")
 improvecorpus <- Corpus(VectorSource(workshopimprove))
@@ -739,6 +807,8 @@ improvedf <- data.frame(word = names(v), freq=v)
 col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 ```
 
+### "What other workshop topics would interest you?"
+We can examine this wordcloud to see if we need to advertise existing workshops more in addition to having ideas about new ones.
 ```{r workshop_feedback_othertopics_code, include=FALSE}
 workshopothertopic <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherTopics.txt")
 othertopiccorpus <- Corpus(VectorSource(workshopothertopic))
@@ -756,6 +826,7 @@ v3 <- sort(rowSums(othertopicsmatrix), decreasing = TRUE)
 othertopicsdf <- data.frame(word = names(v3), freq=v3)
 ```
 
+### "Any other comments?"
 ```{r workshop_feedback_othercomments_code, include=FALSE}
 workshopcomments<- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherComments_Cleaned.txt")
 commentscorpus <- Corpus(VectorSource(workshopcomments))
