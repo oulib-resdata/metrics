@@ -457,6 +457,18 @@ rows <- as.numeric(count(postworkshopsurvey))
 
 postworkshopsurvey <- na.omit(postworkshopsurvey)
 
+post_test2 <- post_test %>% separate_longer_delim(This.workshop.was...,
+                                                  delim = ", ...")
+post_test3 <- post_test2 %>% separate_wider_delim(cols = This.workshop.was...,
+                                                  delim = ". - ",
+                                                  names = c("This_workshop_was",
+                                                            "Ranking"),
+                                                  too_few = "align_start")
+
+# Claire finish this and tidy it up, pivot wider/longer as needed
+# remove extra ... s
+
+
 ```
 
 
@@ -766,6 +778,9 @@ workshop_feedback_skills_plot <- chi_skills$p.value<=0.05
 ### "What did you like about the workshop?"
 ```{r workshop_feedback_liked_code, include=FALSE}
 workshopliked <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopLiked_Cleaned.txt")
+
+# TODO: automate cleaning.  otherwise pull from postworkshopsurvey original columns and then clean by code instead of manually.  CMC and BN discussed 11/28/2023.
+
 likedcorpus <- Corpus(VectorSource(workshopliked))
 
 likedcorpus <- tm_map(likedcorpus, removeNumbers)
