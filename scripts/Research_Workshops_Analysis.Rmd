@@ -1,7 +1,7 @@
 ---
 title: "Research Workshop Attendance, Marketing, and Satisfaction"
 author: "C.M. Curry (STEM Services) and B. Narr (Metrics Coordinator)"
-date: '2023-11-14'
+date: '2023-11-28'
 output:
   word_document: 
     reference_docx: word_styles.docx
@@ -56,10 +56,21 @@ osf_download(x = osf_files,
 
 ```{r data_import_attendance, include=FALSE}
 
-# Analysis requested by JD 2023/08/03
+# Analysis requested by JD 2023/08/03 only 2021-2023.
 last_two_years_attendance <- read.csv("../raw_data/postworkshop/WorkshopAttendanceJD.csv")
 
 # Preliminary analysis requested by CMC 2023/summer (does not include course-integrated workshops)
+# not split into academic year and includes all years.
+# has "known three week column", dont' care about this anymore.
+# has "topic" manually instead of automated from metadata csv.
+# Location of outreach from actual location to just "in person" for sorting.
+# Add to LibInsights for both course and outreach - emailed BN 11/28/2023 to talk to MB.
+## multiple-day (series) yes or no.
+## Requested yes/no is a column. - needs added into LibInsights. (for courses, always yes can add this in in R after import before combine)
+## Name of workshop into LibInsights in both courses and outreach.
+
+
+## This is outreach + courses combined.
 workshop <- read.csv ("../raw_data/postworkshop/WorkshopAttendanceUpdate.csv",
                       header=TRUE,
                       stringsAsFactors=FALSE)
@@ -122,6 +133,7 @@ Registered$OtherDescriptions[!(Registered$How.did.you.hear.about.this.workshop. 
 # Post-workshop surveys from libwizard only
 ## Used for both feedback AND marketing
 
+#same as file loaded below.  CMC TODO: merge with below where I pull in report.csv
 FeedbackActuallyAttended <- read.csv("../raw_data/postworkshop/report.csv")
 
 
