@@ -124,7 +124,7 @@ FeedbackActuallyAttended <- FeedbackActuallyAttended %>%
 
 ```
 
-
+Changes in categories recorded over time have resulted in the need for some automated clean up code, which allows us to look at older categories if we need to, but use the updated equivalents for this report.
 ```{r data_marketing_clean_up, include=FALSE}
 
 # Creating and splitting current levels for marketing
@@ -178,7 +178,7 @@ FeedbackActuallyAttended$OtherDescriptions[!(FeedbackActuallyAttended$How.did.yo
 ```
 
 
-
+We clean dates out by weekday, year, month, day, and times for later analysis and data subsetting.
 ```{r, data_import_date_cleaning, include = FALSE}
 # Month, day, year, hour, minute, seconds
 last_two_years_attendance$Event.Date.and.Time_2 <- mdy_hms(last_two_years_attendance$Event.Date.and.Time,
@@ -228,6 +228,7 @@ FeedbackActuallyAttended$Date <-
 
 ```
 
+Ordered scales require using R levels to order categories for later graphing or analysis.
 ```{r, workshop_feedback_format_levels, echo = FALSE}
 
 #This will need to be repeated for all three "valuable for" questions, so the levels are ordered in the plots.
@@ -247,7 +248,7 @@ postworkshopsurvey$Valuable.for.Program <- factor(x = postworkshopsurvey$Valuabl
 
 ```
 
-Feedback and attendance data are combined to compare feedback with per-workshop characteristics such as format of instruction.
+Finally, the tidied feedback and attendance data are combined to compare feedback with per-workshop characteristics such as format of instruction.
 ```{r, workshop_feedback_format_data, echo = FALSE}
 joined_post <- left_join(FeedbackActuallyAttended, 
                          last_two_years_attendance,
