@@ -1,7 +1,7 @@
 ---
 title: "Research Workshop Attendance, Marketing, and Satisfaction"
-author: "Claire Curry (STEM Services) and Brianna Narr (Metrics Coordinator)"
-date: '2023-08-03'
+author: "C.M. Curry (STEM Services) and B. Narr (Metrics Coordinator)"
+date: '2023-11-14'
 output:
   word_document: 
     reference_docx: word_styles.docx
@@ -12,25 +12,56 @@ output:
 # FUNCTIONS AND LIBRARIES
 
 knitr::opts_chunk$set(echo = FALSE)
-library(ggplot2)
-library(partykit)
-library(tidyverse)
-library(viridis)
-library(tm)
-library(SnowballC)
-library(wordcloud)
+library(ggplot2)    #for plots
+library(osfr)       #downloading data from private OSF
+library(partykit)   # for decision tree statistical analysis
+library(tidyverse)  #for data munging including dates
+library(viridis)    #color scheme
+library(tm)         #text analysis?
+library(SnowballC)  #text analysis
+library(wordcloud)  #word clouds
 
 # Load custom function for "other" block
 source("ggwordcloud_analysis_complete_ou_colors.R")
 # set working directory to be one above the scripts folder.  but is relative to .rmd file??
 ```
 
+```{r data_osf, include=FALSE, eval = FALSE}
+# Load data from OSF
+
+# Authenticate
+# Your OSF PAT should be in .REnviron file following these instructions:
+# https://docs.ropensci.org/osfr/reference/osf_auth.html
+
+
+## Retrieve project
+osf_node <- osf_retrieve_node("qjkvf")
+
+## List files in project
+osf_files <- osf_ls_files(osf_node)
+
+## Download the files
+osf_download(x = osf_files,
+# CHOOSE IF RUNNING FROM RMD FILE
+             path = "..", #default save to directory above scripts
+# CHOOSE IF RUNNING FROM R CONSOLE
+#             path = NULL, #default save to local working directory
+             recurse = TRUE, #download all nested files
+             conflicts = "overwrite", #OSF is the canonical version
+             progress = TRUE #show progress bar
+             )
+  
+```
+
+
 ```{r data_import_attendance, include=FALSE}
+
 # Analysis requested by JD 2023/08/03
 last_two_years_attendance <- read.csv("../raw_data/postworkshop/WorkshopAttendanceJD.csv")
 
 # Preliminary analysis requested by CMC 2023/summer (does not include course-integrated workshops)
-workshop <- read.csv ("../raw_data/postworkshop/WorkshopAttendanceUpdate.csv", header=TRUE,
+workshop <- read.csv ("../raw_data/postworkshop/WorkshopAttendanceUpdate.csv",
+                      header=TRUE,
                       stringsAsFactors=FALSE)
 
 ```
@@ -104,22 +135,48 @@ FeedbackActuallyAttended$ReducedCategories <- FeedbackActuallyAttended$How.did.y
 FeedbackActuallyAttended$ReducedCategories[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
 FeedbackActuallyAttended$OtherDescriptions[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
 ```
-# Workshop descriptive numbers
 
-- How many workshops by format
-- How many workshops by format by topic
-- How many workshops on request vs course vs scheduled
+```{r, data_import_date_cleaning, include = FALSE}
+# Month, day, year, hour, minute, seconds
+last_two_years_attendance$Event.Date.and.Time_2 <- mdy_hms(last_two_years_attendance$Event.Date.and.Time,
+                                                           truncated = 3)
 
-```{r workshop_descriptive_stats, echo=FALSE, message = FALSE, warning = FALSE}
-descriptive <- last_two_years_attendance %>%
-  group_by(Academic.Year,
-           Is.Course,
-           Requested.) %>%
-  summarize(offer_count = n())
-descriptive
+
+# separate year, month, date, times
+last_two_years_attendance$year <- year(last_two_years_attendance$Event.Date.and.Time_2)
+last_two_years_attendance$month <- month(last_two_years_attendance$Event.Date.and.Time_2)
+last_two_years_attendance$day <- day(last_two_years_attendance$Event.Date.and.Time_2)
+last_two_years_attendance$wday <- wday(last_two_years_attendance$Event.Date.and.Time_2,
+                                      week_start = 1, #1 = Monday,
+                                      label = TRUE    # days of weeks as characters
+                                      )
+last_two_years_attendance$hour <-
+  format(last_two_years_attendance$Event.Date.and.Time_2, "%H")
+
+last_two_years_attendance$Date <-
+  format(last_two_years_attendance$Event.Date.and.Time_2, "%m/%d/%Y")
+
+# convert 00 hour to NA
+last_two_years_attendance[last_two_years_attendance$hour=="00", "hour"] <- NA
+
+last_two_years_attendance$hour <- as.numeric(last_two_years_attendance$hour)
 
 ```
-- How many topics per semester
+
+
+# Workshop descriptive numbers
+We continue to offer more workshops on request (right panel), especially in courses.
+```{r workshop_descriptive_stats, echo=FALSE, message = FALSE, warning = FALSE}
+ggplot(data = last_two_years_attendance,
+       mapping = aes(x = Academic.Year,
+                     fill = Is.Course))+
+  geom_bar()+
+  facet_grid(~Requested.)+
+  labs(y = "Number of workshops offered")
+```
+
+
+We have increased the number of topics we've brought "on request" to groups and courses.  The number of distinct topics has declined in the last academic year, likely due to loss of specialist expertise with staff loss.
 
 ```{r workshop_descriptive_stats_topics, echo=FALSE, message = FALSE, warning = FALSE}
 topics_desc <- last_two_years_attendance %>%
@@ -130,14 +187,17 @@ topics_desc <- last_two_years_attendance %>%
       ) %>%
   summarize(topics_count = n_distinct(Topic))
 
-
 topics_desc
 
-
+ggplot(data = topics_desc,
+       mapping = aes(x = Academic.Year,
+                     y = topics_count,
+                     fill = Is.Course))+
+  geom_bar(stat = "identity")+
+  facet_grid(~Requested.)+
+  labs(y = "Number of unique topics offered")
 
 ```
-
-- How many workshops per semester
 
 LATER TODO: How many instructors and helpers per semester
   - BN gather number of helpers from Libraries collaborators + internal notes and total attendees
@@ -151,15 +211,13 @@ LATER TODO: How many instructors and helpers per semester
 
 ## Workshop attendance by format and request
 
-DSI request 2023/07: 
-- attendance numbers for each format (below in Figures and analysis)
-
 ### Statistical analysis
-For scheduled workshops with a known three week advertising period, none of the following variables impact attendance numbers in a conditional inference tree analysis.
-- Format (in person vs virtual vs hybrid)
+For scheduled workshops, none of the following variables impact attendance numbers in a conditional inference tree analysis.
+- Format (in person vs virtual vs hybrid, DSI request 2023/07)
 - academic year
 - calendar year
 - semester (spring, summer, or fall)
+- time of day
 - workshop topic
 - multi-day vs single day scheduling
 
@@ -172,11 +230,13 @@ att_tree <- ctree(Total.Attendees ~
                     as.factor(Calendar.Year)+
                     as.factor(Topic) + 
                     as.factor(Multiple.Days.)+
-                    as.factor(Semester) #+
+                    as.factor(Semester) +
                     #as.factor(Is.Course) +
-                    #as.factor(Known.three.weeks.advertising)
+                    as.factor(Known.three.weeks.advertising) +
+                    hour
                   ,
-                  data = last_two_years_attendance [last_two_years_attendance$Known.three.weeks.advertising == "Y" &
+                  data = last_two_years_attendance [
+                    #last_two_years_attendance$Known.three.weeks.advertising == "Y" &
                                                       last_two_years_attendance$Is.Course == "N" &
                                                       last_two_years_attendance$Requested. == "N",],
                   control = ctree_control(
@@ -185,7 +245,9 @@ att_tree <- ctree(Total.Attendees ~
 plot(att_tree)
 ```
 
-When we include whether a workshop was in a course, requested or not, and had a known three-week advertising period, only whether a workshop was in a course was a deciding factor in increased attendance numbers.
+When we include whether a workshop was in a course, requested or not, and had a known three-week advertising period or not, only whether a workshop was in a course was still the only deciding factor in increased attendance numbers.
+
+
 
 ```{r att_tree2, echo=FALSE, message = FALSE, warning = FALSE}
 att_tree2 <- ctree(Total.Attendees ~ 
@@ -206,6 +268,9 @@ att_tree2 <- ctree(Total.Attendees ~
 plot(att_tree2)
 ```
 
+
+
+
 ### Figures
 Format was not significant, but since it was requested, here is the figure.
 
@@ -221,38 +286,66 @@ last_two_years_attendance [last_two_years_attendance$Known.three.weeks.advertisi
 
 ```
 
-### Email length effect on registration
 
-```{r email_code, include=FALSE}
-emails <- read.csv("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/EmailLengthStudyFinal.csv")
-```
-
-```{r email_plot, echo=FALSE, message = FALSE, warning = FALSE}
-emailtree <- ctree(Total.Registrants ~ 
-                    as.factor(From) +
-                    as.factor(Long.or.Short) + 
-                    as.factor(Lead.Time..in.days.)
-                  ,
-                  data = emails,
-                  control = ctree_control(
-                    alpha = 0.05)) #cutoff for splits is p = 0.05 significance
-
-plot(emailtree)
-```
 
 ## Workshop attendance over time
-Number of on-request workshops over time: I will be talking with Brianna at our next meeting about pulling and analyzing these numbers.  Scaffolding in some departments may also help with scaling the workload for this, but that’s at least a year out yet, from what I hear from that committee.  I have added your questions to our analysis list:
-- Attendance (y)
-- On-requests vs scheduled (fill)
-- Calendar year + semester (x) (lump May into spring even if after semester is out - August before school can go into fall)
+The average number of people at each scheduled workshop has stayed the same per calendar year from 2021-2023. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrolment to "make".
 
-```{r attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
+```{r avg_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 plot_time <- last_two_years_attendance %>% 
   ggplot(mapping = aes(x = as.factor(Calendar.Year),
                        y = Total.Attendees,
-                       fill = Requested.)) +
-  geom_boxplot(notch = TRUE)
+                       fill = Is.Course)) +
+  geom_boxplot(notch = TRUE) +
+  labs (y = "People at each workshop")
 plot_time
+```
+
+
+The total number of people reached has increased from 2021 to 2022, almost completely due to more people reached via courses.  We do not have complete 2023 data as of this writing (11/21/2023 CMC).
+```{r, total_reached_over_time, echo=FALSE, message = FALSE, warning = FALSE}
+
+ggplot(data = last_two_years_attendance[last_two_years_attendance$Calendar.Year!=2023,],
+       size = 5
+       )+
+  stat_summary(geom = "line",
+       mapping = aes(x = Calendar.Year,
+                     y = Total.Attendees,
+                     color = Is.Course,
+                     linetype = Is.Course),
+               fun = "sum",
+               size = 1.6) +
+
+  #facet_grid(~Requested., labeller = label_both)+
+  labs(y = "Total people reached",
+       x = "Calendar Year")+
+  stat_summary(geom = "line",
+       mapping = aes(x = Calendar.Year,
+                     y = Total.Attendees),
+       fun = "sum",
+       size = 10,
+       color = "black"
+)
+  
+```
+
+The proportion of total people reached each calendar year has increased by courses for 2022-2023 (though 2023 dataset is not fully entered yet).
+```{r, prop_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
+# https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
+last_two_years_attendance %>%
+  group_by(Calendar.Year,
+           Is.Course) %>%
+  summarize(count_per_each = n()) %>%
+ggplot(
+       aes(x = Calendar.Year,
+           y = count_per_each,
+           fill = Is.Course)) +
+  geom_col(position = "fill")+
+    scale_fill_viridis_d (aesthetics = "fill")+
+  labs(y = "Proportion of people reached",
+       x = "Calendar Year",
+       fill = "Workshop offered in course")
+
 
 ```
 
@@ -355,22 +448,84 @@ carpentries %>%
 
 # Workshop feedback
 
-## Executive summary
-
-## Questions
-
-## Note from BN: I have no idea how the CSV formatting should go in Rmd, so here's what I did in my own editor
 
 ```{r postworkshop_data, include=FALSE}
-postworkshopsurvey <- read.csv ("C:/Users/Brianna_Narr.ULHKH1JW3/Downloads/PostWorkshopSurveyFinal.csv", header=TRUE, stringsAsFactors=FALSE)
-
+postworkshopsurvey <- read.csv("../raw_data/postworkshop/PostWorkshopSurveyFinal.csv",
+         header = TRUE, 
+         stringsAsFactors = FALSE)
 rows <- as.numeric(count(postworkshopsurvey))
 
 postworkshopsurvey <- na.omit(postworkshopsurvey)
 
 ```
 
-## Do you anticipate that this new knowledge can be applied towards your work?
+
+```{r, workshop_feedback_date_formats, include = FALSE}
+# Month, day, year, hour, minute, seconds
+postworkshopsurvey$Date_2 <- mdy_hms(postworkshopsurvey$Date,
+                                                           truncated = 3)
+
+
+# separate year, month, date, times
+postworkshopsurvey$year <- year(postworkshopsurvey$Date_2)
+postworkshopsurvey$month <- month(postworkshopsurvey$Date_2)
+postworkshopsurvey$day <- day(postworkshopsurvey$Date_2)
+postworkshopsurvey$wday <- wday(postworkshopsurvey$Date_2,
+                                      week_start = 1, #1 = Monday,
+                                      label = TRUE    # days of weeks as characters
+                                      )
+
+# Overwrite original column with formatted date
+postworkshopsurvey$Date <-
+  format(postworkshopsurvey$Date_2, "%m/%d/%Y")
+
+```
+
+```{r, workshop_feedback_format_levels, echo = FALSE}
+
+#This will need to be repeated for all three "valuable for" questions, so the levels are ordered in the plots.
+
+postworkshopsurvey$Valuable.for.Program <- factor(x = postworkshopsurvey$Valuable.for.Program,
+                                                  levels = c("No answer",
+                                                             "Not applicable", 
+                                                             "Strongly agree",
+                                                             "Agree",
+                                                             "Somewhat agree",
+                                                             "Neither agree nor disagree",
+                                                             "Somewhat disagree",
+                                                             "Disagree",
+                                                             "Strongly disagree"
+                                                             
+                                                  ))
+
+```
+
+
+```{r, workshop_feedback_format_data, echo = FALSE}
+joined_post <- left_join(postworkshopsurvey, 
+                         last_two_years_attendance,
+                         by = c("Date"))
+
+## TODO NEED TO CLEAN TOPICS TO MATCH SURVEYS
+# Warning: Detected an unexpected many-to-many relationship between `x` and `y`.
+
+# summarize into counts
+
+na.post <- joined_post %>%
+  filter(!is.na(Location.of.Outreach),
+         !is.na(Valuable.for.Program))
+
+```
+
+## Executive summary
+Tentative results suggest no difference in perception of workshop value by learners among learning formats (in person, hybrid, or online) and generally positive feedback.
+
+## Quantitative questions
+For each question, we examine statistically and graphically (if differences were statistically significant) the rankings divided by instruction format (DSI request 2023/07), request/not, and course/outreach variables.
+In the future, we may check rankings vs length of course in hours.
+
+
+### Do you anticipate that this new knowledge can be applied towards your work?
 ```{r workshop_feedback_newknowledge, echo=FALSE, message = FALSE, warning = FALSE}
 postworkshopsurvey %>%
   ggplot(aes(x=Using.New.Knowledge., fill=Using.New.Knowledge.)) +
@@ -387,38 +542,117 @@ postworkshopsurvey %>%
         axis.title = element_text(size = 14),
         axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
   )
+```
+
+There was no significant difference in perception of learning new knowledge from the workshop among learning formats.
+```{r workshop_feedback_newknowledge_statistics, echo=FALSE, message = FALSE, warning = FALSE}
+# run test for significance
+chi_newkno <- chisq.test(x = na.post$Location.of.Outreach,
+           y = na.post$Using.New.Knowledge.,
+           simulate.p.value = TRUE)
+
+workshop_feedback_chi_newkno_plot <- chi_newkno$p.value<=0.05
 
 ```
 
-## This workshop was valuable towards your program of study.
+```{r, workshop_feedback_newknowledge_plot, eval = workshop_feedback_chi_newkno_plot, include = workshop_feedback_chi_newkno_plot}
+# will only eval or include (ie plot) if test in previous chunk is significant
+na.post %>%
+  group_by(Location.of.Outreach,
+           Using.New.Knowledge.) %>%
+  summarize(count_per_feeling = n()) %>%
+ggplot(
+       aes(x = Location.of.Outreach,
+           y = count_per_feeling,
+           fill = Using.New.Knowledge.)) +
+  geom_col(position = "fill")+
+    scale_fill_viridis_d (aesthetics = "fill")
+
+```
+
+
+
+### This workshop was valuable towards your program of study.
+Most participants perceived the workshop as valuable towards their program of study.  Interestingly, "disagree" is never chosen by any of our several hundred respondents.
+
 ```{r workshop_feedback_valuableforprogram, echo=FALSE, message = FALSE, warning = FALSE}
 postworkshopsurvey %>%
-  mutate(Valuable.for.Program = fct_relevel(Valuable.for.Program, "Strongly agree", "Agree", "Somewhat agree", 
-                                            "Neither agree nor disagree", "Somewhat disagree", 
-                                            "Strongly disagree", "Not applicable", "No answer")) %>%
-  ggplot(aes(x=Valuable.for.Program, fill=Valuable.for.Program)) +
-  scale_fill_viridis_d (aesthetics = "fill") +
-  theme(panel.background = element_rect(fill = "lightgray",
-                                        color = "white",
-                                        size = 0.5, linetype = "solid"),
-        panel.grid.major = element_line(size = 0.5, linetype = "solid",
-                                        color = "darkgray"),
-        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
-                                        color = "darkgray"),
+  mutate(Valuable.for.Program = fct_relevel(Valuable.for.Program,
+                                            "Strongly agree",
+                                            "Agree",
+                                            "Somewhat agree", 
+                                            "Neither agree nor disagree",
+                                            "Somewhat disagree", 
+                                            "Disagree",
+                                            "Strongly disagree",
+                                            "Not applicable",
+                                            "No answer")) %>%
+  ggplot(mapping = aes(x=Valuable.for.Program,
+                       fill = Valuable.for.Program)) +
+  geom_bar(color = "black")+
+  scale_fill_manual(values=c(
+                             "#8D1732",
+                             "#8D1732",
+                             "#8D1732",
+                             "darkgray",
+                             "darkgray",
+                             "darkgray",
+                             "gray99",
+                             "gray99"
+                             ))+
+  theme_bw()+
+  theme(
         plot.title = element_text(size = 20, hjust = 0.5),
         axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
-  )
+        axis.text = element_text(size = 12, 
+                                 angle = 45,
+                                 hjust = 1,
+                                 vjust = 0.2)
+  )+
+  labs(y = "Number of survey respondents with this answer",
+       x = "Response about value of workshop towards program of study",
+       fill = "Agreement on value")
 
 ```
 
-## This workshop was valuable towards your career.
+There was no difference in perception of the material as "valuable to my program of study" between workshop formats (hybrid, online, or in person).
+```{r, workshop_feedback_valuableforprogram_stats, include = TRUE}
+# run test for significance
+chi_program <- chisq.test(x = na.post$Location.of.Outreach,
+           y = na.post$Valuable.for.Program,
+           simulate.p.value = TRUE)
+
+workshop_feedback_valuableforprogram_plot <- chi_program$p.value<=0.05
+```
+
+```{r, workshop_feedback_valuableforprogram_plot, eval = workshop_feedback_valuableforprogram_plot, include = workshop_feedback_valuableforprogram_plot}
+# will only eval or include (ie plot) if test in previous chunk is significant
+# count is WRONG summary  here, because we may  have more people in a given category
+# proportion of total for row?
+# https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
+na.post %>%
+  group_by(Location.of.Outreach,
+           Valuable.for.Program) %>%
+  summarize(count_per_feeling = n()) %>%
+ggplot(
+       aes(x = Location.of.Outreach,
+           y = count_per_feeling,
+           fill = Valuable.for.Program)) +
+  geom_col(position = "fill")+
+    scale_fill_viridis_d (aesthetics = "fill")
+```
+
+
+
+### This workshop was valuable towards your career.
+Most participants perceived the workshop as valuable towards their career.
 ```{r workshop_feedback_valuableforcareer, echo=FALSE, message = FALSE, warning = FALSE}
 postworkshopsurvey %>%
   mutate(Valuable.for.Career = fct_relevel(Valuable.for.Career, "Strongly agree", "Agree", "Somewhat agree", 
                                            "Neither agree nor disagree", "Somewhat disagree", "Disagree", 
                                            "Strongly disagree", "Not applicable", "No answer")) %>%
   ggplot(aes(x=Valuable.for.Career, fill=Valuable.for.Career)) +
+  geom_bar()+
   scale_fill_viridis_d (aesthetics = "fill") +
   theme(panel.background = element_rect(fill = "lightgray",
                                         color = "white",
@@ -433,13 +667,35 @@ postworkshopsurvey %>%
   )
 ```
 
-## This workshop was valuable towards your teaching.
+There was no difference in perception of the material as "valuable to my career" between workshop formats (hybrid, online, or in person).
+```{r, workshop_feedback_valuableforcareer_stats, include = TRUE}
+# run test for significance
+chi_career <- chisq.test(x = na.post$Location.of.Outreach,
+           y = na.post$Valuable.for.Career,
+           simulate.p.value = TRUE)
+
+workshop_feedback_valuableforcareer_plot <- chi_career$p.value<=0.05
+```
+There was no difference among career levels (classifications) for perception of value towards their careers.
+```{r, workshop_feedback_valuableforcareerclass_stats, include = TRUE}
+# run test for significance
+chi_careerclass <- chisq.test(x = na.post$Classification,
+           y = na.post$Valuable.for.Career,
+           simulate.p.value = TRUE)
+
+workshop_feedback_valuableforcareerclass_plot <- chi_careerclass$p.value<=0.05
+```
+
+### This workshop was valuable towards your teaching.
+More respondents felt the workshops were not applicable towards their teaching but were otherwise positive. As our workshops are research focused, this is probably reasonable.
+
 ```{r workshop_feedback_valuableforteaching, echo=FALSE, message = FALSE, warning = FALSE}
 postworkshopsurvey %>%
   mutate(Valuable.for.Teaching = fct_relevel(Valuable.for.Teaching, "Strongly agree", "Agree", "Somewhat agree", 
                                              "Neither agree nor disagree", "Somewhat disagree", "Disagree", 
                                              "Strongly disagree", "Not applicable", "No answer")) %>%
   ggplot(aes(x=Valuable.for.Teaching, fill=Valuable.for.Teaching)) +
+  geom_bar()+
   scale_fill_viridis_d (aesthetics = "fill") +
   theme(panel.background = element_rect(fill = "lightgray",
                                         color = "white",
@@ -455,7 +711,20 @@ postworkshopsurvey %>%
 
 ```
 
-## How do you rate your skills after learning about this workshop topic?
+There was no difference in perception of the material as "valuable to my teaching" between workshop formats (hybrid, online, or in person).
+```{r, workshop_feedback_valuableforteaching_stats, include = TRUE}
+# run test for significance
+chi_teach <- chisq.test(x = na.post$Location.of.Outreach,
+           y = na.post$Valuable.for.Teaching,
+           simulate.p.value = TRUE)
+
+workshop_feedback_valuableforteach_plot <- chi_teach$p.value<=0.05
+```
+
+
+
+### How do you rate your skills after learning about this workshop topic?
+We have a range of skill ratings after the workshop.  This could be an area for improvement but could also be dependent on whether we have targeted the right audience with the right level of materials.
 ```{r workshop_feedback_valuableforteaching, echo=FALSE, message = FALSE, warning = FALSE}
 postworkshopsurvey %>%
   mutate(Rate.Skills = fct_relevel(Rate.Skills, "Need more support and assistance if implementing",
@@ -464,6 +733,7 @@ postworkshopsurvey %>%
                                    "Can complete and expand on task, possibly assist others",
                                    "Did not respond")) %>%
   ggplot(aes(x=Rate.Skills, fill=Rate.Skills)) +
+  geom_bar()+
   scale_fill_viridis_d (aesthetics = "fill") +
   scale_x_discrete(labels=c("Needs more support", "Independent, but not to desired level", "Independent to desired level", 
                             "Independent, could teach skill", "Did not respond")) +
@@ -480,8 +750,20 @@ postworkshopsurvey %>%
   )
 ```
 
-# Wordcloud code
+There was no difference in perception of future abilities to use skills from the workshop between formats (hybrid, online, or in person).
+```{r, workshop_feedback_skills_stats, include = TRUE}
+# run test for significance
+chi_skills <- chisq.test(x = na.post$Location.of.Outreach,
+           y = na.post$Rate.Skills,
+           simulate.p.value = TRUE)
 
+workshop_feedback_skills_plot <- chi_skills$p.value<=0.05
+```
+
+
+## Qualitative feedback (Wordcloud code)
+
+### "What did you like about the workshop?"
 ```{r workshop_feedback_liked_code, include=FALSE}
 workshopliked <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopLiked_Cleaned.txt")
 likedcorpus <- Corpus(VectorSource(workshopliked))
@@ -503,6 +785,7 @@ col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 
 ```
 
+### "What about the workshop needed improvement?"
 ```{r workshop_feedback_needsimprovement_code, include=FALSE}
 workshopimprove<- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopNeedsImprovement_Cleaned.txt")
 improvecorpus <- Corpus(VectorSource(workshopimprove))
@@ -524,6 +807,8 @@ improvedf <- data.frame(word = names(v), freq=v)
 col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 ```
 
+### "What other workshop topics would interest you?"
+We can examine this wordcloud to see if we need to advertise existing workshops more in addition to having ideas about new ones.
 ```{r workshop_feedback_othertopics_code, include=FALSE}
 workshoptopics<- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherTopics_Cleaned.txt")
 topicscorpus <- Corpus(VectorSource(workshoptopics))
@@ -546,6 +831,7 @@ topicsdf <- data.frame(word = names(v), freq=v)
 col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 ```
 
+### "Any other comments?"
 ```{r workshop_feedback_othercomments_code, include=FALSE}
 workshopcomments<- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherComments_Cleaned.txt")
 commentscorpus <- Corpus(VectorSource(workshopcomments))
@@ -596,12 +882,7 @@ wordcloud(words = commentsdf$word, freq = commentsdf$freq, min.freq = 5,
           random.color = FALSE, colors=col)
 ```
 
-### Satisfaction vs format
-- DSI request 2023/07:  quality of instruction in each format (online, in person, hybrid, and total) and request/course status.
 
-### Workshop length vs satisfaction
-- hours in session
-- word cloud relating to length?
 
 
 # Marketing
@@ -790,3 +1071,35 @@ A completely red bar indicates that none of the people who completed the pre-reg
 A completely black bar indicates that pre-registration did not occur but people attended anyways (you see these attendees as the red caps to the black bars in the previous section).  This occurred more with people who attended a workshop given in a class ("Class Requirement"; that category suggests either we visited the class, which does not involve LibCal registration, or that the instructor asked people to attend a workshop outside of class).  With online workshops requiring pre-registration, we don't necessarily expect any bar to be completely black (all walk-ins).  However, in-person workshops can accept passer-by walk-ins who didn't pre-register or people who saw the event via any other marketing method (again, see the previous section's chart) and just showed up without pre-registering. Zoom workshops could have other registrants also forward the Zoom link.
 
 Thus, any method with some black has some attendance, and methods with larger amounts of black indicate relatively stronger responses.  Thus, the highest response "intensity" are for class requirements, librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and people who find events by examining the OU Libraries website.
+
+## Marketing implementation details
+### Email detail level and timing
+
+```{r email_code, include=FALSE}
+#emails <- read.csv("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/EmailLengthStudyFinal.csv")
+emails <- read.csv("../raw_data/preworkshop/EmailLengthStudyFinal.csv")
+#Data source: https://osf.io/rvnsh
+```
+
+I used registrants instead of confirmed attendees, because that felt more relevant to the emails, and it was more consistently documented. The factors that were considered here were lead time (how much time between the email and the event) and length of email (long = one that was typed by one of you, short = automated libzoom email). Email length was the deciding factor for number of registrants! 
+
+Since the time between registration opening and workshop did not affect attendance.  As such, CMC proposed we open all workshops at the start of the semester.  This change was approved by the committee in slack in Fall 2023 (2023/10/03) to be implemented for the Spring 2024 workshops.  We discussed adding a second reminder for already registered participants, but only one reminder is possible using LibCal automated emails.  We will now post once advertising the full schedule, and then continue doing the 3-weeks-advertising to remind people again.
+```{r email_plot, echo=FALSE, message = FALSE, warning = FALSE}
+emailtree <- ctree(Total.Registrants ~ 
+                    as.factor(From) +
+                    as.factor(Long.or.Short) + 
+                    Lead.Time..in.days.
+                  ,
+                  data = emails,
+                  control = ctree_control(
+                    alpha = 0.05)) #cutoff for splits is p = 0.05 significance
+#hist(emails$Lead.Time..in.days.) shows most email lead times are 3 weeks
+plot(emailtree)
+```
+
+
+### Registration is a reasonable proxy for attendance
+```{r registration_vs_attendance, echo = FALSE, message = FALSE, warning = FALSE}
+cor.test()
+
+```
