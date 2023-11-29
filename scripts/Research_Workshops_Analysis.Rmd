@@ -311,6 +311,7 @@ ggplot(data = topics_desc,
 
 LATER TODO: How many instructors and helpers per semester
   - BN gather number of helpers from Libraries collaborators + internal notes and total attendees
+  - 11/28/2023 requested BN to request MB to add external helper count
 
 # Marketing
 ## Executive summary
