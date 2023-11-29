@@ -241,7 +241,7 @@ Ordered scales require using R levels to order categories for later graphing or 
 
 #This will need to be repeated for all three "valuable for" questions, so the levels are ordered in the plots.
 
-postworkshopsurvey$Valuable.for.Program <- factor(x = postworkshopsurvey$Valuable.for.Program,
+postworkshopsurveys$Valuable.for.Program <- factor(x = postworkshopsurveys$Valuable.for.Program,
                                                   levels = c("No answer",
                                                              "Not applicable", 
                                                              "Strongly agree",
