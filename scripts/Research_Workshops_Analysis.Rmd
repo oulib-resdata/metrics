@@ -1,7 +1,7 @@
 ---
 title: "Research Workshop Attendance, Marketing, and Satisfaction"
 author: "C.M. Curry (STEM Services) and B. Narr (Metrics Coordinator)"
-date: '2023-11-14'
+date: '2023-11-28'
 output:
   word_document: 
     reference_docx: word_styles.docx
@@ -25,6 +25,7 @@ library(wordcloud)  #word clouds
 source("ggwordcloud_analysis_complete_ou_colors.R")
 # set working directory to be one above the scripts folder.  but is relative to .rmd file??
 ```
+Data for this report are gathered from three sources: pre-registration questionnaire when people register, attendance numbers entered by workshop instructors in LibInsights, and post-workshop surveys.  Registration numbers include learner names and emails and so all three datasets are kept on a private OSF repository and must be downloaded there.  Do not include these in github.
 
 ```{r data_osf, include=FALSE, eval = FALSE}
 # Load data from OSF
@@ -53,20 +54,86 @@ osf_download(x = osf_files,
   
 ```
 
+Registration data has to be imported per-room from LibCal.
+```{r data_import_registration_marketing, include=FALSE}
+# Event registration 
+Room339 <- read.csv("../raw_data/preworkshop/Room339_lc_events_20230105043223.csv")
+RoomLL123 <- read.csv("../raw_data/preworkshop/LL123_lc_events_20230105043507.csv")
+RoomGeneral <- read.csv("../raw_data/preworkshop/General_lc_events_20230105043258.csv")
+RoomLearningLabClassroom <- read.csv("../raw_data/preworkshop/LearningLabClassroom_lc_events_20230105043409.csv")
 
+# Merge
+Registered <- rbind(Room339,
+                    RoomLL123,
+                    RoomGeneral,
+                    RoomLearningLabClassroom
+)
+```
+
+Attendance data is created by combining Course Instruction attendance data from LibInsights and Outreach Instruction attendance data from LibInsights.  It can be filtered by columns such as date, year, month, instructor, and workshop topic.
 ```{r data_import_attendance, include=FALSE}
 
-# Analysis requested by JD 2023/08/03
+# Analysis requested by JD 2023/08/03 only 2021-2023.
 last_two_years_attendance <- read.csv("../raw_data/postworkshop/WorkshopAttendanceJD.csv")
 
 # Preliminary analysis requested by CMC 2023/summer (does not include course-integrated workshops)
+# not split into academic year and includes all years.
+# has "known three week column", dont' care about this anymore.
+# has "topic" manually instead of automated from metadata csv.
+# Location of outreach from actual location to just "in person" for sorting.
+# Add to LibInsights for both course and outreach - emailed BN 11/28/2023 to talk to MB.
+## multiple-day (series) yes or no.
+## Requested yes/no is a column. - needs added into LibInsights. (for courses, always yes can add this in in R after import before combine)
+## Name of workshop into LibInsights in both courses and outreach.
+## This is outreach + courses combined with the manual cleaning listed above in comments.
 workshop <- read.csv ("../raw_data/postworkshop/WorkshopAttendanceUpdate.csv",
                       header=TRUE,
                       stringsAsFactors=FALSE)
 
 ```
 
-```{r data_import_marketing_and_feedback, include=FALSE}
+Post-workshop survey data are from a subset of learners who attended and also filled out a survey.  In a few cases we forget to adminster the survey or there's not enough time, or individuals opt out even when physically present in the room.
+
+```{r, data_postworkshop_import, include = FALSE}
+
+# Post-workshop surveys from libwizard only
+## Used for both feedback AND marketing
+
+#same as file loaded below.  CMC TODO: merge with below where I pull in report.csv
+FeedbackActuallyAttended <- read.csv("../raw_data/postworkshop/report.csv",
+                                     na.strings=c("","NA"))
+
+
+FeedbackActuallyAttended2 <- FeedbackActuallyAttended %>%
+  separate_longer_delim(This.workshop.was...,
+                        delim = ", ...") %>%
+  separate_wider_delim(cols = This.workshop.was...,
+                       delim = ". - ",
+                       names = c("This_workshop_was",
+                                 "Ranking"),
+                       too_few = "align_start")
+
+FeedbackActuallyAttended2$This_workshop_was <-
+  str_remove(FeedbackActuallyAttended2$This_workshop_was,
+             pattern = fixed("..."))
+
+postworkshopsurveys <- FeedbackActuallyAttended2 %>%
+  pivot_wider(names_from = This_workshop_was,
+              values_from = Ranking) %>%
+  dplyr::select(-`NA`)
+
+
+
+#rows <- as.numeric(count(postworkshopsurvey))
+
+#postworkshopsurvey <- na.omit(postworkshopsurvey)
+
+
+
+```
+
+Changes in categories recorded over time have resulted in the need for some automated clean up code, which allows us to look at older categories if we need to, but use the updated equivalents for this report.
+```{r data_marketing_clean_up, include=FALSE}
 
 # Creating and splitting current levels for marketing
 marketing_current_categories <- c("Announcement in Class by Instructor",
@@ -93,18 +160,7 @@ marketing_current_categories <- c("Announcement in Class by Instructor",
                                   "Colleagues (Forwarded email, word of mouth)")
 
 
-# Event registration 
-Room339 <- read.csv("../raw_data/preworkshop/Room339_lc_events_20230105043223.csv")
-RoomLL123 <- read.csv("../raw_data/preworkshop/LL123_lc_events_20230105043507.csv")
-RoomGeneral <- read.csv("../raw_data/preworkshop/General_lc_events_20230105043258.csv")
-RoomLearningLabClassroom <- read.csv("../raw_data/preworkshop/LearningLabClassroom_lc_events_20230105043409.csv")
 
-# Merge
-Registered <- rbind(Room339,
-                    RoomLL123,
-                    RoomGeneral,
-                    RoomLearningLabClassroom
-)
 
 ## Convert old categories to equivalent new
 Registered$How.did.you.hear.about.this.workshop.[Registered$How.did.you.hear.about.this.workshop.=="Email from University Libraries"] <- "Direct Email from OU Libraries (Source Unknown)"
@@ -118,24 +174,19 @@ Registered$ReducedCategories <- Registered$How.did.you.hear.about.this.workshop.
 Registered$ReducedCategories[!(Registered$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
 Registered$OtherDescriptions[!(Registered$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- Registered$If.other..please.describe.[!(Registered$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
 
+## Convert old categories to equivalent new in feedback/post-workshop surveyd ata too.
+postworkshopsurveys$How.did.you.hear.about.this.workshop.[postworkshopsurveys$How.did.you.hear.about.this.workshop.=="Email from OU Libraries"] <- "Direct Email from OU Libraries (Source Unknown)"
+postworkshopsurveys$How.did.you.hear.about.this.workshop.[postworkshopsurveys$How.did.you.hear.about.this.workshop.=="Colleagues"] <- "Colleagues (Forwarded email, word of mouth)"
+postworkshopsurveys$How.did.you.hear.about.this.workshop.[postworkshopsurveys$How.did.you.hear.about.this.workshop.=="Supervisor"] <- "Supervisor (Forwarded email, word of mouth)"
+postworkshopsurveys$How.did.you.hear.about.this.workshop.[postworkshopsurveys$How.did.you.hear.about.this.workshop.=="Flyer"] <- "Flyer (Paper or Digital Unspecified)"
 
-# Post-workshop surveys from libwizard only
-## Used for both feedback AND marketing
-
-FeedbackActuallyAttended <- read.csv("../raw_data/postworkshop/report.csv")
-
-
-## Convert old categories to equivalent new
-FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.=="Email from OU Libraries"] <- "Direct Email from OU Libraries (Source Unknown)"
-FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.=="Colleagues"] <- "Colleagues (Forwarded email, word of mouth)"
-FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.=="Supervisor"] <- "Supervisor (Forwarded email, word of mouth)"
-FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.=="Flyer"] <- "Flyer (Paper or Digital Unspecified)"
-
-FeedbackActuallyAttended$ReducedCategories <- FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.
-FeedbackActuallyAttended$ReducedCategories[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
-FeedbackActuallyAttended$OtherDescriptions[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- FeedbackActuallyAttended$How.did.you.hear.about.this.workshop.[!(FeedbackActuallyAttended$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
+postworkshopsurveys$ReducedCategories <- postworkshopsurveys$How.did.you.hear.about.this.workshop.
+postworkshopsurveys$ReducedCategories[!(postworkshopsurveys$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
+postworkshopsurveys$OtherDescriptions[!(postworkshopsurveys$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- postworkshopsurveys$How.did.you.hear.about.this.workshop.[!(postworkshopsurveys$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
 ```
 
+
+We clean dates out by weekday, year, month, day, and times for later analysis and data subsetting.
 ```{r, data_import_date_cleaning, include = FALSE}
 # Month, day, year, hour, minute, seconds
 last_two_years_attendance$Event.Date.and.Time_2 <- mdy_hms(last_two_years_attendance$Event.Date.and.Time,
@@ -160,6 +211,65 @@ last_two_years_attendance$Date <-
 last_two_years_attendance[last_two_years_attendance$hour=="00", "hour"] <- NA
 
 last_two_years_attendance$hour <- as.numeric(last_two_years_attendance$hour)
+
+```
+
+
+```{r, workshop_feedback_date_formats, include = FALSE}
+# Month, day, year, hour, minute, seconds
+postworkshopsurveys$Date_2 <- mdy_hms(postworkshopsurveys$What.date.was.the.workshop.,
+                                                           truncated = 3)
+
+
+# separate year, month, date, times
+postworkshopsurveys$year <- year(postworkshopsurveys$Date_2)
+postworkshopsurveys$month <- month(postworkshopsurveys$Date_2)
+postworkshopsurveys$day <- day(postworkshopsurveys$Date_2)
+postworkshopsurveys$wday <- wday(postworkshopsurveys$Date_2,
+                                      week_start = 1, #1 = Monday,
+                                      label = TRUE    # days of weeks as characters
+                                      )
+
+# Overwrite original column with formatted date
+postworkshopsurveys$Date <-
+  format(postworkshopsurveys$Date_2, "%m/%d/%Y")
+
+```
+
+Ordered scales require using R levels to order categories for later graphing or analysis.
+```{r, workshop_feedback_format_levels, echo = FALSE}
+
+#This will need to be repeated for all three "valuable for" questions, so the levels are ordered in the plots.
+
+postworkshopsurveys$Valuable.for.Program <- factor(x = postworkshopsurveys$Valuable.for.Program,
+                                                  levels = c("No answer",
+                                                             "Not applicable", 
+                                                             "Strongly agree",
+                                                             "Agree",
+                                                             "Somewhat agree",
+                                                             "Neither agree nor disagree",
+                                                             "Somewhat disagree",
+                                                             "Disagree",
+                                                             "Strongly disagree"
+                                                             
+                                                  ))
+
+```
+
+Finally, the tidied feedback and attendance data are combined to compare feedback with per-workshop characteristics such as format of instruction.
+```{r, workshop_feedback_format_data, echo = FALSE}
+joined_post <- left_join(postworkshopsurveys, 
+                         last_two_years_attendance,
+                         by = c("Date"))
+
+## TODO NEED TO CLEAN TOPICS TO MATCH SURVEYS
+# Warning: Detected an unexpected many-to-many relationship between `x` and `y`.
+
+# summarize into counts
+
+na.post <- joined_post %>%
+  filter(!is.na(Location.of.Outreach),
+         !is.na(Valuable.for.Program))
 
 ```
 
@@ -201,6 +311,226 @@ ggplot(data = topics_desc,
 
 LATER TODO: How many instructors and helpers per semester
   - BN gather number of helpers from Libraries collaborators + internal notes and total attendees
+  - 11/28/2023 requested BN to request MB to add external helper count
+
+# Marketing
+## Executive summary
+The top three marketing methods that bring in the highest counts of attendees who fill out our post-workshop surveys (hereafter, "attendees" and "attendance") are emails, word-of-mouth, and the OU Libraries website
+
+The marketing methods with the highest response "intensities" (relative proportion of attendees) were class requirements (making liaison outreach to instructors critical), librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and the OU Libraries website.
+
+Thus, our overall most effective marketing methods are emails, the OU Libraries website, word-of-mouth, and outreach to instructors.
+
+
+\newpage
+
+
+## Absolute effectiveness (counts of attendees) by marketing method
+
+### Overall counts of attendees by marketing method and registration status
+These data for people who filled out a post-workshop survey (ie are confirmed to have attended a workshop) and answer the question "How did you hear about this workshop?".  They are grouped by pre-registered or not pre-registered (passerby walk-ins, class workshops where registration wasn't required).  We do not get 100% completion of surveys.
+
+```{r attendees, echo=FALSE, message = FALSE, warning = FALSE}
+marketing_breakdown_initial <- ggplot(data = postworkshopsurveys,
+       aes(x = ReducedCategories,
+           fill = Did.you.pre.register.for.this.workshop.))+
+  geom_bar()+
+  theme(axis.text.x = element_text(angle = 0,
+                                   hjust = 1,
+                                   size = 16),
+        axis.text.y = element_text(angle = 0,
+                                   hjust = 1,
+                                   size = 8),
+        panel.background = element_blank(),
+        legend.text=element_text(size=16),
+        strip.text.y = element_text(size = 16),
+        axis.title=element_text(size=16))+
+ # facet_grid(type~.)+
+  scale_fill_manual(values = c("#8D1732",
+                               "#000000"))+
+   #                            "#298ac4",
+  #                             "#94c893",
+   #                            "#cccccc"))+
+  coord_flip()+
+  labs (y = "Number of participants filling out post-workshop surveys",
+        x = "Marketing methods",
+        fill = "Pre-registered?")
+marketing_breakdown_initial
+```
+
+
+\newpage
+
+
+### Marketing methods for selection "Other (please describe)" with at least two words
+
+These words suggest that professors, librarians, and previous workshops were included in methods that reached these attendees.  Later data cleaning to incorporate emails/professors/word-of-mouth into the existing categories could be useful.
+
+```{r other, echo = FALSE, message = FALSE, warning = FALSE}
+
+
+other_source_Preregistered <- ggwordcloud_analysis_complete (df = postworkshopsurveys,
+                                                             min_words = 2,
+                                                             max_size = 70,
+                                                             column = "OtherDescriptions",
+                                                             border_margins= 0)
+
+other_source_Preregistered
+
+```
+
+
+
+\newpage
+
+
+
+## Marketing sources for people who registered for workshops (attendance yet unknown)
+These data are from people who filled out the pre-registration form to attend a workshop.  When they filled out this form, we do not know if they will go on to actually attend the workshop.  Most of the people in the previous section will have registered, so there is overlap between the datasets, but the post-workshop surveys are anonymous so we cannot connect them directly.  The next section shows a broad-level view of the relative effectiveness of methods for people who register vs people who follow through and attend.
+
+```{r all_registered, echo = FALSE, message = FALSE, warning = FALSE, include = TRUE}
+
+
+marketing_breakdown_registration <- ggplot(data = Registered,
+       aes(x = ReducedCategories))+
+  geom_bar()+
+  theme(axis.text.x = element_text(angle = 0,
+                                   hjust = 1,
+                                   size = 16),
+        axis.text.y = element_text(angle = 0,
+                                   hjust = 1,
+                                   size = 8),
+        panel.background = element_blank(),
+        legend.text=element_text(size=16),
+        strip.text.y = element_text(size = 16),
+        axis.title=element_text(size=16))+
+ # facet_grid(type~.)+
+  coord_flip()+
+  labs (y = "People pre-registered for the workshops 
+        (attendance yet unknown)",
+        x = "Marketing methods",
+        fill = "")
+marketing_breakdown_registration
+```
+
+```{r other_registered, echo = FALSE, message = FALSE, warning = FALSE, include = FALSE}
+## Marketing sources for people who attended the workshop and selected "Other (please describe)"
+
+
+other_source_registrations <- ggwordcloud_analysis_complete (df = Registered,
+                                                             min_words = 2,
+                                                             max_size = 16,
+                                                             column = "OtherDescriptions")
+
+other_source_registrations
+
+```
+
+
+
+\newpage
+
+
+## Relative effectiveness in marketing methods
+
+We do not get 100% survey responses at our workshops.  However, I wanted to see to see if some marketing methods are proportionately more effective in getting pre-registrants to actually show up at the workshop.  The differences are overall statistically significantly different (Chi-squared = 71.5, df =- 20, p < 0.0001).
+
+Below is a chart that represents this visually as a ratio of attendance to pre-registrant counts.  The vertical beige bar shows approximately where about the same proportion (i.e., 0.5 out of 1, or 50/100) of people who pre-registered (red) ended up actually attending and filling out a survey (black).
+
+
+
+
+
+```{r effectiveness, echo = FALSE, message = FALSE, warning = FALSE, include = FALSE}
+# Merge two datasets.
+registered_only <- data.frame("DataType" = "pre_registered",
+                              "ReducedCategories" = Registered[,"ReducedCategories"])
+actually_attended_only <- data.frame("DataType" = "surveyed_attendees",
+                              "ReducedCategories" = postworkshopsurveys[,"ReducedCategories"])
+
+# contingency table
+all_marketing <- rbind(registered_only,
+      actually_attended_only)
+
+# difference in proportions between registered source and attending source?
+chisq.test(table(all_marketing))
+```
+
+```{r effectiveness_figure, echo = FALSE}
+
+marketing_effectiveness <- ggplot(data = all_marketing,
+       aes(x = ReducedCategories,
+           fill = DataType))+
+  geom_bar(
+    position = "fill"
+    )+
+  theme(axis.text.x = element_text(angle = 90,
+                                   hjust = 1,
+                                   vjust = 0.5,
+                                   size = 16),
+        axis.text.y = element_text(angle = 0,
+                                   hjust = 1,
+                                   size = 8),
+        panel.background = element_blank(),
+        legend.text=element_text(size=8),
+        strip.text.y = element_text(size = 8),
+        axis.title=element_text(size=16))+
+ # facet_grid(type~.)+
+  scale_fill_manual(values = c("#8D1732",
+                               "#000000"
+                                        ))+
+   #                            "#298ac4",
+  #                             "#94c893",
+   #                            "#cccccc"))+
+  coord_flip()+
+  labs (y = "Ratio of registration to attendance + survey",
+        x = "Marketing methods",
+        fill = "Registration vs Attendance")+
+  geom_hline(yintercept = 0.5, linewidth = 8, color = "#cccccc")+
+
+  annotate("text", 
+           y = 0.5, x = 1, label = "0.5 is equal ratio of registration and attendance", angle = 90, hjust = 0, vjust = 0.5)
+marketing_effectiveness
+
+```
+
+A completely red bar indicates that none of the people who completed the pre-registration survey later completed a post-workshop survey.  It is possible some of those attendees showed up but did not complete the offered post-workshop survey.  People who pre-registered and heard about the workshop via Twitter, Facebook, Other Social Media Not Specified, Announcement in Class by Librarian, and paper fliers have this result, suggesting those media may not be resulting in attendees or not resulting in attendees willing to provide feedback.
+
+A completely black bar indicates that pre-registration did not occur but people attended anyways (you see these attendees as the red caps to the black bars in the previous section).  This occurred more with people who attended a workshop given in a class ("Class Requirement"; that category suggests either we visited the class, which does not involve LibCal registration, or that the instructor asked people to attend a workshop outside of class).  With online workshops requiring pre-registration, we don't necessarily expect any bar to be completely black (all walk-ins).  However, in-person workshops can accept passer-by walk-ins who didn't pre-register or people who saw the event via any other marketing method (again, see the previous section's chart) and just showed up without pre-registering. Zoom workshops could have other registrants also forward the Zoom link.
+
+Thus, any method with some black has some attendance, and methods with larger amounts of black indicate relatively stronger responses.  Thus, the highest response "intensity" are for class requirements, librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and people who find events by examining the OU Libraries website.
+
+## Marketing implementation details
+### Email detail level and timing
+
+```{r email_code, include=FALSE}
+#emails <- read.csv("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/EmailLengthStudyFinal.csv")
+emails <- read.csv("../raw_data/preworkshop/EmailLengthStudyFinal.csv")
+#Data source: https://osf.io/rvnsh
+```
+
+I used registrants instead of confirmed attendees, because that felt more relevant to the emails, and it was more consistently documented. The factors that were considered here were lead time (how much time between the email and the event) and length of email (long = one that was typed by one of you, short = automated libzoom email). Email length was the deciding factor for number of registrants! 
+
+Since the time between registration opening and workshop did not affect attendance.  As such, CMC proposed we open all workshops at the start of the semester.  This change was approved by the committee in slack in Fall 2023 (2023/10/03) to be implemented for the Spring 2024 workshops.  We discussed adding a second reminder for already registered participants, but only one reminder is possible using LibCal automated emails.  We will now post once advertising the full schedule, and then continue doing the 3-weeks-advertising to remind people again.
+```{r email_plot, echo=FALSE, message = FALSE, warning = FALSE}
+emailtree <- ctree(Total.Registrants ~ 
+                    as.factor(From) +
+                    as.factor(Long.or.Short) + 
+                    Lead.Time..in.days.
+                  ,
+                  data = emails,
+                  control = ctree_control(
+                    alpha = 0.05)) #cutoff for splits is p = 0.05 significance
+#hist(emails$Lead.Time..in.days.) shows most email lead times are 3 weeks
+plot(emailtree)
+```
+
+
+### Registration is a reasonable proxy for attendance
+```{r registration_vs_attendance, echo = FALSE, message = FALSE, warning = FALSE}
+cor.test()
+
+```
 
 
 # Attendance
@@ -449,74 +779,6 @@ carpentries %>%
 # Workshop feedback
 
 
-```{r postworkshop_data, include=FALSE}
-postworkshopsurvey <- read.csv("../raw_data/postworkshop/PostWorkshopSurveyFinal.csv",
-         header = TRUE, 
-         stringsAsFactors = FALSE)
-rows <- as.numeric(count(postworkshopsurvey))
-
-postworkshopsurvey <- na.omit(postworkshopsurvey)
-
-```
-
-
-```{r, workshop_feedback_date_formats, include = FALSE}
-# Month, day, year, hour, minute, seconds
-postworkshopsurvey$Date_2 <- mdy_hms(postworkshopsurvey$Date,
-                                                           truncated = 3)
-
-
-# separate year, month, date, times
-postworkshopsurvey$year <- year(postworkshopsurvey$Date_2)
-postworkshopsurvey$month <- month(postworkshopsurvey$Date_2)
-postworkshopsurvey$day <- day(postworkshopsurvey$Date_2)
-postworkshopsurvey$wday <- wday(postworkshopsurvey$Date_2,
-                                      week_start = 1, #1 = Monday,
-                                      label = TRUE    # days of weeks as characters
-                                      )
-
-# Overwrite original column with formatted date
-postworkshopsurvey$Date <-
-  format(postworkshopsurvey$Date_2, "%m/%d/%Y")
-
-```
-
-```{r, workshop_feedback_format_levels, echo = FALSE}
-
-#This will need to be repeated for all three "valuable for" questions, so the levels are ordered in the plots.
-
-postworkshopsurvey$Valuable.for.Program <- factor(x = postworkshopsurvey$Valuable.for.Program,
-                                                  levels = c("No answer",
-                                                             "Not applicable", 
-                                                             "Strongly agree",
-                                                             "Agree",
-                                                             "Somewhat agree",
-                                                             "Neither agree nor disagree",
-                                                             "Somewhat disagree",
-                                                             "Disagree",
-                                                             "Strongly disagree"
-                                                             
-                                                  ))
-
-```
-
-
-```{r, workshop_feedback_format_data, echo = FALSE}
-joined_post <- left_join(postworkshopsurvey, 
-                         last_two_years_attendance,
-                         by = c("Date"))
-
-## TODO NEED TO CLEAN TOPICS TO MATCH SURVEYS
-# Warning: Detected an unexpected many-to-many relationship between `x` and `y`.
-
-# summarize into counts
-
-na.post <- joined_post %>%
-  filter(!is.na(Location.of.Outreach),
-         !is.na(Valuable.for.Program))
-
-```
-
 ## Executive summary
 Tentative results suggest no difference in perception of workshop value by learners among learning formats (in person, hybrid, or online) and generally positive feedback.
 
@@ -527,7 +789,7 @@ In the future, we may check rankings vs length of course in hours.
 
 ### Do you anticipate that this new knowledge can be applied towards your work?
 ```{r workshop_feedback_newknowledge, echo=FALSE, message = FALSE, warning = FALSE}
-postworkshopsurvey %>%
+postworkshopsurveys %>%
   ggplot(aes(x=Using.New.Knowledge., fill=Using.New.Knowledge.)) +
   geom_bar()+
   scale_fill_viridis_d (aesthetics = "fill") +
@@ -766,6 +1028,9 @@ workshop_feedback_skills_plot <- chi_skills$p.value<=0.05
 ### "What did you like about the workshop?"
 ```{r workshop_feedback_liked_code, include=FALSE}
 workshopliked <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopLiked_Cleaned.txt")
+
+# TODO: automate cleaning.  otherwise pull from postworkshopsurvey original columns and then clean by code instead of manually.  CMC and BN discussed 11/28/2023.
+
 likedcorpus <- Corpus(VectorSource(workshopliked))
 
 likedcorpus <- tm_map(likedcorpus, removeNumbers)
@@ -810,20 +1075,25 @@ col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 ### "What other workshop topics would interest you?"
 We can examine this wordcloud to see if we need to advertise existing workshops more in addition to having ideas about new ones.
 ```{r workshop_feedback_othertopics_code, include=FALSE}
-workshopothertopic <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherTopics.txt")
-othertopiccorpus <- Corpus(VectorSource(workshopothertopic))
+workshoptopics<- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherTopics_Cleaned.txt")
+topicscorpus <- Corpus(VectorSource(workshoptopics))
 
-othertopiccorpus <- tm_map(othertopiccorpus, content_transformer(tolower))
-othertopiccorpus <- tm_map(othertopiccorpus, removeNumbers)
-othertopiccorpus <- tm_map(othertopiccorpus, removeWords, stopwords("english"))
-othertopiccorpus <- tm_map(othertopiccorpus, removeWords, c("think", "maybe")) 
-othertopiccorpus <- tm_map(othertopiccorpus, removePunctuation)
-othertopiccorpus <- tm_map(othertopiccorpus, stripWhitespace)
+topicscorpus <- tm_map(topicscorpus, removeNumbers)
+topicscorpus <- tm_map(topicscorpus, removeWords, c("the", "and", "was", "that", "very", 
+                                                  "with", "how", "for", "were", "all", "through",
+                                                  "you", "have", "like", "more", "but", "had", "could",
+                                                  "what", "get", "also", "not", "this", "way",
+                                                  "really", "about", "will", "our", "being", "would",
+                                                  "workshop", "there", "are", "can", "they", "think",
+                                                  "workshops", "when", "these")) 
+topicscorpus <- tm_map(topicscorpus, stripWhitespace)
 
-othertopicsdocmatrix <- TermDocumentMatrix(othertopiccorpus)
-othertopicsmatrix <- as.matrix(othertopicsdocmatrix)
-v3 <- sort(rowSums(othertopicsmatrix), decreasing = TRUE)
-othertopicsdf <- data.frame(word = names(v3), freq=v3)
+topicsdocmatrix <- TermDocumentMatrix(topicscorpus)
+topicsmatrix <- as.matrix(topicsdocmatrix)
+v <- sort(rowSums(topicsmatrix), decreasing = TRUE)
+topicsdf <- data.frame(word = names(v), freq=v)
+
+col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 ```
 
 ### "Any other comments?"
@@ -880,221 +1150,3 @@ wordcloud(words = commentsdf$word, freq = commentsdf$freq, min.freq = 5,
 
 
 
-# Marketing
-## Executive summary
-The top three marketing methods that bring in the highest counts of attendees who fill out our post-workshop surveys (hereafter, "attendees" and "attendance") are emails, word-of-mouth, and the OU Libraries website
-
-The marketing methods with the highest response "intensities" (relative proportion of attendees) were class requirements (making liaison outreach to instructors critical), librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and the OU Libraries website.
-
-Thus, our overall most effective marketing methods are emails, the OU Libraries website, word-of-mouth, and outreach to instructors.
-
-
-\newpage
-
-
-## Absolute effectiveness (counts of attendees) by marketing method
-
-### Overall counts of attendees by marketing method and registration status
-These data for people who filled out a post-workshop survey (ie are confirmed to have attended a workshop) and answer the question "How did you hear about this workshop?".  They are grouped by pre-registered or not pre-registered (passerby walk-ins, class workshops where registration wasn't required).  We do not get 100% completion of surveys.
-
-```{r attendees, echo=FALSE, message = FALSE, warning = FALSE}
-marketing_breakdown_initial <- ggplot(data = FeedbackActuallyAttended,
-       aes(x = ReducedCategories,
-           fill = Did.you.pre.register.for.this.workshop.))+
-  geom_bar()+
-  theme(axis.text.x = element_text(angle = 0,
-                                   hjust = 1,
-                                   size = 16),
-        axis.text.y = element_text(angle = 0,
-                                   hjust = 1,
-                                   size = 8),
-        panel.background = element_blank(),
-        legend.text=element_text(size=16),
-        strip.text.y = element_text(size = 16),
-        axis.title=element_text(size=16))+
- # facet_grid(type~.)+
-  scale_fill_manual(values = c("#8D1732",
-                               "#000000"))+
-   #                            "#298ac4",
-  #                             "#94c893",
-   #                            "#cccccc"))+
-  coord_flip()+
-  labs (y = "Number of participants filling out post-workshop surveys",
-        x = "Marketing methods",
-        fill = "Pre-registered?")
-marketing_breakdown_initial
-```
-
-
-\newpage
-
-
-### Marketing methods for selection "Other (please describe)" with at least two words
-
-These words suggest that professors, librarians, and previous workshops were included in methods that reached these attendees.  Later data cleaning to incorporate emails/professors/word-of-mouth into the existing categories could be useful.
-
-```{r other, echo = FALSE, message = FALSE, warning = FALSE}
-
-
-other_source_Preregistered <- ggwordcloud_analysis_complete (df = FeedbackActuallyAttended,
-                                                             min_words = 2,
-                                                             max_size = 70,
-                                                             column = "OtherDescriptions",
-                                                             border_margins= 0)
-
-other_source_Preregistered
-
-```
-
-
-
-\newpage
-
-
-
-## Marketing sources for people who registered for workshops (attendance yet unknown)
-These data are from people who filled out the pre-registration form to attend a workshop.  When they filled out this form, we do not know if they will go on to actually attend the workshop.  Most of the people in the previous section will have registered, so there is overlap between the datasets, but the post-workshop surveys are anonymous so we cannot connect them directly.  The next section shows a broad-level view of the relative effectiveness of methods for people who register vs people who follow through and attend.
-
-```{r all_registered, echo = FALSE, message = FALSE, warning = FALSE, include = TRUE}
-
-
-marketing_breakdown_registration <- ggplot(data = Registered,
-       aes(x = ReducedCategories))+
-  geom_bar()+
-  theme(axis.text.x = element_text(angle = 0,
-                                   hjust = 1,
-                                   size = 16),
-        axis.text.y = element_text(angle = 0,
-                                   hjust = 1,
-                                   size = 8),
-        panel.background = element_blank(),
-        legend.text=element_text(size=16),
-        strip.text.y = element_text(size = 16),
-        axis.title=element_text(size=16))+
- # facet_grid(type~.)+
-  coord_flip()+
-  labs (y = "People pre-registered for the workshops 
-        (attendance yet unknown)",
-        x = "Marketing methods",
-        fill = "")
-marketing_breakdown_registration
-```
-
-```{r other_registered, echo = FALSE, message = FALSE, warning = FALSE, include = FALSE}
-## Marketing sources for people who attended the workshop and selected "Other (please describe)"
-
-
-other_source_registrations <- ggwordcloud_analysis_complete (df = Registered,
-                                                             min_words = 2,
-                                                             max_size = 16,
-                                                             column = "OtherDescriptions")
-
-other_source_registrations
-
-```
-
-
-
-\newpage
-
-
-## Relative effectiveness in marketing methods
-
-We do not get 100% survey responses at our workshops.  However, I wanted to see to see if some marketing methods are proportionately more effective in getting pre-registrants to actually show up at the workshop.  The differences are overall statistically significantly different (Chi-squared = 71.5, df =- 20, p < 0.0001).
-
-Below is a chart that represents this visually as a ratio of attendance to pre-registrant counts.  The vertical beige bar shows approximately where about the same proportion (i.e., 0.5 out of 1, or 50/100) of people who pre-registered (red) ended up actually attending and filling out a survey (black).
-
-
-
-
-
-```{r effectiveness, echo = FALSE, message = FALSE, warning = FALSE, include = FALSE}
-# Merge two datasets.
-registered_only <- data.frame("DataType" = "pre_registered",
-                              "ReducedCategories" = Registered[,"ReducedCategories"])
-actually_attended_only <- data.frame("DataType" = "surveyed_attendees",
-                              "ReducedCategories" = FeedbackActuallyAttended[,"ReducedCategories"])
-
-# contingency table
-all_marketing <- rbind(registered_only,
-      actually_attended_only)
-
-# difference in proportions between registered source and attending source?
-chisq.test(table(all_marketing))
-```
-
-```{r effectiveness_figure, echo = FALSE}
-
-marketing_effectiveness <- ggplot(data = all_marketing,
-       aes(x = ReducedCategories,
-           fill = DataType))+
-  geom_bar(
-    position = "fill"
-    )+
-  theme(axis.text.x = element_text(angle = 90,
-                                   hjust = 1,
-                                   vjust = 0.5,
-                                   size = 16),
-        axis.text.y = element_text(angle = 0,
-                                   hjust = 1,
-                                   size = 8),
-        panel.background = element_blank(),
-        legend.text=element_text(size=8),
-        strip.text.y = element_text(size = 8),
-        axis.title=element_text(size=16))+
- # facet_grid(type~.)+
-  scale_fill_manual(values = c("#8D1732",
-                               "#000000"
-                                        ))+
-   #                            "#298ac4",
-  #                             "#94c893",
-   #                            "#cccccc"))+
-  coord_flip()+
-  labs (y = "Ratio of registration to attendance + survey",
-        x = "Marketing methods",
-        fill = "Registration vs Attendance")+
-  geom_hline(yintercept = 0.5, linewidth = 8, color = "#cccccc")+
-
-  annotate("text", 
-           y = 0.5, x = 1, label = "0.5 is equal ratio of registration and attendance", angle = 90, hjust = 0, vjust = 0.5)
-marketing_effectiveness
-
-```
-
-A completely red bar indicates that none of the people who completed the pre-registration survey later completed a post-workshop survey.  It is possible some of those attendees showed up but did not complete the offered post-workshop survey.  People who pre-registered and heard about the workshop via Twitter, Facebook, Other Social Media Not Specified, Announcement in Class by Librarian, and paper fliers have this result, suggesting those media may not be resulting in attendees or not resulting in attendees willing to provide feedback.
-
-A completely black bar indicates that pre-registration did not occur but people attended anyways (you see these attendees as the red caps to the black bars in the previous section).  This occurred more with people who attended a workshop given in a class ("Class Requirement"; that category suggests either we visited the class, which does not involve LibCal registration, or that the instructor asked people to attend a workshop outside of class).  With online workshops requiring pre-registration, we don't necessarily expect any bar to be completely black (all walk-ins).  However, in-person workshops can accept passer-by walk-ins who didn't pre-register or people who saw the event via any other marketing method (again, see the previous section's chart) and just showed up without pre-registering. Zoom workshops could have other registrants also forward the Zoom link.
-
-Thus, any method with some black has some attendance, and methods with larger amounts of black indicate relatively stronger responses.  Thus, the highest response "intensity" are for class requirements, librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and people who find events by examining the OU Libraries website.
-
-## Marketing implementation details
-### Email detail level and timing
-
-```{r email_code, include=FALSE}
-#emails <- read.csv("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/EmailLengthStudyFinal.csv")
-emails <- read.csv("../raw_data/preworkshop/EmailLengthStudyFinal.csv")
-#Data source: https://osf.io/rvnsh
-```
-
-I used registrants instead of confirmed attendees, because that felt more relevant to the emails, and it was more consistently documented. The factors that were considered here were lead time (how much time between the email and the event) and length of email (long = one that was typed by one of you, short = automated libzoom email). Email length was the deciding factor for number of registrants! 
-
-Since the time between registration opening and workshop did not affect attendance.  As such, CMC proposed we open all workshops at the start of the semester.  This change was approved by the committee in slack in Fall 2023 (2023/10/03) to be implemented for the Spring 2024 workshops.  We discussed adding a second reminder for already registered participants, but only one reminder is possible using LibCal automated emails.  We will now post once advertising the full schedule, and then continue doing the 3-weeks-advertising to remind people again.
-```{r email_plot, echo=FALSE, message = FALSE, warning = FALSE}
-emailtree <- ctree(Total.Registrants ~ 
-                    as.factor(From) +
-                    as.factor(Long.or.Short) + 
-                    Lead.Time..in.days.
-                  ,
-                  data = emails,
-                  control = ctree_control(
-                    alpha = 0.05)) #cutoff for splits is p = 0.05 significance
-#hist(emails$Lead.Time..in.days.) shows most email lead times are 3 weeks
-plot(emailtree)
-```
-
-
-### Registration is a reasonable proxy for attendance
-```{r registration_vs_attendance, echo = FALSE, message = FALSE, warning = FALSE}
-cor.test()
-
-```
