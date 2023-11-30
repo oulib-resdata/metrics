@@ -1,7 +1,7 @@
 ---
 title: "Research Workshop Attendance, Marketing, and Satisfaction"
 author: "C.M. Curry (STEM Services) and B. Narr (Metrics Coordinator)"
-date: '2023-11-28'
+date: '2023-11-30'
 output:
   word_document: 
     reference_docx: word_styles.docx
@@ -100,8 +100,6 @@ Post-workshop survey data are from a subset of learners who attended and also fi
 
 # Post-workshop surveys from libwizard only
 ## Used for both feedback AND marketing
-
-#same as file loaded below.  CMC TODO: merge with below where I pull in report.csv
 FeedbackActuallyAttended <- read.csv("../raw_data/postworkshop/report.csv",
                                      na.strings=c("","NA"))
 
@@ -119,7 +117,7 @@ FeedbackActuallyAttended2$This_workshop_was <-
   str_remove(FeedbackActuallyAttended2$This_workshop_was,
              pattern = fixed("..."))
 
-postworkshopsurveys_named <- FeedbackActuallyAttended2 %>%
+postworkshopsurveys_wide <- FeedbackActuallyAttended2 %>%
   pivot_wider(names_from = This_workshop_was,
               values_from = Ranking) %>%
   dplyr::select(-`NA`)
@@ -177,14 +175,14 @@ Registered$ReducedCategories[!(Registered$How.did.you.hear.about.this.workshop. 
 Registered$OtherDescriptions[!(Registered$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- Registered$If.other..please.describe.[!(Registered$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
 
 ## Convert old categories to equivalent new in feedback/post-workshop surveyd ata too.
-postworkshopsurveys_named$How.did.you.hear.about.this.workshop.[postworkshopsurveys_named$How.did.you.hear.about.this.workshop.=="Email from OU Libraries"] <- "Direct Email from OU Libraries (Source Unknown)"
-postworkshopsurveys_named$How.did.you.hear.about.this.workshop.[postworkshopsurveys_named$How.did.you.hear.about.this.workshop.=="Colleagues"] <- "Colleagues (Forwarded email, word of mouth)"
-postworkshopsurveys_named$How.did.you.hear.about.this.workshop.[postworkshopsurveys_named$How.did.you.hear.about.this.workshop.=="Supervisor"] <- "Supervisor (Forwarded email, word of mouth)"
-postworkshopsurveys_named$How.did.you.hear.about.this.workshop.[postworkshopsurveys_named$How.did.you.hear.about.this.workshop.=="Flyer"] <- "Flyer (Paper or Digital Unspecified)"
+postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.=="Email from OU Libraries"] <- "Direct Email from OU Libraries (Source Unknown)"
+postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.=="Colleagues"] <- "Colleagues (Forwarded email, word of mouth)"
+postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.=="Supervisor"] <- "Supervisor (Forwarded email, word of mouth)"
+postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.=="Flyer"] <- "Flyer (Paper or Digital Unspecified)"
 
-postworkshopsurveys_named$ReducedCategories <- postworkshopsurveys_named$How.did.you.hear.about.this.workshop.
-postworkshopsurveys_named$ReducedCategories[!(postworkshopsurveys_named$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
-postworkshopsurveys_named$OtherDescriptions[!(postworkshopsurveys_named$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- postworkshopsurveys_named$How.did.you.hear.about.this.workshop.[!(postworkshopsurveys_named$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
+postworkshopsurveys_wide$ReducedCategories <- postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.
+postworkshopsurveys_wide$ReducedCategories[!(postworkshopsurveys_wide$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
+postworkshopsurveys_wide$OtherDescriptions[!(postworkshopsurveys_wide$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.[!(postworkshopsurveys_wide$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
 ```
 
 Titles have varied over time with marketing experiments, typos, and accidental changes.  This code assigns a standardized code between each topic.
@@ -210,7 +208,7 @@ attendance_named <- left_join(workshop,
 
 
 ## postworkshop surveys
-postworkshopsurveys_named <- left_join(postworkshopsurveys,
+postworkshopsurveys_named <- left_join(postworkshopsurveys_wide,
                                        topics_complete_variations_cleaned,
                                        by =  c("What.workshop.did.you.attend." = "WorkshopNameVariations"))
 
@@ -301,7 +299,9 @@ Finally, the tidied feedback and attendance data are combined to compare feedbac
 joined_post <- left_join(postworkshopsurveys_named, 
                          attendance_named,
                          by = c("Date", "WorkshopCode"))
+# It is necessary to join by both date and workshop code as occasionally 2 or more people will teach on the same day in different events or classes.
 
+# Filtering by NA is necessary because not everyone has entered their workshops into LibInsights, resulting in no attendance or format data to associate with the feedback.
 joined_attendance_post_clean <- joined_post %>%
   filter(!is.na(Location.of.Outreach),
          !is.na(Valuable.for.Program))
@@ -312,8 +312,8 @@ joined_attendance_post_clean <- joined_post %>%
 # Workshop descriptive numbers
 We continue to offer more workshops on request (right panel), especially in courses.
 ```{r joined_post, echo=FALSE, message = FALSE, warning = FALSE}
-ggplot(data = attendance_named,
-       mapping = aes(x = year,
+ggplot(data = last_two_years_attendance,
+       mapping = aes(x = Calendar.Year,
                      fill = Is.Course))+
   geom_bar()+
   facet_grid(~Requested.)+
@@ -324,8 +324,8 @@ ggplot(data = attendance_named,
 We have increased the number of topics we've brought "on request" to groups and courses.  The number of distinct topics has declined in the last academic year, likely due to loss of specialist expertise with staff loss.
 
 ```{r workshop_descriptive_stats_topics, echo=FALSE, message = FALSE, warning = FALSE}
-topics_desc <- joined_post %>%
-  group_by(Academic.Year,
+topics_desc <- last_two_years_attendance %>%
+  group_by(Calendar.Year,
            Semester,
            Is.Course,
            Requested.
@@ -345,7 +345,7 @@ ggplot(data = topics_desc,
 ```
 
 LATER TODO: How many instructors and helpers per semester
-  - BN gather number of helpers from Libraries collaborators + internal notes and total attendees
+  - BN gather number of helpers from Libraries collaborators + internal notes.  later in report will cover helper to attendee ratio.
   - 11/28/2023 requested BN to request MB to add external helper count
 
 # Marketing
