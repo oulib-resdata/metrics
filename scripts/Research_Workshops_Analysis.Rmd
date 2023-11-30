@@ -86,6 +86,8 @@ last_two_years_attendance <- read.csv("../raw_data/postworkshop/WorkshopAttendan
 ## Requested yes/no is a column. - needs added into LibInsights. (for courses, always yes can add this in in R after import before combine)
 ## Name of workshop into LibInsights in both courses and outreach.
 ## This is outreach + courses combined with the manual cleaning listed above in comments.
+## TODO: retroactively apply the workshop name field in course and outreach so data can be pulled automatically without manual formatting for future.
+
 workshop <- read.csv ("../raw_data/postworkshop/WorkshopAttendanceUpdate.csv",
                       header=TRUE,
                       stringsAsFactors=FALSE)
