@@ -119,7 +119,7 @@ FeedbackActuallyAttended2$This_workshop_was <-
   str_remove(FeedbackActuallyAttended2$This_workshop_was,
              pattern = fixed("..."))
 
-postworkshopsurveys <- FeedbackActuallyAttended2 %>%
+postworkshopsurveys_named <- FeedbackActuallyAttended2 %>%
   pivot_wider(names_from = This_workshop_was,
               values_from = Ranking) %>%
   dplyr::select(-`NA`)
@@ -177,64 +177,93 @@ Registered$ReducedCategories[!(Registered$How.did.you.hear.about.this.workshop. 
 Registered$OtherDescriptions[!(Registered$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- Registered$If.other..please.describe.[!(Registered$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
 
 ## Convert old categories to equivalent new in feedback/post-workshop surveyd ata too.
-postworkshopsurveys$How.did.you.hear.about.this.workshop.[postworkshopsurveys$How.did.you.hear.about.this.workshop.=="Email from OU Libraries"] <- "Direct Email from OU Libraries (Source Unknown)"
-postworkshopsurveys$How.did.you.hear.about.this.workshop.[postworkshopsurveys$How.did.you.hear.about.this.workshop.=="Colleagues"] <- "Colleagues (Forwarded email, word of mouth)"
-postworkshopsurveys$How.did.you.hear.about.this.workshop.[postworkshopsurveys$How.did.you.hear.about.this.workshop.=="Supervisor"] <- "Supervisor (Forwarded email, word of mouth)"
-postworkshopsurveys$How.did.you.hear.about.this.workshop.[postworkshopsurveys$How.did.you.hear.about.this.workshop.=="Flyer"] <- "Flyer (Paper or Digital Unspecified)"
+postworkshopsurveys_named$How.did.you.hear.about.this.workshop.[postworkshopsurveys_named$How.did.you.hear.about.this.workshop.=="Email from OU Libraries"] <- "Direct Email from OU Libraries (Source Unknown)"
+postworkshopsurveys_named$How.did.you.hear.about.this.workshop.[postworkshopsurveys_named$How.did.you.hear.about.this.workshop.=="Colleagues"] <- "Colleagues (Forwarded email, word of mouth)"
+postworkshopsurveys_named$How.did.you.hear.about.this.workshop.[postworkshopsurveys_named$How.did.you.hear.about.this.workshop.=="Supervisor"] <- "Supervisor (Forwarded email, word of mouth)"
+postworkshopsurveys_named$How.did.you.hear.about.this.workshop.[postworkshopsurveys_named$How.did.you.hear.about.this.workshop.=="Flyer"] <- "Flyer (Paper or Digital Unspecified)"
 
-postworkshopsurveys$ReducedCategories <- postworkshopsurveys$How.did.you.hear.about.this.workshop.
-postworkshopsurveys$ReducedCategories[!(postworkshopsurveys$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
-postworkshopsurveys$OtherDescriptions[!(postworkshopsurveys$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- postworkshopsurveys$How.did.you.hear.about.this.workshop.[!(postworkshopsurveys$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
+postworkshopsurveys_named$ReducedCategories <- postworkshopsurveys_named$How.did.you.hear.about.this.workshop.
+postworkshopsurveys_named$ReducedCategories[!(postworkshopsurveys_named$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
+postworkshopsurveys_named$OtherDescriptions[!(postworkshopsurveys_named$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- postworkshopsurveys_named$How.did.you.hear.about.this.workshop.[!(postworkshopsurveys_named$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
 ```
 
+Titles have varied over time with marketing experiments, typos, and accidental changes.  This code assigns a standardized code between each topic.
+```{r, data_cleanup_topics, include = FALSE}
+topics_complete_variations <- read.csv("../workshop_metadata.csv")
+
+# remove any accidental duplicates of name variations (otherwise will create a many-to-many join below in next step)
+topics_complete_variations_cleaned <-topics_complete_variations %>%
+  dplyr::distinct(WorkshopNameVariations, WorkshopCode)
+
+# Must attach standard titles to all three datasets (registrations, attendance, and post-workshop surveys) to allow joining the three based on topic and date (date will be cleaned in next code chunk).
+
+## registrations
+registrations_named <- left_join(Registered,
+                                 topics_complete_variations_cleaned,
+                                 by =  c("Title" = "WorkshopNameVariations"))
+## attendance
+attendance_named <- left_join(workshop,
+                                 topics_complete_variations_cleaned,
+                                 by =  c("Topic" = "WorkshopNameVariations")) %>%
+  dplyr::filter(!is.na(id))
+
+
+
+## postworkshop surveys
+postworkshopsurveys_named <- left_join(postworkshopsurveys,
+                                       topics_complete_variations_cleaned,
+                                       by =  c("What.workshop.did.you.attend." = "WorkshopNameVariations"))
+
+
+```
 
 We clean dates out by weekday, year, month, day, and times for later analysis and data subsetting.
 ```{r, data_import_date_cleaning, include = FALSE}
 # Month, day, year, hour, minute, seconds
-last_two_years_attendance$Event.Date.and.Time_2 <- mdy_hms(last_two_years_attendance$Event.Date.and.Time,
+attendance_named$Event.Date.and.Time_2 <- mdy_hms(attendance_named$Event.Date.and.Time,
                                                            truncated = 3)
 
 
 # separate year, month, date, times
-last_two_years_attendance$year <- year(last_two_years_attendance$Event.Date.and.Time_2)
-last_two_years_attendance$month <- month(last_two_years_attendance$Event.Date.and.Time_2)
-last_two_years_attendance$day <- day(last_two_years_attendance$Event.Date.and.Time_2)
-last_two_years_attendance$wday <- wday(last_two_years_attendance$Event.Date.and.Time_2,
+attendance_named$year <- year(attendance_named$Event.Date.and.Time_2)
+attendance_named$month <- month(attendance_named$Event.Date.and.Time_2)
+attendance_named$day <- day(attendance_named$Event.Date.and.Time_2)
+attendance_named$wday <- wday(attendance_named$Event.Date.and.Time_2,
                                       week_start = 1, #1 = Monday,
                                       label = TRUE    # days of weeks as characters
                                       )
-last_two_years_attendance$hour <-
-  format(last_two_years_attendance$Event.Date.and.Time_2, "%H")
+attendance_named$hour <-
+  format(attendance_named$Event.Date.and.Time_2, "%H")
 
-last_two_years_attendance$Date <-
-  format(last_two_years_attendance$Event.Date.and.Time_2, "%m/%d/%Y")
+attendance_named$Date <-
+  format(attendance_named$Event.Date.and.Time_2, "%m/%d/%Y")
 
 # convert 00 hour to NA
-last_two_years_attendance[last_two_years_attendance$hour=="00", "hour"] <- NA
+attendance_named[attendance_named$hour=="00", "hour"] <- NA
 
-last_two_years_attendance$hour <- as.numeric(last_two_years_attendance$hour)
+attendance_named$hour <- as.numeric(attendance_named$hour)
 
 ```
 
 
 ```{r, workshop_feedback_date_formats, include = FALSE}
 # Month, day, year, hour, minute, seconds
-postworkshopsurveys$Date_2 <- mdy_hms(postworkshopsurveys$What.date.was.the.workshop.,
+postworkshopsurveys_named$Date_2 <- ymd_hms(postworkshopsurveys_named$What.date.was.the.workshop.,
                                                            truncated = 3)
 
 
 # separate year, month, date, times
-postworkshopsurveys$year <- year(postworkshopsurveys$Date_2)
-postworkshopsurveys$month <- month(postworkshopsurveys$Date_2)
-postworkshopsurveys$day <- day(postworkshopsurveys$Date_2)
-postworkshopsurveys$wday <- wday(postworkshopsurveys$Date_2,
+postworkshopsurveys_named$year <- year(postworkshopsurveys_named$Date_2)
+postworkshopsurveys_named$month <- month(postworkshopsurveys_named$Date_2)
+postworkshopsurveys_named$day <- day(postworkshopsurveys_named$Date_2)
+postworkshopsurveys_named$wday <- wday(postworkshopsurveys_named$Date_2,
                                       week_start = 1, #1 = Monday,
                                       label = TRUE    # days of weeks as characters
                                       )
 
 # Overwrite original column with formatted date
-postworkshopsurveys$Date <-
-  format(postworkshopsurveys$Date_2, "%m/%d/%Y")
+postworkshopsurveys_named$Date <-
+  format(postworkshopsurveys_named$Date_2, "%m/%d/%Y")
 
 ```
 
@@ -243,7 +272,16 @@ Ordered scales require using R levels to order categories for later graphing or 
 
 #This will need to be repeated for all three "valuable for" questions, so the levels are ordered in the plots.
 
-postworkshopsurveys$Valuable.for.Program <- factor(x = postworkshopsurveys$Valuable.for.Program,
+# First, rename difficult columns
+# rename(df, newname = oldname)
+postworkshopsurveys_named <- postworkshopsurveys_named %>% 
+  dplyr::rename(Valuable.for.Program = `valuable towards your program of study`, 
+                Valuable.for.Teaching  = `valuable towards your teaching`,
+                Valuable.for.Career = `valuable towards your career`,
+                Using.New.Knowledge. = `Do.you.anticipate.that.this.new.knowledge.can.b...`)
+
+## Next, order the levels for all three.
+postworkshopsurveys_named$Valuable.for.Program <- factor(x = postworkshopsurveys_named$Valuable.for.Program,
                                                   levels = c("No answer",
                                                              "Not applicable", 
                                                              "Strongly agree",
@@ -258,18 +296,13 @@ postworkshopsurveys$Valuable.for.Program <- factor(x = postworkshopsurveys$Valua
 
 ```
 
-Finally, the tidied feedback and attendance data are combined to compare feedback with per-workshop characteristics such as format of instruction.
+Finally, the tidied feedback and attendance data are combined to compare feedback with per-workshop characteristics such as format of instruction.  This is a smaller dataset as not all the workshops appear to have been entered into LibInsights, where the attendance and format data are stored.
 ```{r, workshop_feedback_format_data, echo = FALSE}
-joined_post <- left_join(postworkshopsurveys, 
-                         last_two_years_attendance,
-                         by = c("Date"))
+joined_post <- left_join(postworkshopsurveys_named, 
+                         attendance_named,
+                         by = c("Date", "WorkshopCode"))
 
-## TODO NEED TO CLEAN TOPICS TO MATCH SURVEYS
-# Warning: Detected an unexpected many-to-many relationship between `x` and `y`.
-
-# summarize into counts
-
-na.post <- joined_post %>%
+joined_attendance_post_clean <- joined_post %>%
   filter(!is.na(Location.of.Outreach),
          !is.na(Valuable.for.Program))
 
@@ -278,9 +311,9 @@ na.post <- joined_post %>%
 
 # Workshop descriptive numbers
 We continue to offer more workshops on request (right panel), especially in courses.
-```{r workshop_descriptive_stats, echo=FALSE, message = FALSE, warning = FALSE}
-ggplot(data = last_two_years_attendance,
-       mapping = aes(x = Academic.Year,
+```{r joined_post, echo=FALSE, message = FALSE, warning = FALSE}
+ggplot(data = attendance_named,
+       mapping = aes(x = year,
                      fill = Is.Course))+
   geom_bar()+
   facet_grid(~Requested.)+
@@ -291,13 +324,13 @@ ggplot(data = last_two_years_attendance,
 We have increased the number of topics we've brought "on request" to groups and courses.  The number of distinct topics has declined in the last academic year, likely due to loss of specialist expertise with staff loss.
 
 ```{r workshop_descriptive_stats_topics, echo=FALSE, message = FALSE, warning = FALSE}
-topics_desc <- last_two_years_attendance %>%
+topics_desc <- joined_post %>%
   group_by(Academic.Year,
            Semester,
            Is.Course,
            Requested.
       ) %>%
-  summarize(topics_count = n_distinct(Topic))
+  summarize(topics_count = n_distinct(WorkshopCode))
 
 topics_desc
 
@@ -333,7 +366,7 @@ Thus, our overall most effective marketing methods are emails, the OU Libraries 
 These data for people who filled out a post-workshop survey (ie are confirmed to have attended a workshop) and answer the question "How did you hear about this workshop?".  They are grouped by pre-registered or not pre-registered (passerby walk-ins, class workshops where registration wasn't required).  We do not get 100% completion of surveys.
 
 ```{r attendees, echo=FALSE, message = FALSE, warning = FALSE}
-marketing_breakdown_initial <- ggplot(data = postworkshopsurveys,
+marketing_breakdown_initial <- ggplot(data = postworkshopsurveys_named,
        aes(x = ReducedCategories,
            fill = Did.you.pre.register.for.this.workshop.))+
   geom_bar()+
@@ -371,7 +404,7 @@ These words suggest that professors, librarians, and previous workshops were inc
 ```{r other, echo = FALSE, message = FALSE, warning = FALSE}
 
 
-other_source_Preregistered <- ggwordcloud_analysis_complete (df = postworkshopsurveys,
+other_source_Preregistered <- ggwordcloud_analysis_complete (df = postworkshopsurveys_named,
                                                              min_words = 2,
                                                              max_size = 70,
                                                              column = "OtherDescriptions",
@@ -448,7 +481,7 @@ Below is a chart that represents this visually as a ratio of attendance to pre-r
 registered_only <- data.frame("DataType" = "pre_registered",
                               "ReducedCategories" = Registered[,"ReducedCategories"])
 actually_attended_only <- data.frame("DataType" = "surveyed_attendees",
-                              "ReducedCategories" = postworkshopsurveys[,"ReducedCategories"])
+                              "ReducedCategories" = postworkshopsurveys_named[,"ReducedCategories"])
 
 # contingency table
 all_marketing <- rbind(registered_only,
@@ -791,7 +824,7 @@ In the future, we may check rankings vs length of course in hours.
 
 ### Do you anticipate that this new knowledge can be applied towards your work?
 ```{r workshop_feedback_newknowledge, echo=FALSE, message = FALSE, warning = FALSE}
-postworkshopsurveys %>%
+joined_attendance_post_clean %>%
   ggplot(aes(x=Using.New.Knowledge., fill=Using.New.Knowledge.)) +
   geom_bar()+
   scale_fill_viridis_d (aesthetics = "fill") +
@@ -811,17 +844,17 @@ postworkshopsurveys %>%
 There was no significant difference in perception of learning new knowledge from the workshop among learning formats.
 ```{r workshop_feedback_newknowledge_statistics, echo=FALSE, message = FALSE, warning = FALSE}
 # run test for significance
-chi_newkno <- chisq.test(x = na.post$Location.of.Outreach,
-           y = na.post$Using.New.Knowledge.,
+chi_newkno <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+           y = joined_attendance_post_clean$Using.New.Knowledge.,
            simulate.p.value = TRUE)
 
-workshop_feedback_chi_newkno_plot <- chi_newkno$p.value<=0.05
+(workshop_feedback_chi_newkno_plot <- chi_newkno$p.value<=0.05)
 
 ```
 
 ```{r, workshop_feedback_newknowledge_plot, eval = workshop_feedback_chi_newkno_plot, include = workshop_feedback_chi_newkno_plot}
 # will only eval or include (ie plot) if test in previous chunk is significant
-na.post %>%
+joined_attendance_post_clean %>%
   group_by(Location.of.Outreach,
            Using.New.Knowledge.) %>%
   summarize(count_per_feeling = n()) %>%
@@ -840,7 +873,7 @@ ggplot(
 Most participants perceived the workshop as valuable towards their program of study.  Interestingly, "disagree" is never chosen by any of our several hundred respondents.
 
 ```{r workshop_feedback_valuableforprogram, echo=FALSE, message = FALSE, warning = FALSE}
-postworkshopsurvey %>%
+joined_attendance_post_clean %>%
   mutate(Valuable.for.Program = fct_relevel(Valuable.for.Program,
                                             "Strongly agree",
                                             "Agree",
@@ -882,11 +915,11 @@ postworkshopsurvey %>%
 There was no difference in perception of the material as "valuable to my program of study" between workshop formats (hybrid, online, or in person).
 ```{r, workshop_feedback_valuableforprogram_stats, include = TRUE}
 # run test for significance
-chi_program <- chisq.test(x = na.post$Location.of.Outreach,
-           y = na.post$Valuable.for.Program,
+chi_program <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+           y = joined_attendance_post_clean$Valuable.for.Program,
            simulate.p.value = TRUE)
 
-workshop_feedback_valuableforprogram_plot <- chi_program$p.value<=0.05
+(workshop_feedback_valuableforprogram_plot <- chi_program$p.value<=0.05)
 ```
 
 ```{r, workshop_feedback_valuableforprogram_plot, eval = workshop_feedback_valuableforprogram_plot, include = workshop_feedback_valuableforprogram_plot}
@@ -894,7 +927,7 @@ workshop_feedback_valuableforprogram_plot <- chi_program$p.value<=0.05
 # count is WRONG summary  here, because we may  have more people in a given category
 # proportion of total for row?
 # https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
-na.post %>%
+joined_attendance_post_clean %>%
   group_by(Location.of.Outreach,
            Valuable.for.Program) %>%
   summarize(count_per_feeling = n()) %>%
@@ -911,7 +944,7 @@ ggplot(
 ### This workshop was valuable towards your career.
 Most participants perceived the workshop as valuable towards their career.
 ```{r workshop_feedback_valuableforcareer, echo=FALSE, message = FALSE, warning = FALSE}
-postworkshopsurvey %>%
+joined_attendance_post_clean %>%
   mutate(Valuable.for.Career = fct_relevel(Valuable.for.Career, "Strongly agree", "Agree", "Somewhat agree", 
                                            "Neither agree nor disagree", "Somewhat disagree", "Disagree", 
                                            "Strongly disagree", "Not applicable", "No answer")) %>%
@@ -934,27 +967,27 @@ postworkshopsurvey %>%
 There was no difference in perception of the material as "valuable to my career" between workshop formats (hybrid, online, or in person).
 ```{r, workshop_feedback_valuableforcareer_stats, include = TRUE}
 # run test for significance
-chi_career <- chisq.test(x = na.post$Location.of.Outreach,
-           y = na.post$Valuable.for.Career,
+chi_career <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+           y = joined_attendance_post_clean$Valuable.for.Career,
            simulate.p.value = TRUE)
 
-workshop_feedback_valuableforcareer_plot <- chi_career$p.value<=0.05
+(workshop_feedback_valuableforcareer_plot <- chi_career$p.value<=0.05)
 ```
 There was no difference among career levels (classifications) for perception of value towards their careers.
 ```{r, workshop_feedback_valuableforcareerclass_stats, include = TRUE}
 # run test for significance
-chi_careerclass <- chisq.test(x = na.post$Classification,
-           y = na.post$Valuable.for.Career,
+chi_careerclass <- chisq.test(x = joined_attendance_post_clean$Classification,
+           y = joined_attendance_post_clean$Valuable.for.Career,
            simulate.p.value = TRUE)
 
-workshop_feedback_valuableforcareerclass_plot <- chi_careerclass$p.value<=0.05
+(workshop_feedback_valuableforcareerclass_plot <- chi_careerclass$p.value<=0.05)
 ```
 
 ### This workshop was valuable towards your teaching.
 More respondents felt the workshops were not applicable towards their teaching but were otherwise positive. As our workshops are research focused, this is probably reasonable.
 
 ```{r workshop_feedback_valuableforteaching, echo=FALSE, message = FALSE, warning = FALSE}
-postworkshopsurvey %>%
+joined_attendance_post_clean %>%
   mutate(Valuable.for.Teaching = fct_relevel(Valuable.for.Teaching, "Strongly agree", "Agree", "Somewhat agree", 
                                              "Neither agree nor disagree", "Somewhat disagree", "Disagree", 
                                              "Strongly disagree", "Not applicable", "No answer")) %>%
@@ -978,11 +1011,11 @@ postworkshopsurvey %>%
 There was no difference in perception of the material as "valuable to my teaching" between workshop formats (hybrid, online, or in person).
 ```{r, workshop_feedback_valuableforteaching_stats, include = TRUE}
 # run test for significance
-chi_teach <- chisq.test(x = na.post$Location.of.Outreach,
-           y = na.post$Valuable.for.Teaching,
+chi_teach <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+           y = joined_attendance_post_clean$Valuable.for.Teaching,
            simulate.p.value = TRUE)
 
-workshop_feedback_valuableforteach_plot <- chi_teach$p.value<=0.05
+(workshop_feedback_valuableforteach_plot <- chi_teach$p.value<=0.05)
 ```
 
 
@@ -990,13 +1023,13 @@ workshop_feedback_valuableforteach_plot <- chi_teach$p.value<=0.05
 ### How do you rate your skills after learning about this workshop topic?
 We have a range of skill ratings after the workshop.  This could be an area for improvement but could also be dependent on whether we have targeted the right audience with the right level of materials.
 ```{r workshop_feedback_valuableforteaching, echo=FALSE, message = FALSE, warning = FALSE}
-postworkshopsurvey %>%
-  mutate(Rate.Skills = fct_relevel(Rate.Skills, "Need more support and assistance if implementing",
+joined_attendance_post_clean %>%
+  mutate(Rate.Skills = fct_relevel(How.do.you.rate.your.skills.after.learning.abou..., "Need more support and assistance if implementing",
                                    "Can complete a related task independently but not to desired level",
                                    "Can complete a related task independently to desired level",
                                    "Can complete and expand on task, possibly assist others",
                                    "Did not respond")) %>%
-  ggplot(aes(x=Rate.Skills, fill=Rate.Skills)) +
+  ggplot(aes(x=How.do.you.rate.your.skills.after.learning.abou..., fill=How.do.you.rate.your.skills.after.learning.abou...)) +
   geom_bar()+
   scale_fill_viridis_d (aesthetics = "fill") +
   scale_x_discrete(labels=c("Needs more support", "Independent, but not to desired level", "Independent to desired level", 
@@ -1017,11 +1050,11 @@ postworkshopsurvey %>%
 There was no difference in perception of future abilities to use skills from the workshop between formats (hybrid, online, or in person).
 ```{r, workshop_feedback_skills_stats, include = TRUE}
 # run test for significance
-chi_skills <- chisq.test(x = na.post$Location.of.Outreach,
-           y = na.post$Rate.Skills,
+chi_skills <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+           y = joined_attendance_post_clean$How.do.you.rate.your.skills.after.learning.abou...,
            simulate.p.value = TRUE)
 
-workshop_feedback_skills_plot <- chi_skills$p.value<=0.05
+(workshop_feedback_skills_plot <- chi_skills$p.value<=0.05)
 ```
 
 
