@@ -7,8 +7,8 @@ documentclass: book
 github-repo: oulib-resdata/metrics
 
 book:
-  title: "Research Workshops Analysis"
-  author: "C.M. Curry and B.N. Narr"
+  title: "Research Workshop Attendance, Marketing, and Satisfaction"
+  author: "C.M. Curry (STEM Services) and B. Narr (Metrics Coordinator)"
   search: true
   downloads: [pdf]
   date: last-modified
@@ -16,16 +16,10 @@ book:
 
   chapters:
     - index.qmd
-    - part: descriptive_numbers.qmd
-      chapters:
-        - files.qmd
-    - part: marketing.qmd
-      chapters:
-        - files.qmd
-    - part: attendance.qmd
-      chapters:
-        - files.qmd
-    - part: satisfaction.qmd
+    - descriptive_numbers.qmd
+    - marketing.qmd
+    - attendance.qmd
+    - satisfaction.qmd
     - references.qmd
   appendices:
     - something.qmd
