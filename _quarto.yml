@@ -1,0 +1,56 @@
+project:
+  type: book
+  output-dir: _book
+
+documentclass: book
+
+github-repo: oulib-resdata/metrics
+
+book:
+  title: "Research Workshops Analysis"
+  author: "C.M. Curry and B.N. Narr"
+  search: true
+  downloads: [pdf]
+  date: last-modified
+  page-navigation: true
+
+  chapters:
+    - index.qmd
+    - part: descriptive_numbers.qmd
+      chapters:
+        - files.qmd
+    - part: marketing.qmd
+      chapters:
+        - files.qmd
+    - part: attendance.qmd
+      chapters:
+        - files.qmd
+    - part: satisfaction.qmd
+    - references.qmd
+  appendices:
+    - something.qmd
+
+comments:
+  hypothesis: true
+
+
+bibliography:
+  - references.bib
+  - packages.bib
+
+
+format:
+  html:
+    toc: false
+    code-background: true
+    code-copy: true
+    css: style.css
+    fontsize: 12pt
+    reference-location: margin
+    citation-location: margin
+  pdf:
+    documentclass: book
+    keep-tex: false
+    cite-method: natbib
+    reference-location: margin
+    citation-location: margin
