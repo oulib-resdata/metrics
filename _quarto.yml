@@ -54,3 +54,4 @@ format:
     cite-method: natbib
     reference-location: margin
     citation-location: margin
+# reference_docx: word_styles.docx
