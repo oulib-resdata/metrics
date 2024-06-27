@@ -16,11 +16,16 @@ book:
 
   chapters:
     - index.qmd
-    - descriptive_numbers.qmd
-    - marketing.qmd
-    - attendance.qmd
-#    - satisfaction.qmd
-#    - references.qmd
+    - part: overall_analysis.qmd
+      chapters:
+        - descriptive_numbers.qmd
+        - marketing.qmd
+        - attendance.qmd
+    #  - satisfaction.qmd
+    - part: per_workshop_info.qmd
+      chapters:
+        - VIZ101.qmd
+#   - references.qmd
     - technical_background.qmd
 #  appendices:
 #    - something.qmd
