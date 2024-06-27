@@ -1,5 +1,6 @@
-# Workshop descriptive numbers
-We continue to offer more workshops on request (right panel), especially in courses.
+# Descriptive numbers
+
+While we offer many scheduled workshops each semester, we continue to increase our course-based "workshops on request" (right panel).  This has resulted in an incrase in proportion of people we reach each time period to be weighted towards course visits (@sec-attendance)
 
 ```{r setup, include=FALSE}
 # FUNCTIONS AND LIBRARIES

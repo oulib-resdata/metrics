@@ -1,4 +1,4 @@
-# Attendance
+# Attendance {#sec-attendance}
 
 ```{r setup, include=FALSE}
 # FUNCTIONS AND LIBRARIES
