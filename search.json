@@ -79,7 +79,7 @@
     "href": "marketing.html#marketing-implementation-details",
     "title": "2  Marketing",
     "section": "2.5 Marketing implementation details",
-    "text": "2.5 Marketing implementation details\n\n2.5.1 Email detail level and timing\nI used registrants instead of confirmed attendees, because that felt more relevant to the emails, and it was more consistently documented. The factors that were considered here were lead time (how much time between the email and the event) and length of email (long = one that was typed by one of you, short = automated libzoom email). Email length was the deciding factor for number of registrants!\nSince the time between registration opening and workshop did not affect attendance. As such, CMC proposed we open all workshops at the start of the semester. This change was approved by the committee in slack in Fall 2023 (2023/10/03) to be implemented for the Spring 2024 workshops. We discussed adding a second reminder for already registered participants, but only one reminder is possible using LibCal automated emails. We will now post once advertising the full schedule, and then continue doing the 3-weeks-advertising to remind people again.\n\n\n\n\n\n\n\n\n\n\n\n2.5.2 Registration is a reasonable proxy for attendance",
+    "text": "2.5 Marketing implementation details\n\n2.5.1 Email detail level and timing\nI used registrants instead of confirmed attendees, because that felt more relevant to the emails, and it was more consistently documented. The factors that were considered here were lead time (how much time between the email and the event) and length of email (long = one that was typed by one of you, short = automated libzoom email). Email length was the deciding factor for number of registrants!\nThus, the time between registration opening and workshop did not affect attendance. As such, CMC proposed we open all workshops at the start of the semester. This change was approved by the committee in slack in Fall 2023 (2023/10/03) to be implemented for the Spring 2024 workshops. We discussed adding a second reminder for already registered participants, but only one reminder is possible using LibCal automated emails. We will now post once advertising the full schedule, and then continue doing the 3-weeks-advertising to remind people again.\n\n\n\n\n\n\n\n\n\n\n\n2.5.2 Registration is a reasonable proxy for attendance",
     "crumbs": [
       "Overall analysis",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Marketing</span>"
@@ -152,6 +152,39 @@
     ]
   },
   {
+    "objectID": "satisfaction.html",
+    "href": "satisfaction.html",
+    "title": "4  Workshop feedback",
+    "section": "",
+    "text": "4.1 Executive summary\nTentative results suggest no difference in perception of workshop value by learners among learning formats (in person, hybrid, or online) and generally positive feedback.",
+    "crumbs": [
+      "Overall analysis",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Workshop feedback</span>"
+    ]
+  },
+  {
+    "objectID": "satisfaction.html#quantitative-questions",
+    "href": "satisfaction.html#quantitative-questions",
+    "title": "4  Workshop feedback",
+    "section": "4.2 Quantitative questions",
+    "text": "4.2 Quantitative questions\nFor each question, we examine statistically and graphically (if differences were statistically significant) the rankings divided by instruction format (DSI request 2023/07), request/not, and course/outreach variables. In the future, we may check rankings vs length of course in hours. # TODO need to clean out NA for variables we test, as it errors out in the statistical test (graphs work and just automatically remove)\n\n4.2.1 Do you anticipate that this new knowledge can be applied towards your work?\n\n\n\n\n\n\n\n\n\nThere was no significant difference in perception of learning new knowledge from the workshop among learning formats.\n\n\n[1] FALSE\n\n\n\n\n4.2.2 This workshop was valuable towards your program of study.\nMost participants perceived the workshop as valuable towards their program of study. Interestingly, “disagree” is never chosen by any of our several hundred respondents.\n\n\n\n\n\n\n\n\n\nThere was no difference in perception of the material as “valuable to my program of study” between workshop formats (hybrid, online, or in person).\n\n\n[1] FALSE\n\n\n\n\n4.2.3 This workshop was valuable towards your career.\nMost participants perceived the workshop as valuable towards their career.\n\n\n\n\n\n\n\n\n\nThere was no difference in perception of the material as “valuable to my career” between workshop formats (hybrid, online, or in person).\n\n\n[1] FALSE\n\n\nThere was no difference among career levels (classifications) for perception of value towards their careers.\n\n\n[1] FALSE\n\n\n\n\n4.2.4 This workshop was valuable towards your teaching.\nMore respondents felt the workshops were not applicable towards their teaching but were otherwise positive. As our workshops are research focused, this is probably reasonable.\n\n\n\n\n\n\n\n\n\nThere was no difference in perception of the material as “valuable to my teaching” between workshop formats (hybrid, online, or in person).\n\n\n[1] FALSE\n\n\n\n\n4.2.5 How do you rate your skills after learning about this workshop topic?\nWe have a range of skill ratings after the workshop. This could be an area for improvement but could also be dependent on whether we have targeted the right audience with the right level of materials.\n\n\n\n\n\n\n\n\n\nThere was no difference in perception of future abilities to use skills from the workshop between formats (hybrid, online, or in person).\n\n\n[1] FALSE",
+    "crumbs": [
+      "Overall analysis",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Workshop feedback</span>"
+    ]
+  },
+  {
+    "objectID": "satisfaction.html#qualitative-feedback-wordcloud-code",
+    "href": "satisfaction.html#qualitative-feedback-wordcloud-code",
+    "title": "4  Workshop feedback",
+    "section": "4.3 Qualitative feedback (Wordcloud code)",
+    "text": "4.3 Qualitative feedback (Wordcloud code)\n\n4.3.1 “What did you like about the workshop?”\n\n\n4.3.2 “What about the workshop needed improvement?”\n\n\n4.3.3 “What other workshop topics would interest you?”\nWe can examine this wordcloud to see if we need to advertise existing workshops more in addition to having ideas about new ones.\n\n\n4.3.4 “Any other comments?”",
+    "crumbs": [
+      "Overall analysis",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Workshop feedback</span>"
+    ]
+  },
+  {
     "objectID": "per_workshop_info.html",
     "href": "per_workshop_info.html",
     "title": "Per-workshop descriptive statistics",
@@ -159,6 +192,50 @@
     "text": "These reports are created on request by the instructor for each workshop. Contact Claire or Brianna if you want one for your workshop.",
     "crumbs": [
       "Per-workshop descriptive statistics"
+    ]
+  },
+  {
+    "objectID": "VIZ101.html",
+    "href": "VIZ101.html",
+    "title": "5  Concepts of Data-Driven Visualization",
+    "section": "",
+    "text": "5.1 Descriptive numbers\nHow many times offered per semester, per year. Number of different instructors.",
+    "crumbs": [
+      "Per-workshop descriptive statistics",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Concepts of Data-Driven Visualization</span>"
+    ]
+  },
+  {
+    "objectID": "VIZ101.html#attendance",
+    "href": "VIZ101.html#attendance",
+    "title": "5  Concepts of Data-Driven Visualization",
+    "section": "5.2 Attendance",
+    "text": "5.2 Attendance\n\n5.2.1 Over time\n\n\n5.2.2 By semester",
+    "crumbs": [
+      "Per-workshop descriptive statistics",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Concepts of Data-Driven Visualization</span>"
+    ]
+  },
+  {
+    "objectID": "VIZ101.html#marketing",
+    "href": "VIZ101.html#marketing",
+    "title": "5  Concepts of Data-Driven Visualization",
+    "section": "5.3 Marketing",
+    "text": "5.3 Marketing\n\n5.3.1 Over time\n\n\n5.3.2 By semester",
+    "crumbs": [
+      "Per-workshop descriptive statistics",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Concepts of Data-Driven Visualization</span>"
+    ]
+  },
+  {
+    "objectID": "VIZ101.html#satisfaction",
+    "href": "VIZ101.html#satisfaction",
+    "title": "5  Concepts of Data-Driven Visualization",
+    "section": "5.4 Satisfaction",
+    "text": "5.4 Satisfaction\n\n5.4.1 Over time\n\n\n5.4.2 By semester",
+    "crumbs": [
+      "Per-workshop descriptive statistics",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Concepts of Data-Driven Visualization</span>"
     ]
   },
   {
