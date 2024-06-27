@@ -8,6 +8,12 @@ library(osfr)       #downloading data from private OSF
 library(partykit)   # for decision tree statistical analysis
 library(tidyverse)  #for data munging including dates
 library(viridis)    #color scheme
+
+# Load custom function for "other" block
+source("scripts/ggwordcloud_analysis_complete_ou_colors.R")
+
+postworkshopsurveys_named <- read.csv("raw_data/processed_postworkshopsurveys_named.csv")
+Registered <- read.csv("raw_data/processed_Registered.csv")
 ```
 
 
@@ -28,7 +34,6 @@ Thus, our overall most effective marketing methods are emails, the OU Libraries 
 These data for people who filled out a post-workshop survey (ie are confirmed to have attended a workshop) and answer the question "How did you hear about this workshop?".  They are grouped by pre-registered or not pre-registered (passerby walk-ins, class workshops where registration wasn't required).  We do not get 100% completion of surveys.
 
 ```{r attendees, echo=FALSE, message = FALSE, warning = FALSE}
-library(ggplot2)    #for plots
 marketing_breakdown_initial <- ggplot(data = postworkshopsurveys_named,
        aes(x = ReducedCategories,
            fill = Did.you.pre.register.for.this.workshop.))+
@@ -203,7 +208,7 @@ Thus, any method with some black has some attendance, and methods with larger am
 
 ```{r email_code, include=FALSE}
 #emails <- read.csv("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/EmailLengthStudyFinal.csv")
-emails <- read.csv("../raw_data/preworkshop/EmailLengthStudyFinal.csv")
+emails <- read.csv("./raw_data/preworkshop/EmailLengthStudyFinal.csv")
 #Data source: https://osf.io/rvnsh
 ```
 
@@ -226,7 +231,7 @@ plot(emailtree)
 
 ### Registration is a reasonable proxy for attendance
 ```{r registration_vs_attendance, echo = FALSE, message = FALSE, warning = FALSE}
-cor.test()
+# cor.test()
 
 ```
 

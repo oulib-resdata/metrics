@@ -6,12 +6,18 @@
 knitr::opts_chunk$set(echo = FALSE)
 library(ggplot2)    #for plots
 library(viridis)    #color scheme
+library(tidyverse)  #for data munging including dates
 library(tm)         #text analysis?
 library(SnowballC)  #text analysis
 library(wordcloud)  #word clouds
 
 # Load custom function for "other" block
 source("scripts/ggwordcloud_analysis_complete_ou_colors.R")
+
+# Fix join
+joined_attendance_post_clean <- read.csv("raw_data/processed_joined_attendance_post_clean.csv")
+
+
 ```
 
 ## Executive summary
@@ -45,11 +51,11 @@ joined_attendance_post_clean %>%
 There was no significant difference in perception of learning new knowledge from the workshop among learning formats.
 ```{r workshop_feedback_newknowledge_statistics, echo=FALSE, message = FALSE, warning = FALSE}
 # run test for significance
-chi_newkno <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-           y = joined_attendance_post_clean$Using.New.Knowledge.,
-           simulate.p.value = TRUE)
-
-(workshop_feedback_chi_newkno_plot <- chi_newkno$p.value<=0.05)
+# chi_newkno <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+#            y = joined_attendance_post_clean$Using.New.Knowledge.,
+#            simulate.p.value = TRUE)
+# 
+# (workshop_feedback_chi_newkno_plot <- chi_newkno$p.value<=0.05)
 
 ```
 
@@ -116,11 +122,11 @@ joined_attendance_post_clean %>%
 There was no difference in perception of the material as "valuable to my program of study" between workshop formats (hybrid, online, or in person).
 ```{r, workshop_feedback_valuableforprogram_stats, include = TRUE}
 # run test for significance
-chi_program <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-           y = joined_attendance_post_clean$Valuable.for.Program,
-           simulate.p.value = TRUE)
-
-(workshop_feedback_valuableforprogram_plot <- chi_program$p.value<=0.05)
+# chi_program <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+#            y = joined_attendance_post_clean$Valuable.for.Program,
+#            simulate.p.value = TRUE)
+# 
+# (workshop_feedback_valuableforprogram_plot <- chi_program$p.value<=0.05)
 ```
 
 ```{r, workshop_feedback_valuableforprogram_plot, eval = workshop_feedback_valuableforprogram_plot, include = workshop_feedback_valuableforprogram_plot}
@@ -168,20 +174,20 @@ joined_attendance_post_clean %>%
 There was no difference in perception of the material as "valuable to my career" between workshop formats (hybrid, online, or in person).
 ```{r, workshop_feedback_valuableforcareer_stats, include = TRUE}
 # run test for significance
-chi_career <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-           y = joined_attendance_post_clean$Valuable.for.Career,
-           simulate.p.value = TRUE)
-
-(workshop_feedback_valuableforcareer_plot <- chi_career$p.value<=0.05)
+# chi_career <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+#            y = joined_attendance_post_clean$Valuable.for.Career,
+#            simulate.p.value = TRUE)
+# 
+# (workshop_feedback_valuableforcareer_plot <- chi_career$p.value<=0.05)
 ```
 There was no difference among career levels (classifications) for perception of value towards their careers.
 ```{r, workshop_feedback_valuableforcareerclass_stats, include = TRUE}
 # run test for significance
-chi_careerclass <- chisq.test(x = joined_attendance_post_clean$Classification,
-           y = joined_attendance_post_clean$Valuable.for.Career,
-           simulate.p.value = TRUE)
-
-(workshop_feedback_valuableforcareerclass_plot <- chi_careerclass$p.value<=0.05)
+# chi_careerclass <- chisq.test(x = joined_attendance_post_clean$Classification,
+#            y = joined_attendance_post_clean$Valuable.for.Career,
+#            simulate.p.value = TRUE)
+# 
+# (workshop_feedback_valuableforcareerclass_plot <- chi_careerclass$p.value<=0.05)
 ```
 
 ### This workshop was valuable towards your teaching.
@@ -212,18 +218,18 @@ joined_attendance_post_clean %>%
 There was no difference in perception of the material as "valuable to my teaching" between workshop formats (hybrid, online, or in person).
 ```{r, workshop_feedback_valuableforteaching_stats, include = TRUE}
 # run test for significance
-chi_teach <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-           y = joined_attendance_post_clean$Valuable.for.Teaching,
-           simulate.p.value = TRUE)
-
-(workshop_feedback_valuableforteach_plot <- chi_teach$p.value<=0.05)
+# chi_teach <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+#            y = joined_attendance_post_clean$Valuable.for.Teaching,
+#            simulate.p.value = TRUE)
+# 
+# (workshop_feedback_valuableforteach_plot <- chi_teach$p.value<=0.05)
 ```
 
 
 
 ### How do you rate your skills after learning about this workshop topic?
 We have a range of skill ratings after the workshop.  This could be an area for improvement but could also be dependent on whether we have targeted the right audience with the right level of materials.
-```{r workshop_feedback_valuableforteaching, echo=FALSE, message = FALSE, warning = FALSE}
+```{r workshop_feedback_skills, echo=FALSE, message = FALSE, warning = FALSE}
 joined_attendance_post_clean %>%
   mutate(Rate.Skills = fct_relevel(How.do.you.rate.your.skills.after.learning.abou..., "Need more support and assistance if implementing",
                                    "Can complete a related task independently but not to desired level",
@@ -251,11 +257,11 @@ joined_attendance_post_clean %>%
 There was no difference in perception of future abilities to use skills from the workshop between formats (hybrid, online, or in person).
 ```{r, workshop_feedback_skills_stats, include = TRUE}
 # run test for significance
-chi_skills <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-           y = joined_attendance_post_clean$How.do.you.rate.your.skills.after.learning.abou...,
-           simulate.p.value = TRUE)
-
-(workshop_feedback_skills_plot <- chi_skills$p.value<=0.05)
+# chi_skills <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+#            y = joined_attendance_post_clean$How.do.you.rate.your.skills.after.learning.abou...,
+#            simulate.p.value = TRUE)
+# 
+# (workshop_feedback_skills_plot <- chi_skills$p.value<=0.05)
 ```
 
 
@@ -263,7 +269,7 @@ chi_skills <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
 
 ### "What did you like about the workshop?"
 ```{r workshop_feedback_liked_code, include=FALSE}
-workshopliked <- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopLiked_Cleaned.txt")
+workshopliked <- readLines("raw_data/postworkshop/WorkshopLiked_Cleaned.txt")
 
 # TODO: automate cleaning.  otherwise pull from postworkshopsurvey original columns and then clean by code instead of manually.  CMC and BN discussed 11/28/2023.
 
@@ -288,7 +294,7 @@ col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 
 ### "What about the workshop needed improvement?"
 ```{r workshop_feedback_needsimprovement_code, include=FALSE}
-workshopimprove<- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopNeedsImprovement_Cleaned.txt")
+workshopimprove<- readLines("raw_data/postworkshop/WorkshopNeedsImprovement_Cleaned.txt")
 improvecorpus <- Corpus(VectorSource(workshopimprove))
 
 improvecorpus <- tm_map(improvecorpus, removeNumbers)
@@ -311,7 +317,7 @@ col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 ### "What other workshop topics would interest you?"
 We can examine this wordcloud to see if we need to advertise existing workshops more in addition to having ideas about new ones.
 ```{r workshop_feedback_othertopics_code, include=FALSE}
-workshoptopics<- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherTopics_Cleaned.txt")
+workshoptopics<- readLines("raw_data/postworkshop/WorkshopOtherTopics_Cleaned.txt")
 topicscorpus <- Corpus(VectorSource(workshoptopics))
 
 topicscorpus <- tm_map(topicscorpus, removeNumbers)
@@ -334,7 +340,7 @@ col <- sapply(seq(0.1, 1, 0.1), function(x) adjustcolor("darkred", x))
 
 ### "Any other comments?"
 ```{r workshop_feedback_othercomments_code, include=FALSE}
-workshopcomments<- readLines("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/Documents_narr1655/WorkshopOtherComments_Cleaned.txt")
+workshopcomments<- readLines("raw_data/postworkshop/WorkshopOtherComments_Cleaned.txt")
 commentscorpus <- Corpus(VectorSource(workshopcomments))
 
 commentscorpus <- tm_map(commentscorpus, removeNumbers)

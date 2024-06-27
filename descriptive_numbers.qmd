@@ -6,16 +6,16 @@ We continue to offer more workshops on request (right panel), especially in cour
 # have to load all data over again each document https://forum.posit.co/t/quarto-cant-find-r-objects/156848
 knitr::opts_chunk$set(echo = FALSE)
 library(ggplot2)    #for plots
+library(tidyverse)  #for data munging including dates
 library(viridis)    #color scheme
+
+
+attendance_named <- read.csv("raw_data/processed_attendance_named.csv")
 
 ```
 
 
 ```{r joined_post, echo=FALSE, message = FALSE, warning = FALSE}
-
-library(ggplot2)    #for plots
-
-
 
 ggplot(data = attendance_named,
        mapping = aes(x = year,

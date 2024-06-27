@@ -6,7 +6,13 @@
 knitr::opts_chunk$set(echo = FALSE)
 library(ggplot2)    #for plots
 library(partykit)   # for decision tree statistical analysis
+library(tidyverse)  #for data munging including dates
 library(viridis)    #color scheme
+
+last_two_years_attendance <- read.csv("raw_data/processed_last_two_years_attendance.csv")
+# read.csv("raw_data/processed_attendance_named.csv")
+# read.csv("raw_data/processed_joined_post.csv")
+# read.csv("raw_data/processed_postworkshopsurveys_named.csv")
 ```
 
 ## Executive summary
@@ -40,8 +46,8 @@ att_tree <- ctree(Total.Attendees ~
                     as.factor(Multiple.Days.)+
                     as.factor(Semester) +
                     #as.factor(Is.Course) +
-                    as.factor(Known.three.weeks.advertising) +
-                    hour
+                    as.factor(Known.three.weeks.advertising)# +
+#                    hour
                   ,
                   data = last_two_years_attendance [
                     #last_two_years_attendance$Known.three.weeks.advertising == "Y" &
@@ -183,37 +189,37 @@ DSI request 2023/07:
 
 
 ```{r attendance_by_topic, echo=FALSE, message = FALSE, warning = FALSE}
-workshop [workshop$Requested. == "N" &
-            workshop$Topic != "African American Newspapers and Primary Sources" &
-            workshop$Topic != "Digital newspapers" &
-            workshop$Topic != "DMPTool" &
-            workshop$Topic != "Intermediate shell" &
-            workshop$Topic != "matplotlib" &
-            workshop$Topic != "Smoother meetings" &
-            workshop$Topic != "Standalone Carpentries R" &
-            workshop$Topic != "Standalone Openrefine" &
-            workshop$Topic != "Standalone Python" &
-            workshop$Topic != "Standalone SQL" &
-            workshop$Topic != "Tableau" &
-            workshop$Topic != "Troubleshooting" & 
-            workshop$Topic != "Using computers",
-            ]%>%
-  ggplot (aes(x=Topic, y=Total.Attendees, fill=Topic)) +
-  geom_boxplot(outlier.shape = NA, notch = TRUE) +
-  scale_fill_viridis(discrete = TRUE) +
-  theme(panel.background = element_rect(fill = "lightgray",
-                                        color = "white",
-                                        size = 0.5, linetype = "solid"),
-        panel.grid.major = element_line(size = 0.5, linetype = "solid",
-                                        color = "darkgray"),
-        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
-                                        color = "darkgray"),
-        plot.title = element_text(size = 20, hjust = 0.5),
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
-  )+
-  geom_jitter(color='black', alpha = 0.55, size = 2, position = position_jitter (width = .1), show.legend = FALSE) +
-  ggtitle('Attendees of Scheduled Workshops by Topic')
+# workshop [workshop$Requested. == "N" &
+#             workshop$Topic != "African American Newspapers and Primary Sources" &
+#             workshop$Topic != "Digital newspapers" &
+#             workshop$Topic != "DMPTool" &
+#             workshop$Topic != "Intermediate shell" &
+#             workshop$Topic != "matplotlib" &
+#             workshop$Topic != "Smoother meetings" &
+#             workshop$Topic != "Standalone Carpentries R" &
+#             workshop$Topic != "Standalone Openrefine" &
+#             workshop$Topic != "Standalone Python" &
+#             workshop$Topic != "Standalone SQL" &
+#             workshop$Topic != "Tableau" &
+#             workshop$Topic != "Troubleshooting" & 
+#             workshop$Topic != "Using computers",
+#             ]%>%
+#   ggplot (aes(x=Topic, y=Total.Attendees, fill=Topic)) +
+#   geom_boxplot(outlier.shape = NA, notch = TRUE) +
+#   scale_fill_viridis(discrete = TRUE) +
+#   theme(panel.background = element_rect(fill = "lightgray",
+#                                         color = "white",
+#                                         size = 0.5, linetype = "solid"),
+#         panel.grid.major = element_line(size = 0.5, linetype = "solid",
+#                                         color = "darkgray"),
+#         panel.grid.minor = element_line(size = 0.25, linetype = "solid",
+#                                         color = "darkgray"),
+#         plot.title = element_text(size = 20, hjust = 0.5),
+#         axis.title = element_text(size = 14),
+#         axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
+#   )+
+#   geom_jitter(color='black', alpha = 0.55, size = 2, position = position_jitter (width = .1), show.legend = FALSE) +
+#   ggtitle('Attendees of Scheduled Workshops by Topic')
 
 ```
 
@@ -227,28 +233,28 @@ workshop [workshop$Requested. == "N" &
 
 ### Single day over multiple sessions vs two-day workshops
 ```{r carpentries_attendance, echo=FALSE, message = FALSE, warning = FALSE}
-#Last one! Plotting attendance for carpentries by multi-day VS single-topic
-
-carpentries <- workshop %>% filter(grepl('Standalone Bash|Standalone Carpentries R|Standalone Git|
-                                              Standalone Openrefine|Standalone Python|Standalone SQL|Two-day Carpentries with R|Two-day Carpentries with Python', Topic))
-
-carpentries %>%
-  ggplot (aes(x=Topic, y=Total.Attendees, fill=Topic)) +
-  geom_boxplot(outlier.shape = NA) +
-  scale_fill_viridis(discrete = TRUE) +
-  theme(panel.background = element_rect(fill = "lightgray",
-                                        color = "white",
-                                        size = 0.5, linetype = "solid"),
-        panel.grid.major = element_line(size = 0.5, linetype = "solid",
-                                        color = "darkgray"),
-        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
-                                        color = "darkgray"),
-        plot.title = element_text(size = 20, hjust = 0.5),
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
-  )+
-  geom_jitter(alpha = 0.55, size = 4, position = position_jitter (width = .08, height = .04), show.legend = FALSE) +
-  ggtitle('Multi-Day VS Single Day Workshops')
+# #Last one! Plotting attendance for carpentries by multi-day VS single-topic
+# 
+# carpentries <- workshop %>% filter(grepl('Standalone Bash|Standalone Carpentries R|Standalone Git|
+#                                               Standalone Openrefine|Standalone Python|Standalone SQL|Two-day Carpentries with R|Two-day Carpentries with Python', Topic))
+# 
+# carpentries %>%
+#   ggplot (aes(x=Topic, y=Total.Attendees, fill=Topic)) +
+#   geom_boxplot(outlier.shape = NA) +
+#   scale_fill_viridis(discrete = TRUE) +
+#   theme(panel.background = element_rect(fill = "lightgray",
+#                                         color = "white",
+#                                         size = 0.5, linetype = "solid"),
+#         panel.grid.major = element_line(size = 0.5, linetype = "solid",
+#                                         color = "darkgray"),
+#         panel.grid.minor = element_line(size = 0.25, linetype = "solid",
+#                                         color = "darkgray"),
+#         plot.title = element_text(size = 20, hjust = 0.5),
+#         axis.title = element_text(size = 14),
+#         axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
+#   )+
+#   geom_jitter(alpha = 0.55, size = 4, position = position_jitter (width = .08, height = .04), show.legend = FALSE) +
+#   ggtitle('Multi-Day VS Single Day Workshops')
 
 
 ```

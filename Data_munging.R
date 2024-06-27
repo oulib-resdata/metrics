@@ -302,10 +302,18 @@ write.csv(attendance_named,
           file = "raw_data/processed_attendance_named.csv",
           row.names = FALSE)
 
-write.csv(joined_post,
-          file = "raw_data/processed_joined_post.csv",
+write.csv(joined_attendance_post_clean,
+          file = "raw_data/processed_joined_attendance_post_clean.csv",
           row.names = FALSE)
 
 write.csv(postworkshopsurveys_named,
           file = "raw_data/processed_postworkshopsurveys_named.csv",
+          row.names = FALSE)
+
+write.csv(Registered,
+          file = "raw_data/processed_Registered.csv",
+          row.names = FALSE)
+
+write.csv(last_two_years_attendance,
+          file = "raw_data/processed_last_two_years_attendance.csv",
           row.names = FALSE)

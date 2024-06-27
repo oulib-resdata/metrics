@@ -19,7 +19,7 @@ book:
     - descriptive_numbers.qmd
     - marketing.qmd
     - attendance.qmd
-    - satisfaction.qmd
+#    - satisfaction.qmd
 #    - references.qmd
 #  appendices:
 #    - something.qmd
