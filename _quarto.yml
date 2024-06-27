@@ -21,6 +21,7 @@ book:
     - attendance.qmd
 #    - satisfaction.qmd
 #    - references.qmd
+    - technical_background.qmd
 #  appendices:
 #    - something.qmd
 

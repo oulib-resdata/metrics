@@ -1,0 +1,18 @@
+# Technical details {.unnumbered}
+
+## Data sources and processing
+
+Are available in Data_munging.R
+
+{{< pagebreak >}}
+
+## Book info
+
+This document was created are using the **quarto** package [@R-quarto] to format this book.
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), "quarto"
+), 'packages.bib')
+```

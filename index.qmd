@@ -2,28 +2,8 @@
 options(tinytex.verbose = TRUE)
 ```
 
-# Introduction: What's in this report? {.unnumbered}
+# Executive Summary {.unnumbered}
 
-## Executive Summary
-Initial commit
-
-Plots
 
 {{< pagebreak >}}
 
-## Data sources and processing
-
-Are available in Data_munging.R
-
-{{< pagebreak >}}
-
-## Book info
-
-This document was created are using the **quarto** package [@R-quarto] to format this book.
-
-```{r include=FALSE}
-# automatically create a bib database for R packages
-knitr::write_bib(c(
-  .packages(), "quarto"
-), 'packages.bib')
-```
