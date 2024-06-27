@@ -294,3 +294,18 @@ joined_attendance_post_clean <- joined_post %>%
 # Later data analysis will remove observations with no feedback automatically.
 
 
+###########
+# Write to files for use in qmds.
+###########
+
+write.csv(attendance_named,
+          file = "raw_data/processed_attendance_named.csv",
+          row.names = FALSE)
+
+write.csv(joined_post,
+          file = "raw_data/processed_joined_post.csv",
+          row.names = FALSE)
+
+write.csv(postworkshopsurveys_named,
+          file = "raw_data/processed_postworkshopsurveys_named.csv",
+          row.names = FALSE)
