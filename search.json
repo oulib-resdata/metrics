@@ -4,39 +4,9 @@
     "href": "index.html",
     "title": "Research Workshop Attendance, Marketing, and Satisfaction",
     "section": "",
-    "text": "Introduction: What’s in this report?",
+    "text": "Executive Summary",
     "crumbs": [
-      "Introduction: What's in this report?"
-    ]
-  },
-  {
-    "objectID": "index.html#executive-summary",
-    "href": "index.html#executive-summary",
-    "title": "Research Workshop Attendance, Marketing, and Satisfaction",
-    "section": "Executive Summary",
-    "text": "Executive Summary\nInitial commit\nPlots",
-    "crumbs": [
-      "Introduction: What's in this report?"
-    ]
-  },
-  {
-    "objectID": "index.html#data-sources-and-processing",
-    "href": "index.html#data-sources-and-processing",
-    "title": "Research Workshop Attendance, Marketing, and Satisfaction",
-    "section": "Data sources and processing",
-    "text": "Data sources and processing\nAre available in Data_munging.R",
-    "crumbs": [
-      "Introduction: What's in this report?"
-    ]
-  },
-  {
-    "objectID": "index.html#book-info",
-    "href": "index.html#book-info",
-    "title": "Research Workshop Attendance, Marketing, and Satisfaction",
-    "section": "Book info",
-    "text": "Book info\nThis document was created are using the quarto package (R-quarto?) to format this book.",
-    "crumbs": [
-      "Introduction: What's in this report?"
+      "Executive Summary"
     ]
   },
   {
@@ -157,6 +127,26 @@
     "text": "4.2 Workshop length vs attendance\n\n4.2.1 length of session\n\nLow priority: session length vs attendance\n\n\n\n4.2.2 Single day over multiple sessions vs two-day workshops",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
+    ]
+  },
+  {
+    "objectID": "technical_background.html",
+    "href": "technical_background.html",
+    "title": "Technical details",
+    "section": "",
+    "text": "Data sources and processing\nAre available in Data_munging.R",
+    "crumbs": [
+      "Technical details"
+    ]
+  },
+  {
+    "objectID": "technical_background.html#book-info",
+    "href": "technical_background.html#book-info",
+    "title": "Technical details",
+    "section": "Book info",
+    "text": "Book info\nThis document was created are using the quarto package (R-quarto?) to format this book.",
+    "crumbs": [
+      "Technical details"
     ]
   }
 ]
