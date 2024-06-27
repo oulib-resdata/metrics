@@ -1,6 +1,18 @@
-
 # Workshop feedback
 
+```{r setup, include=FALSE}
+# FUNCTIONS AND LIBRARIES
+# have to load all data over again each document https://forum.posit.co/t/quarto-cant-find-r-objects/156848
+knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2)    #for plots
+library(viridis)    #color scheme
+library(tm)         #text analysis?
+library(SnowballC)  #text analysis
+library(wordcloud)  #word clouds
+
+# Load custom function for "other" block
+source("scripts/ggwordcloud_analysis_complete_ou_colors.R")
+```
 
 ## Executive summary
 Tentative results suggest no difference in perception of workshop value by learners among learning formats (in person, hybrid, or online) and generally positive feedback.

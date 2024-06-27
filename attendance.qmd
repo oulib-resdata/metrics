@@ -1,5 +1,14 @@
-
 # Attendance
+
+```{r setup, include=FALSE}
+# FUNCTIONS AND LIBRARIES
+# have to load all data over again each document https://forum.posit.co/t/quarto-cant-find-r-objects/156848
+knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2)    #for plots
+library(partykit)   # for decision tree statistical analysis
+library(viridis)    #color scheme
+```
+
 ## Executive summary
 
 

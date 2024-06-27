@@ -13,24 +13,7 @@ Plots
 
 ## Data sources and processing
 
-```{r setup, include=FALSE}
-# FUNCTIONS AND LIBRARIES
-
-knitr::opts_chunk$set(echo = FALSE)
-library(ggplot2)    #for plots
-library(osfr)       #downloading data from private OSF
-library(partykit)   # for decision tree statistical analysis
-library(tidyverse)  #for data munging including dates
-library(viridis)    #color scheme
-library(tm)         #text analysis?
-library(SnowballC)  #text analysis
-library(wordcloud)  #word clouds
-
-# Load custom function for "other" block
-source("scripts/ggwordcloud_analysis_complete_ou_colors.R")
-# set working directory to be one above the scripts folder.  but is relative to .rmd file??
-```
-
+Are available in Data_munging.R
 
 {{< pagebreak >}}
 

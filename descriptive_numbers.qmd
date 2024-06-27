@@ -1,7 +1,18 @@
 # Workshop descriptive numbers
 We continue to offer more workshops on request (right panel), especially in courses.
-```{r joined_post, echo=FALSE, message = FALSE, warning = FALSE}
+
+```{r setup, include=FALSE}
+# FUNCTIONS AND LIBRARIES
 # have to load all data over again each document https://forum.posit.co/t/quarto-cant-find-r-objects/156848
+knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2)    #for plots
+library(viridis)    #color scheme
+
+```
+
+
+```{r joined_post, echo=FALSE, message = FALSE, warning = FALSE}
+
 library(ggplot2)    #for plots
 
 
