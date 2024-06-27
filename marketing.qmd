@@ -214,7 +214,7 @@ emails <- read.csv("./raw_data/preworkshop/EmailLengthStudyFinal.csv")
 
 I used registrants instead of confirmed attendees, because that felt more relevant to the emails, and it was more consistently documented. The factors that were considered here were lead time (how much time between the email and the event) and length of email (long = one that was typed by one of you, short = automated libzoom email). Email length was the deciding factor for number of registrants! 
 
-Since the time between registration opening and workshop did not affect attendance.  As such, CMC proposed we open all workshops at the start of the semester.  This change was approved by the committee in slack in Fall 2023 (2023/10/03) to be implemented for the Spring 2024 workshops.  We discussed adding a second reminder for already registered participants, but only one reminder is possible using LibCal automated emails.  We will now post once advertising the full schedule, and then continue doing the 3-weeks-advertising to remind people again.
+Thus, the time between registration opening and workshop did not affect attendance.  As such, CMC proposed we open all workshops at the start of the semester.  This change was approved by the committee in slack in Fall 2023 (2023/10/03) to be implemented for the Spring 2024 workshops.  We discussed adding a second reminder for already registered participants, but only one reminder is possible using LibCal automated emails.  We will now post once advertising the full schedule, and then continue doing the 3-weeks-advertising to remind people again.
 ```{r email_plot, echo=FALSE, message = FALSE, warning = FALSE}
 emailtree <- ctree(Total.Registrants ~ 
                     as.factor(From) +

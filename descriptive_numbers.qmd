@@ -44,7 +44,7 @@ ggplot(data = topics_desc,
                      y = topics_count,
                      fill = Is.Course))+
   geom_bar(stat = "identity")+
-  facet_grid(~Requested.)+
+  facet_grid(~Requested., labeller = label_both)+
   labs(y = "Number of unique topics offered")
 
 ```

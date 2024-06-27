@@ -31,7 +31,8 @@ In the future, we may check rankings vs length of course in hours.
 ### Do you anticipate that this new knowledge can be applied towards your work?
 ```{r workshop_feedback_newknowledge, echo=FALSE, message = FALSE, warning = FALSE}
 library(ggplot2)    #for plots
-joined_attendance_post_clean %>%
+#joined_attendance_post_clean %>%
+postworkshopsurveys_named %>%
   ggplot(aes(x=Using.New.Knowledge., fill=Using.New.Knowledge.)) +
   geom_bar()+
   scale_fill_viridis_d (aesthetics = "fill") +
@@ -51,11 +52,11 @@ joined_attendance_post_clean %>%
 There was no significant difference in perception of learning new knowledge from the workshop among learning formats.
 ```{r workshop_feedback_newknowledge_statistics, echo=FALSE, message = FALSE, warning = FALSE}
 # run test for significance
-# chi_newkno <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-#            y = joined_attendance_post_clean$Using.New.Knowledge.,
-#            simulate.p.value = TRUE)
-# 
-# (workshop_feedback_chi_newkno_plot <- chi_newkno$p.value<=0.05)
+chi_newkno <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+           y = joined_attendance_post_clean$Using.New.Knowledge.,
+           simulate.p.value = TRUE)
+
+(workshop_feedback_chi_newkno_plot <- chi_newkno$p.value<=0.05)
 
 ```
 
@@ -115,7 +116,8 @@ joined_attendance_post_clean %>%
   )+
   labs(y = "Number of survey respondents with this answer",
        x = "Response about value of workshop towards program of study",
-       fill = "Agreement on value")
+       fill = "Agreement on value")+
+  facet_grid(~Location.of.Outreach)
 
 ```
 

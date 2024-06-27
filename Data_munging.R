@@ -283,7 +283,7 @@ postworkshopsurveys_named$Valuable.for.Program <- factor(x = postworkshopsurveys
 
 joined_post <- full_join(postworkshopsurveys_named, 
                          attendance_named,
-                         by = c("Date_2" = "Event.Date.and.Time_2", "WorkshopCode"))
+                         by = c("Date", "WorkshopCode"))
 # It is necessary to join by both date and workshop code as occasionally 2 or more people will teach on the same day in different events or classes.
 # needs to be a full join because there are some courses not entered and vice versa.
 
@@ -297,15 +297,20 @@ joined_attendance_post_clean <- joined_post %>%
 ###########
 # Write to files for use in qmds.
 ###########
-
+# Attendance
 write.csv(attendance_named,
           file = "raw_data/processed_attendance_named.csv",
           row.names = FALSE)
 
+
+# Satisfaction
 write.csv(joined_attendance_post_clean,
           file = "raw_data/processed_joined_attendance_post_clean.csv",
           row.names = FALSE)
 
+# Marketing
+
+#not sure why this one is different
 write.csv(postworkshopsurveys_named,
           file = "raw_data/processed_postworkshopsurveys_named.csv",
           row.names = FALSE)
@@ -314,6 +319,8 @@ write.csv(Registered,
           file = "raw_data/processed_Registered.csv",
           row.names = FALSE)
 
+############
+# ultimately get rid of this one, do it by filtering in the analysis itself.
 write.csv(last_two_years_attendance,
           file = "raw_data/processed_last_two_years_attendance.csv",
           row.names = FALSE)
