@@ -19,6 +19,9 @@ For scheduled workshops, none of the following variables impact attendance numbe
 
 
 ```{r att_tree, echo=FALSE, message = FALSE, warning = FALSE}
+library(ggplot2)    #for plots
+library(partykit)    #for ctree
+
 att_tree <- ctree(Total.Attendees ~ 
                     as.factor(Location.of.Outreach) +
                    #as.factor(Requested.) +

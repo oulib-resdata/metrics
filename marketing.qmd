@@ -16,6 +16,7 @@ Thus, our overall most effective marketing methods are emails, the OU Libraries 
 These data for people who filled out a post-workshop survey (ie are confirmed to have attended a workshop) and answer the question "How did you hear about this workshop?".  They are grouped by pre-registered or not pre-registered (passerby walk-ins, class workshops where registration wasn't required).  We do not get 100% completion of surveys.
 
 ```{r attendees, echo=FALSE, message = FALSE, warning = FALSE}
+library(ggplot2)    #for plots
 marketing_breakdown_initial <- ggplot(data = postworkshopsurveys_named,
        aes(x = ReducedCategories,
            fill = Did.you.pre.register.for.this.workshop.))+

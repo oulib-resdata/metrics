@@ -1,6 +1,11 @@
 # Workshop descriptive numbers
 We continue to offer more workshops on request (right panel), especially in courses.
 ```{r joined_post, echo=FALSE, message = FALSE, warning = FALSE}
+# have to load all data over again each document https://forum.posit.co/t/quarto-cant-find-r-objects/156848
+library(ggplot2)    #for plots
+
+
+
 ggplot(data = attendance_named,
        mapping = aes(x = year,
                      fill = Is.Course))+

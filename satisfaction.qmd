@@ -12,6 +12,7 @@ In the future, we may check rankings vs length of course in hours.
 
 ### Do you anticipate that this new knowledge can be applied towards your work?
 ```{r workshop_feedback_newknowledge, echo=FALSE, message = FALSE, warning = FALSE}
+library(ggplot2)    #for plots
 joined_attendance_post_clean %>%
   ggplot(aes(x=Using.New.Knowledge., fill=Using.New.Knowledge.)) +
   geom_bar()+

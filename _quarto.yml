@@ -20,9 +20,9 @@ book:
     - marketing.qmd
     - attendance.qmd
     - satisfaction.qmd
-    - references.qmd
-  appendices:
-    - something.qmd
+#    - references.qmd
+#  appendices:
+#    - something.qmd
 
 comments:
   hypothesis: true
