@@ -1,0 +1,162 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Research Workshop Attendance, Marketing, and Satisfaction",
+    "section": "",
+    "text": "Introduction: What’s in this report?",
+    "crumbs": [
+      "Introduction: What's in this report?"
+    ]
+  },
+  {
+    "objectID": "index.html#executive-summary",
+    "href": "index.html#executive-summary",
+    "title": "Research Workshop Attendance, Marketing, and Satisfaction",
+    "section": "Executive Summary",
+    "text": "Executive Summary\nInitial commit\nPlots",
+    "crumbs": [
+      "Introduction: What's in this report?"
+    ]
+  },
+  {
+    "objectID": "index.html#data-sources-and-processing",
+    "href": "index.html#data-sources-and-processing",
+    "title": "Research Workshop Attendance, Marketing, and Satisfaction",
+    "section": "Data sources and processing",
+    "text": "Data sources and processing\nAre available in Data_munging.R",
+    "crumbs": [
+      "Introduction: What's in this report?"
+    ]
+  },
+  {
+    "objectID": "index.html#book-info",
+    "href": "index.html#book-info",
+    "title": "Research Workshop Attendance, Marketing, and Satisfaction",
+    "section": "Book info",
+    "text": "Book info\nThis document was created are using the quarto package (R-quarto?) to format this book.",
+    "crumbs": [
+      "Introduction: What's in this report?"
+    ]
+  },
+  {
+    "objectID": "descriptive_numbers.html",
+    "href": "descriptive_numbers.html",
+    "title": "1  Workshop descriptive numbers",
+    "section": "",
+    "text": "We continue to offer more workshops on request (right panel), especially in courses.\n\n\n\n\n\n\n\n\n\nWe have increased the number of topics we’ve brought “on request” to groups and courses. The number of distinct topics has declined in the last academic year, likely due to loss of specialist expertise with staff loss.\n\n\n# A tibble: 30 × 5\n# Groups:   year, Semester, Is.Course [20]\n    year Semester Is.Course Requested. topics_count\n   &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;             &lt;int&gt;\n 1  2018 Fall     &lt;NA&gt;      N                     3\n 2  2018 Fall     &lt;NA&gt;      Y                     1\n 3  2019 Fall     &lt;NA&gt;      N                    12\n 4  2019 Fall     &lt;NA&gt;      Y                     3\n 5  2019 Spring   &lt;NA&gt;      N                    10\n 6  2019 Spring   &lt;NA&gt;      Y                     1\n 7  2019 Summer   &lt;NA&gt;      N                     2\n 8  2019 Summer   &lt;NA&gt;      Y                     2\n 9  2020 Fall     &lt;NA&gt;      N                    11\n10  2020 Spring   &lt;NA&gt;      N                     8\n# ℹ 20 more rows\n\n\n\n\n\n\n\n\n\nLATER TODO: How many instructors and helpers per semester - BN gather number of helpers from Libraries collaborators + internal notes. later in report will cover helper to attendee ratio. - 11/28/2023 requested BN to request MB to add external helper count",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Workshop descriptive numbers</span>"
+    ]
+  },
+  {
+    "objectID": "marketing.html",
+    "href": "marketing.html",
+    "title": "2  Marketing",
+    "section": "",
+    "text": "2.1 Executive summary\nThe top three marketing methods that bring in the highest counts of attendees who fill out our post-workshop surveys (hereafter, “attendees” and “attendance”) are emails, word-of-mouth, and the OU Libraries website\nThe marketing methods with the highest response “intensities” (relative proportion of attendees) were class requirements (making liaison outreach to instructors critical), librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and the OU Libraries website.\nThus, our overall most effective marketing methods are emails, the OU Libraries website, word-of-mouth, and outreach to instructors.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Marketing</span>"
+    ]
+  },
+  {
+    "objectID": "marketing.html#absolute-effectiveness-counts-of-attendees-by-marketing-method",
+    "href": "marketing.html#absolute-effectiveness-counts-of-attendees-by-marketing-method",
+    "title": "2  Marketing",
+    "section": "2.2 Absolute effectiveness (counts of attendees) by marketing method",
+    "text": "2.2 Absolute effectiveness (counts of attendees) by marketing method\n\n2.2.1 Overall counts of attendees by marketing method and registration status\nThese data for people who filled out a post-workshop survey (ie are confirmed to have attended a workshop) and answer the question “How did you hear about this workshop?”. They are grouped by pre-registered or not pre-registered (passerby walk-ins, class workshops where registration wasn’t required). We do not get 100% completion of surveys.\n\n\n\n\n\n\n\n\n\n\n\n\n2.2.2 Marketing methods for selection “Other (please describe)” with at least two words\nThese words suggest that professors, librarians, and previous workshops were included in methods that reached these attendees. Later data cleaning to incorporate emails/professors/word-of-mouth into the existing categories could be useful.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Marketing</span>"
+    ]
+  },
+  {
+    "objectID": "marketing.html#marketing-sources-for-people-who-registered-for-workshops-attendance-yet-unknown",
+    "href": "marketing.html#marketing-sources-for-people-who-registered-for-workshops-attendance-yet-unknown",
+    "title": "2  Marketing",
+    "section": "2.3 Marketing sources for people who registered for workshops (attendance yet unknown)",
+    "text": "2.3 Marketing sources for people who registered for workshops (attendance yet unknown)\nThese data are from people who filled out the pre-registration form to attend a workshop. When they filled out this form, we do not know if they will go on to actually attend the workshop. Most of the people in the previous section will have registered, so there is overlap between the datasets, but the post-workshop surveys are anonymous so we cannot connect them directly. The next section shows a broad-level view of the relative effectiveness of methods for people who register vs people who follow through and attend.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Marketing</span>"
+    ]
+  },
+  {
+    "objectID": "marketing.html#relative-effectiveness-in-marketing-methods",
+    "href": "marketing.html#relative-effectiveness-in-marketing-methods",
+    "title": "2  Marketing",
+    "section": "2.4 Relative effectiveness in marketing methods",
+    "text": "2.4 Relative effectiveness in marketing methods\nWe do not get 100% survey responses at our workshops. However, I wanted to see to see if some marketing methods are proportionately more effective in getting pre-registrants to actually show up at the workshop. The differences are overall statistically significantly different (Chi-squared = 71.5, df =- 20, p &lt; 0.0001).\nBelow is a chart that represents this visually as a ratio of attendance to pre-registrant counts. The vertical beige bar shows approximately where about the same proportion (i.e., 0.5 out of 1, or 50/100) of people who pre-registered (red) ended up actually attending and filling out a survey (black).\n\n\n\n\n\n\n\n\n\nA completely red bar indicates that none of the people who completed the pre-registration survey later completed a post-workshop survey. It is possible some of those attendees showed up but did not complete the offered post-workshop survey. People who pre-registered and heard about the workshop via Twitter, Facebook, Other Social Media Not Specified, Announcement in Class by Librarian, and paper fliers have this result, suggesting those media may not be resulting in attendees or not resulting in attendees willing to provide feedback.\nA completely black bar indicates that pre-registration did not occur but people attended anyways (you see these attendees as the red caps to the black bars in the previous section). This occurred more with people who attended a workshop given in a class (“Class Requirement”; that category suggests either we visited the class, which does not involve LibCal registration, or that the instructor asked people to attend a workshop outside of class). With online workshops requiring pre-registration, we don’t necessarily expect any bar to be completely black (all walk-ins). However, in-person workshops can accept passer-by walk-ins who didn’t pre-register or people who saw the event via any other marketing method (again, see the previous section’s chart) and just showed up without pre-registering. Zoom workshops could have other registrants also forward the Zoom link.\nThus, any method with some black has some attendance, and methods with larger amounts of black indicate relatively stronger responses. Thus, the highest response “intensity” are for class requirements, librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and people who find events by examining the OU Libraries website.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Marketing</span>"
+    ]
+  },
+  {
+    "objectID": "marketing.html#marketing-implementation-details",
+    "href": "marketing.html#marketing-implementation-details",
+    "title": "2  Marketing",
+    "section": "2.5 Marketing implementation details",
+    "text": "2.5 Marketing implementation details\n\n2.5.1 Email detail level and timing\nI used registrants instead of confirmed attendees, because that felt more relevant to the emails, and it was more consistently documented. The factors that were considered here were lead time (how much time between the email and the event) and length of email (long = one that was typed by one of you, short = automated libzoom email). Email length was the deciding factor for number of registrants!\nSince the time between registration opening and workshop did not affect attendance. As such, CMC proposed we open all workshops at the start of the semester. This change was approved by the committee in slack in Fall 2023 (2023/10/03) to be implemented for the Spring 2024 workshops. We discussed adding a second reminder for already registered participants, but only one reminder is possible using LibCal automated emails. We will now post once advertising the full schedule, and then continue doing the 3-weeks-advertising to remind people again.\n\n\n\n\n\n\n\n\n\n\n\n2.5.2 Registration is a reasonable proxy for attendance",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Marketing</span>"
+    ]
+  },
+  {
+    "objectID": "attendance.html",
+    "href": "attendance.html",
+    "title": "3  Attendance",
+    "section": "",
+    "text": "3.1 Executive summary",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
+    ]
+  },
+  {
+    "objectID": "attendance.html#workshop-attendance-by-format-and-request",
+    "href": "attendance.html#workshop-attendance-by-format-and-request",
+    "title": "3  Attendance",
+    "section": "3.2 Workshop attendance by format and request",
+    "text": "3.2 Workshop attendance by format and request\n\n3.2.1 Statistical analysis\nFor scheduled workshops, none of the following variables impact attendance numbers in a conditional inference tree analysis. - Format (in person vs virtual vs hybrid, DSI request 2023/07) - academic year - calendar year - semester (spring, summer, or fall) - time of day - workshop topic - multi-day vs single day scheduling\n\n\n\n\n\n\n\n\n\nWhen we include whether a workshop was in a course, requested or not, and had a known three-week advertising period or not, only whether a workshop was in a course was still the only deciding factor in increased attendance numbers.\n\n\n\n\n\n\n\n\n\n\n\n3.2.2 Figures\nFormat was not significant, but since it was requested, here is the figure.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
+    ]
+  },
+  {
+    "objectID": "attendance.html#workshop-attendance-over-time",
+    "href": "attendance.html#workshop-attendance-over-time",
+    "title": "3  Attendance",
+    "section": "3.3 Workshop attendance over time",
+    "text": "3.3 Workshop attendance over time\nThe average number of people at each scheduled workshop has stayed the same per calendar year from 2021-2023. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrolment to “make”.\n\n\n\n\n\n\n\n\n\nThe total number of people reached has increased from 2021 to 2022, almost completely due to more people reached via courses. We do not have complete 2023 data as of this writing (11/21/2023 CMC).\n\n\n\n\n\n\n\n\n\nThe proportion of total people reached each calendar year has increased by courses for 2022-2023 (though 2023 dataset is not fully entered yet).",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
+    ]
+  },
+  {
+    "objectID": "attendance.html#workshop-helper-load-for-on-request-workshops-over-time",
+    "href": "attendance.html#workshop-helper-load-for-on-request-workshops-over-time",
+    "title": "3  Attendance",
+    "section": "3.4 Workshop helper load for on-request workshops over time",
+    "text": "3.4 Workshop helper load for on-request workshops over time\nDSI request 2023/07: - TODO: Libraries personnel to attendance ratios for On Request workshops. which high-helper topics requested more over time and do we have enough data yet, are those increasing.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
+    ]
+  },
+  {
+    "objectID": "attendance.html#workshop-attendance-by-topic",
+    "href": "attendance.html#workshop-attendance-by-topic",
+    "title": "3  Attendance",
+    "section": "4.1 Workshop attendance by topic",
+    "text": "4.1 Workshop attendance by topic\n\nDONE BN: modify to show\n\nscheduled only\nnot on request\nworkshops with =&gt;4 runs (two years)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
+    ]
+  },
+  {
+    "objectID": "attendance.html#workshop-length-vs-attendance",
+    "href": "attendance.html#workshop-length-vs-attendance",
+    "title": "3  Attendance",
+    "section": "4.2 Workshop length vs attendance",
+    "text": "4.2 Workshop length vs attendance\n\n4.2.1 length of session\n\nLow priority: session length vs attendance\n\n\n\n4.2.2 Single day over multiple sessions vs two-day workshops",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
+    ]
+  }
+]
