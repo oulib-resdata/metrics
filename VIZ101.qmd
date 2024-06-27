@@ -1,0 +1,25 @@
+# Concepts of Data-Driven Visualization
+Link to OSF.
+
+## Descriptive numbers
+How many times offered per semester, per year.  Number of different instructors.
+
+## Attendance
+
+### Over time
+
+### By semester
+
+
+## Marketing
+
+### Over time
+
+### By semester
+
+## Satisfaction
+
+### Over time
+
+### By semester
+

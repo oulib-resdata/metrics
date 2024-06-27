@@ -16,6 +16,7 @@ source("scripts/ggwordcloud_analysis_complete_ou_colors.R")
 
 # Fix join
 joined_attendance_post_clean <- read.csv("raw_data/processed_joined_attendance_post_clean.csv")
+postworkshopsurveys_named <- read.csv("raw_data/processed_postworkshopsurveys_named.csv")
 
 
 ```
@@ -124,11 +125,11 @@ joined_attendance_post_clean %>%
 There was no difference in perception of the material as "valuable to my program of study" between workshop formats (hybrid, online, or in person).
 ```{r, workshop_feedback_valuableforprogram_stats, include = TRUE}
 # run test for significance
-# chi_program <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-#            y = joined_attendance_post_clean$Valuable.for.Program,
-#            simulate.p.value = TRUE)
-# 
-# (workshop_feedback_valuableforprogram_plot <- chi_program$p.value<=0.05)
+chi_program <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+           y = joined_attendance_post_clean$Valuable.for.Program,
+           simulate.p.value = TRUE)
+
+(workshop_feedback_valuableforprogram_plot <- chi_program$p.value<=0.05)
 ```
 
 ```{r, workshop_feedback_valuableforprogram_plot, eval = workshop_feedback_valuableforprogram_plot, include = workshop_feedback_valuableforprogram_plot}
@@ -176,20 +177,20 @@ joined_attendance_post_clean %>%
 There was no difference in perception of the material as "valuable to my career" between workshop formats (hybrid, online, or in person).
 ```{r, workshop_feedback_valuableforcareer_stats, include = TRUE}
 # run test for significance
-# chi_career <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-#            y = joined_attendance_post_clean$Valuable.for.Career,
-#            simulate.p.value = TRUE)
-# 
-# (workshop_feedback_valuableforcareer_plot <- chi_career$p.value<=0.05)
+chi_career <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+           y = joined_attendance_post_clean$Valuable.for.Career,
+           simulate.p.value = TRUE)
+
+(workshop_feedback_valuableforcareer_plot <- chi_career$p.value<=0.05)
 ```
 There was no difference among career levels (classifications) for perception of value towards their careers.
 ```{r, workshop_feedback_valuableforcareerclass_stats, include = TRUE}
 # run test for significance
-# chi_careerclass <- chisq.test(x = joined_attendance_post_clean$Classification,
-#            y = joined_attendance_post_clean$Valuable.for.Career,
-#            simulate.p.value = TRUE)
-# 
-# (workshop_feedback_valuableforcareerclass_plot <- chi_careerclass$p.value<=0.05)
+chi_careerclass <- chisq.test(x = joined_attendance_post_clean$Classification,
+           y = joined_attendance_post_clean$Valuable.for.Career,
+           simulate.p.value = TRUE)
+
+(workshop_feedback_valuableforcareerclass_plot <- chi_careerclass$p.value<=0.05)
 ```
 
 ### This workshop was valuable towards your teaching.
@@ -220,11 +221,11 @@ joined_attendance_post_clean %>%
 There was no difference in perception of the material as "valuable to my teaching" between workshop formats (hybrid, online, or in person).
 ```{r, workshop_feedback_valuableforteaching_stats, include = TRUE}
 # run test for significance
-# chi_teach <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-#            y = joined_attendance_post_clean$Valuable.for.Teaching,
-#            simulate.p.value = TRUE)
-# 
-# (workshop_feedback_valuableforteach_plot <- chi_teach$p.value<=0.05)
+chi_teach <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+           y = joined_attendance_post_clean$Valuable.for.Teaching,
+           simulate.p.value = TRUE)
+
+(workshop_feedback_valuableforteach_plot <- chi_teach$p.value<=0.05)
 ```
 
 
@@ -259,11 +260,11 @@ joined_attendance_post_clean %>%
 There was no difference in perception of future abilities to use skills from the workshop between formats (hybrid, online, or in person).
 ```{r, workshop_feedback_skills_stats, include = TRUE}
 # run test for significance
-# chi_skills <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-#            y = joined_attendance_post_clean$How.do.you.rate.your.skills.after.learning.abou...,
-#            simulate.p.value = TRUE)
-# 
-# (workshop_feedback_skills_plot <- chi_skills$p.value<=0.05)
+chi_skills <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
+           y = joined_attendance_post_clean$How.do.you.rate.your.skills.after.learning.abou...,
+           simulate.p.value = TRUE)
+
+(workshop_feedback_skills_plot <- chi_skills$p.value<=0.05)
 ```
 
 
@@ -379,7 +380,7 @@ wordcloud(words = improvedf$word, freq = improvedf$freq, min.freq = 5,
 
 # What other workshop topics would interest you?
 ```{r workshop_feedback_otherworkshops, echo=FALSE, message = FALSE, warning = FALSE}
-wordcloud(words = othertopicsdf$word, freq = othertopicsdf$freq, min.freq = 5,
+wordcloud(words = topicsdf$word, freq = topicsdf$freq, min.freq = 5,
           max.words = 50, random.order = FALSE,
           random.color = FALSE, colors=col)
 ```
