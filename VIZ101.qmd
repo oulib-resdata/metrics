@@ -1,6 +1,9 @@
 # Concepts of Data-Driven Visualization
 Link to OSF.
 
+words(@sec-topics)
+
+
 ## Descriptive numbers
 How many times offered per semester, per year.  Number of different instructors.
 

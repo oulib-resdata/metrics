@@ -1,6 +1,4 @@
-# Descriptive numbers
-
-While we offer many scheduled workshops each semester, we continue to increase our course-based "workshops on request" (right panel).  This has resulted in an incrase in proportion of people we reach each time period to be weighted towards course visits (@sec-attendance)
+# Offerings {#sec-offerings}
 
 ```{r setup, include=FALSE}
 # FUNCTIONS AND LIBRARIES
@@ -15,19 +13,48 @@ attendance_named <- read.csv("raw_data/processed_attendance_named.csv")
 
 ```
 
+The number of distinct topics has declined since 2022, likely due to loss of digital scholarship specialist expertise.
+```{r workshop_descriptive_stats_topics_unique, echo=FALSE, message = FALSE, warning = FALSE}
+topics_desc <- attendance_named %>%
+  group_by(year,
+           Semester,
+           Is.Course,
+           Requested.
+      ) %>%
+  summarize(topics_count = n_distinct(WorkshopCode))
+
+
+ggplot(data = topics_desc,
+       mapping = aes(x = year,
+                     y = topics_count))+
+  geom_bar(stat = "identity")+
+  labs(x = "Calendar year",
+       y = "Number of unique topics offered")
+
+```
+
+
+While we offer many scheduled workshops each semester (upper left panel, "Not requested/Regularly scheduled"), we continue to increase our course-based "workshops on request" visits (lower right panel) as well as a low but steady number of out-of-class requested workshops (upper right panel).
 
 ```{r joined_post, echo=FALSE, message = FALSE, warning = FALSE}
+
+to_string <- as_labeller(c(`N` = "Regularly Scheduled", `Y` = "Requested"))
 
 ggplot(data = attendance_named,
        mapping = aes(x = year,
                      fill = Is.Course))+
   geom_bar()+
-  facet_grid(~Requested.)+
-  labs(y = "Number of workshops offered")
+  facet_grid(Is.Course ~ Requested.)+
+  labs(x = "Calendar year",
+       y = "Number of workshops offered",
+       fill = "Within a course")
 ```
 
 
-We have increased the number of topics we've brought "on request" to groups and courses.  The number of distinct topics has declined in the last academic year, likely due to loss of specialist expertise with staff loss.
+
+::: {.content-hidden}
+
+We have increased the number of topics we've brought "on request" to groups and courses.
 
 ```{r workshop_descriptive_stats_topics, echo=FALSE, message = FALSE, warning = FALSE}
 topics_desc <- attendance_named %>%
@@ -38,18 +65,22 @@ topics_desc <- attendance_named %>%
       ) %>%
   summarize(topics_count = n_distinct(WorkshopCode))
 
-topics_desc
 
 ggplot(data = topics_desc,
        mapping = aes(x = year,
                      y = topics_count,
                      fill = Is.Course))+
   geom_bar(stat = "identity")+
-  facet_grid(~Requested., labeller = label_both)+
-  labs(y = "Number of unique topics offered")
+  facet_grid(~Requested., labeller = to_string)+
+  labs(x = "Calendar year",
+       y = "Number of unique topics offered",
+       fill = "Within a course")
 
 ```
 
 LATER TODO: How many instructors and helpers per semester
   - BN gather number of helpers from Libraries collaborators + internal notes.  later in report will cover helper to attendee ratio.
-  - 11/28/2023 requested BN to request MB to add external helper count
+  - 11/28/2023 requested BN to request MB to add external helper count.  DONE but need to backfill data from notes.
+  
+  
+:::

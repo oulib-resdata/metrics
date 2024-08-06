@@ -22,8 +22,9 @@ book:
         - marketing.qmd
         - attendance.qmd
         - satisfaction.qmd
-    - part: per_workshop_info.qmd
+    - part: topic_details.qmd
       chapters:
+        - topics.qmd
         - VIZ101.qmd
 #   - references.qmd
     - technical_background.qmd

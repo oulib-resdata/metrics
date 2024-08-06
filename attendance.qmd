@@ -17,23 +17,31 @@ last_two_years_attendance <- read.csv("raw_data/processed_last_two_years_attenda
 
 ## Executive summary
 
+**Counts of workshop attendance are only influenced by whether a workshop was presented as part of course instruction.** Format (virtual, in-person, hybrid) and marketing did not change attendance counts. Even topics (@sec-topics) didn't impact attendance counts.
 
 \newpage
 
-## Workshop attendance by format and request
+## Per-workshop attendance by format and request
 
 ### Statistical analysis
+
 For scheduled workshops, none of the following variables impact attendance numbers in a conditional inference tree analysis.
-- Format (in person vs virtual vs hybrid, DSI request 2023/07)
-- academic year
-- calendar year
-- semester (spring, summer, or fall)
-- time of day
-- workshop topic
-- multi-day vs single day scheduling
 
+-   format (in person vs virtual vs hybrid)
 
-```{r att_tree, echo=FALSE, message = FALSE, warning = FALSE}
+-   academic year (starts in August, goes through July)
+
+-   calendar year (starts in January)
+
+-   semester (spring, summer, or fall)
+
+-   time of day
+
+-   workshop topic
+
+-   multi-day vs single day scheduling
+
+```{r att_tree, echo=FALSE, message = FALSE, warning = FALSE, output = FALSE}
 library(ggplot2)    #for plots
 library(partykit)    #for ctree
 
@@ -59,9 +67,15 @@ att_tree <- ctree(Total.Attendees ~
 plot(att_tree)
 ```
 
-When we include whether a workshop was in a course, requested or not, and had a known three-week advertising period or not, only whether a workshop was in a course was still the only deciding factor in increased attendance numbers.
+When we examine all workshops (included on-request visits to classes and on-request workshops), we add the following variables:
 
+-   workshop was in a course
 
+-   requested or not
+
+-   marketing (had a known three-week advertising period or not)
+
+Whether a workshop was in a course (where students are presumably required to attend) was still the only deciding factor in increased attendance numbers.
 
 ```{r att_tree2, echo=FALSE, message = FALSE, warning = FALSE}
 att_tree2 <- ctree(Total.Attendees ~ 
@@ -82,28 +96,26 @@ att_tree2 <- ctree(Total.Attendees ~
 plot(att_tree2)
 ```
 
+### Format
 
-
-
-### Figures
-Format was not significant, but since it was requested, here is the figure.
+Again, per the conditional inference tree analysis, the workshop format was not significantly different. You can also see this with a different visual analysis using notched box plots. The overlapping "notches" here show that there is no difference between median attendance for scheduled (not on request, not in a class) workshops by format.
 
 ```{r attendance_by_format_request, echo=FALSE, message = FALSE, warning = FALSE}
-last_two_years_attendance [last_two_years_attendance$Known.three.weeks.advertising == "Y" &
-                                                      last_two_years_attendance$Is.Course == "N" &
-                                                      last_two_years_attendance$Requested. == "N",]%>%
+last_two_years_attendance[last_two_years_attendance$Is.Course == "N" &
+                             last_two_years_attendance$Requested. == "N",]%>%
   ggplot(mapping = aes(x = Location.of.Outreach,
-                       y = Total.Attendees,
-                       fill = Is.Course))+
-  geom_boxplot(notch = TRUE)
+                       y = Total.Attendees))+
+  geom_boxplot(notch = TRUE) + 
+  labs(x = "Workshop format",
+         y = "Total attendees per workshop"
+         )
 
 
 ```
 
+### Workshop attendance over time
 
-
-## Workshop attendance over time
-The average number of people at each scheduled workshop has stayed the same per calendar year from 2021-2023. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrolment to "make".
+The median number of people at each scheduled workshop has stayed the same per calendar year from 2021-2023. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrollment to "make".
 
 ```{r avg_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 plot_time <- last_two_years_attendance %>% 
@@ -111,39 +123,32 @@ plot_time <- last_two_years_attendance %>%
                        y = Total.Attendees,
                        fill = Is.Course)) +
   geom_boxplot(notch = TRUE) +
-  labs (y = "People at each workshop")
+  labs (y = "Total attendees per workshop",
+        x = "Calendar year",
+        fill = "Workshop offered in course")
 plot_time
 ```
 
 
-The total number of people reached has increased from 2021 to 2022, almost completely due to more people reached via courses.  We do not have complete 2023 data as of this writing (11/21/2023 CMC).
+## Total people reached
+
+The total number of people reached has increased from 2021 to 2022, almost completely due to more people reached via courses. We do not have complete 2023 data as of this writing (11/21/2023 CMC).
+
 ```{r, total_reached_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 
-ggplot(data = last_two_years_attendance[last_two_years_attendance$Calendar.Year!=2023,],
-       size = 5
-       )+
-  stat_summary(geom = "line",
-       mapping = aes(x = Calendar.Year,
-                     y = Total.Attendees,
-                     color = Is.Course,
-                     linetype = Is.Course),
-               fun = "sum",
-               size = 1.6) +
-
-  #facet_grid(~Requested., labeller = label_both)+
-  labs(y = "Total people reached",
-       x = "Calendar Year")+
-  stat_summary(geom = "line",
-       mapping = aes(x = Calendar.Year,
-                     y = Total.Attendees),
-       fun = "sum",
-       size = 10,
-       color = "black"
-)
+last_two_years_attendance[last_two_years_attendance$Calendar.Year!=2023,] %>%
+  group_by(Calendar.Year, Is.Course) %>%
+  summarize(total_reached = sum(Total.Attendees)) %>%
+  bind_rows(summarise(.,
+                      across(where(is.numeric), sum),
+                      across(where(is.character), ~"Total")))%>% # https://stackoverflow.com/a/50322272
+  pivot_wider(names_from = Calendar.Year,
+              values_from = total_reached)
   
 ```
 
 The proportion of total people reached each calendar year has increased by courses for 2022-2023 (though 2023 dataset is not fully entered yet).
+
 ```{r, prop_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 # https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
 last_two_years_attendance %>%
@@ -157,81 +162,23 @@ ggplot(
   geom_col(position = "fill")+
     scale_fill_viridis_d (aesthetics = "fill")+
   labs(y = "Proportion of people reached",
-       x = "Calendar Year",
+       x = "Calendar year",
        fill = "Workshop offered in course")
 
 
 ```
 
-## Workshop helper load for on-request workshops over time
-DSI request 2023/07: 
-- TODO: Libraries personnel to attendance ratios for On Request workshops.  which high-helper topics requested more over time and do we have enough data yet, are those increasing.
-
-# ```{r attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
-# plot_helpers <- last_two_years_attendance[last_two_years_attendance$Requested.=="Y",] %>%
-#   ggplot(mapping = aes(x = as.factor(Calendar.Year),
-#                        y = helpers/Total.Attendees,
-#                        fill = Topic)) +
-#   geom_boxplot(notch = TRUE)
-# plot_helpers
-# ```
-
-
 \newpage
 
-
-
-## Workshop attendance by topic
-- DONE BN: modify to show 
-  - scheduled only
-  - not on request
-  - workshops with =>4 runs (two years)
-
-
-```{r attendance_by_topic, echo=FALSE, message = FALSE, warning = FALSE}
-# workshop [workshop$Requested. == "N" &
-#             workshop$Topic != "African American Newspapers and Primary Sources" &
-#             workshop$Topic != "Digital newspapers" &
-#             workshop$Topic != "DMPTool" &
-#             workshop$Topic != "Intermediate shell" &
-#             workshop$Topic != "matplotlib" &
-#             workshop$Topic != "Smoother meetings" &
-#             workshop$Topic != "Standalone Carpentries R" &
-#             workshop$Topic != "Standalone Openrefine" &
-#             workshop$Topic != "Standalone Python" &
-#             workshop$Topic != "Standalone SQL" &
-#             workshop$Topic != "Tableau" &
-#             workshop$Topic != "Troubleshooting" & 
-#             workshop$Topic != "Using computers",
-#             ]%>%
-#   ggplot (aes(x=Topic, y=Total.Attendees, fill=Topic)) +
-#   geom_boxplot(outlier.shape = NA, notch = TRUE) +
-#   scale_fill_viridis(discrete = TRUE) +
-#   theme(panel.background = element_rect(fill = "lightgray",
-#                                         color = "white",
-#                                         size = 0.5, linetype = "solid"),
-#         panel.grid.major = element_line(size = 0.5, linetype = "solid",
-#                                         color = "darkgray"),
-#         panel.grid.minor = element_line(size = 0.25, linetype = "solid",
-#                                         color = "darkgray"),
-#         plot.title = element_text(size = 20, hjust = 0.5),
-#         axis.title = element_text(size = 14),
-#         axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
-#   )+
-#   geom_jitter(color='black', alpha = 0.55, size = 2, position = position_jitter (width = .1), show.legend = FALSE) +
-#   ggtitle('Attendees of Scheduled Workshops by Topic')
-
-```
-
-
-
-\newpage
+::: content-hidden
 ## Workshop length vs attendance
 
 ### length of session
-- Low priority: session length vs attendance
+
+-   Low priority: session length vs attendance
 
 ### Single day over multiple sessions vs two-day workshops
+
 ```{r carpentries_attendance, echo=FALSE, message = FALSE, warning = FALSE}
 # #Last one! Plotting attendance for carpentries by multi-day VS single-topic
 # 
@@ -258,3 +205,19 @@ DSI request 2023/07:
 
 
 ```
+
+## Workshop helper load for on-request workshops over time
+
+DSI request 2023/07: - TODO: Libraries personnel to attendance ratios for On Request workshops. which high-helper topics requested more over time and do we have enough data yet, are those increasing.
+
+```{r attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
+ # plot_helpers <- last_two_years_attendance[last_two_years_attendance$Requested.=="Y",] %>%
+ #   ggplot(mapping = aes(x = as.factor(Calendar.Year),
+ #                        y = helpers/Total.Attendees,
+ #                        fill = Topic)) +
+ #   geom_boxplot(notch = TRUE)
+ # plot_helpers
+```
+
+\newpage
+:::
