@@ -22,12 +22,12 @@
   {
     "objectID": "descriptive_numbers.html",
     "href": "descriptive_numbers.html",
-    "title": "1  Workshop descriptive numbers",
+    "title": "1  Offerings",
     "section": "",
-    "text": "We continue to offer more workshops on request (right panel), especially in courses.\n\n\n\n\n\n\n\n\n\nWe have increased the number of topics we’ve brought “on request” to groups and courses. The number of distinct topics has declined in the last academic year, likely due to loss of specialist expertise with staff loss.\n\n\n# A tibble: 30 × 5\n# Groups:   year, Semester, Is.Course [20]\n    year Semester Is.Course Requested. topics_count\n   &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;             &lt;int&gt;\n 1  2018 Fall     &lt;NA&gt;      N                     3\n 2  2018 Fall     &lt;NA&gt;      Y                     1\n 3  2019 Fall     &lt;NA&gt;      N                    12\n 4  2019 Fall     &lt;NA&gt;      Y                     3\n 5  2019 Spring   &lt;NA&gt;      N                    10\n 6  2019 Spring   &lt;NA&gt;      Y                     1\n 7  2019 Summer   &lt;NA&gt;      N                     2\n 8  2019 Summer   &lt;NA&gt;      Y                     2\n 9  2020 Fall     &lt;NA&gt;      N                    11\n10  2020 Spring   &lt;NA&gt;      N                     8\n# ℹ 20 more rows\n\n\n\n\n\n\n\n\n\nLATER TODO: How many instructors and helpers per semester - BN gather number of helpers from Libraries collaborators + internal notes. later in report will cover helper to attendee ratio. - 11/28/2023 requested BN to request MB to add external helper count",
+    "text": "The number of distinct topics has declined since 2022, likely due to loss of digital scholarship specialist expertise.\n\n\n\n\n\n\n\n\n\nWhile we offer many scheduled workshops each semester (upper left panel, “Not requested/Regularly scheduled”), we continue to increase our course-based “workshops on request” visits (lower right panel) as well as a low but steady number of out-of-class requested workshops (upper right panel).",
     "crumbs": [
       "Overall analysis",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Workshop descriptive numbers</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Offerings</span>"
     ]
   },
   {
@@ -35,7 +35,18 @@
     "href": "marketing.html",
     "title": "2  Marketing",
     "section": "",
-    "text": "2.1 Executive summary\nThe top three marketing methods that bring in the highest counts of attendees who fill out our post-workshop surveys (hereafter, “attendees” and “attendance”) are emails, word-of-mouth, and the OU Libraries website\nThe marketing methods with the highest response “intensities” (relative proportion of attendees) were class requirements (making liaison outreach to instructors critical), librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and the OU Libraries website.\nThus, our overall most effective marketing methods are emails, the OU Libraries website, word-of-mouth, and outreach to instructors.",
+    "text": "2.1 Executive summary\nOur overall most effective marketing methods are emails, the OU Libraries website, word-of-mouth, and outreach to instructors.\nThis determination is made by combining what methods bring in high attendee counts (1) and what methods bring the highest ratio of attendance to registration (2).",
+    "crumbs": [
+      "Overall analysis",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Marketing</span>"
+    ]
+  },
+  {
+    "objectID": "marketing.html#executive-summary",
+    "href": "marketing.html#executive-summary",
+    "title": "2  Marketing",
+    "section": "",
+    "text": "The top three marketing methods that bring in the highest counts of attendees who fill out our post-workshop surveys (hereafter, “attendees” and “attendance”) are emails, word-of-mouth, and the OU Libraries website\nThe marketing methods with the highest response “intensities” (relative proportion of attendees) were class requirements (making liaison outreach to instructors critical), librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and the OU Libraries website.",
     "crumbs": [
       "Overall analysis",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Marketing</span>"
@@ -79,7 +90,7 @@
     "href": "marketing.html#marketing-implementation-details",
     "title": "2  Marketing",
     "section": "2.5 Marketing implementation details",
-    "text": "2.5 Marketing implementation details\n\n2.5.1 Email detail level and timing\nI used registrants instead of confirmed attendees, because that felt more relevant to the emails, and it was more consistently documented. The factors that were considered here were lead time (how much time between the email and the event) and length of email (long = one that was typed by one of you, short = automated libzoom email). Email length was the deciding factor for number of registrants!\nThus, the time between registration opening and workshop did not affect attendance. As such, CMC proposed we open all workshops at the start of the semester. This change was approved by the committee in slack in Fall 2023 (2023/10/03) to be implemented for the Spring 2024 workshops. We discussed adding a second reminder for already registered participants, but only one reminder is possible using LibCal automated emails. We will now post once advertising the full schedule, and then continue doing the 3-weeks-advertising to remind people again.\n\n\n\n\n\n\n\n\n\n\n\n2.5.2 Registration is a reasonable proxy for attendance",
+    "text": "2.5 Marketing implementation details\n\n2.5.1 Email detail level and timing\nI used registrants instead of confirmed attendees, because that felt more relevant to the emails, and it was more consistently documented. The factors that were considered here were lead time (how much time between the email and the event) and length of email (long = one that was typed by one of you, short = automated libzoom email). Email length was the deciding factor for number of registrants!\nThus, the time between registration opening and workshop did not affect attendance. As such, CMC proposed we open all workshops at the start of the semester. This change was approved by the committee in slack in Fall 2023 (2023/10/03) to be implemented for the Spring 2024 workshops. We discussed adding a second reminder for already registered participants, but only one reminder is possible using LibCal automated emails. We will now post once advertising the full schedule, and then continue doing the 3-weeks-advertising to remind people again.",
     "crumbs": [
       "Overall analysis",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Marketing</span>"
@@ -90,62 +101,29 @@
     "href": "attendance.html",
     "title": "3  Attendance",
     "section": "",
-    "text": "3.1 Executive summary",
+    "text": "3.1 Executive summary\nCounts of workshop attendance are only influenced by whether a workshop was presented as part of course instruction. Format (virtual, in-person, hybrid) and marketing did not change attendance counts. Even topics (Chapter 5) didn’t impact attendance counts.",
     "crumbs": [
       "Overall analysis",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
     ]
   },
   {
-    "objectID": "attendance.html#workshop-attendance-by-format-and-request",
-    "href": "attendance.html#workshop-attendance-by-format-and-request",
+    "objectID": "attendance.html#per-workshop-attendance-by-format-and-request",
+    "href": "attendance.html#per-workshop-attendance-by-format-and-request",
     "title": "3  Attendance",
-    "section": "3.2 Workshop attendance by format and request",
-    "text": "3.2 Workshop attendance by format and request\n\n3.2.1 Statistical analysis\nFor scheduled workshops, none of the following variables impact attendance numbers in a conditional inference tree analysis. - Format (in person vs virtual vs hybrid, DSI request 2023/07) - academic year - calendar year - semester (spring, summer, or fall) - time of day - workshop topic - multi-day vs single day scheduling\n\n\n\n\n\n\n\n\n\nWhen we include whether a workshop was in a course, requested or not, and had a known three-week advertising period or not, only whether a workshop was in a course was still the only deciding factor in increased attendance numbers.\n\n\n\n\n\n\n\n\n\n\n\n3.2.2 Figures\nFormat was not significant, but since it was requested, here is the figure.",
+    "section": "3.2 Per-workshop attendance by format and request",
+    "text": "3.2 Per-workshop attendance by format and request\n\n3.2.1 Statistical analysis\nFor scheduled workshops, none of the following variables impact attendance numbers in a conditional inference tree analysis.\n\nformat (in person vs virtual vs hybrid)\nacademic year (starts in August, goes through July)\ncalendar year (starts in January)\nsemester (spring, summer, or fall)\ntime of day\nworkshop topic\nmulti-day vs single day scheduling\n\nWhen we examine all workshops (included on-request visits to classes and on-request workshops), we add the following variables:\n\nworkshop was in a course\nrequested or not\nmarketing (had a known three-week advertising period or not)\n\nWhether a workshop was in a course (where students are presumably required to attend) was still the only deciding factor in increased attendance numbers.\n\n\n\n\n\n\n\n\n\n\n\n3.2.2 Format\nAgain, per the conditional inference tree analysis, the workshop format was not significantly different. You can also see this with a different visual analysis using notched box plots. The overlapping “notches” here show that there is no difference between median attendance for scheduled (not on request, not in a class) workshops by format.\n\n\n\n\n\n\n\n\n\n\n\n3.2.3 Workshop attendance over time\nThe median number of people at each scheduled workshop has stayed the same per calendar year from 2021-2023. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrollment to “make”.",
     "crumbs": [
       "Overall analysis",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
     ]
   },
   {
-    "objectID": "attendance.html#workshop-attendance-over-time",
-    "href": "attendance.html#workshop-attendance-over-time",
+    "objectID": "attendance.html#total-people-reached",
+    "href": "attendance.html#total-people-reached",
     "title": "3  Attendance",
-    "section": "3.3 Workshop attendance over time",
-    "text": "3.3 Workshop attendance over time\nThe average number of people at each scheduled workshop has stayed the same per calendar year from 2021-2023. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrolment to “make”.\n\n\n\n\n\n\n\n\n\nThe total number of people reached has increased from 2021 to 2022, almost completely due to more people reached via courses. We do not have complete 2023 data as of this writing (11/21/2023 CMC).\n\n\n\n\n\n\n\n\n\nThe proportion of total people reached each calendar year has increased by courses for 2022-2023 (though 2023 dataset is not fully entered yet).",
-    "crumbs": [
-      "Overall analysis",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
-    ]
-  },
-  {
-    "objectID": "attendance.html#workshop-helper-load-for-on-request-workshops-over-time",
-    "href": "attendance.html#workshop-helper-load-for-on-request-workshops-over-time",
-    "title": "3  Attendance",
-    "section": "3.4 Workshop helper load for on-request workshops over time",
-    "text": "3.4 Workshop helper load for on-request workshops over time\nDSI request 2023/07: - TODO: Libraries personnel to attendance ratios for On Request workshops. which high-helper topics requested more over time and do we have enough data yet, are those increasing.",
-    "crumbs": [
-      "Overall analysis",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
-    ]
-  },
-  {
-    "objectID": "attendance.html#workshop-attendance-by-topic",
-    "href": "attendance.html#workshop-attendance-by-topic",
-    "title": "3  Attendance",
-    "section": "4.1 Workshop attendance by topic",
-    "text": "4.1 Workshop attendance by topic\n\nDONE BN: modify to show\n\nscheduled only\nnot on request\nworkshops with =&gt;4 runs (two years)",
-    "crumbs": [
-      "Overall analysis",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
-    ]
-  },
-  {
-    "objectID": "attendance.html#workshop-length-vs-attendance",
-    "href": "attendance.html#workshop-length-vs-attendance",
-    "title": "3  Attendance",
-    "section": "4.2 Workshop length vs attendance",
-    "text": "4.2 Workshop length vs attendance\n\n4.2.1 length of session\n\nLow priority: session length vs attendance\n\n\n\n4.2.2 Single day over multiple sessions vs two-day workshops",
+    "section": "3.3 Total people reached",
+    "text": "3.3 Total people reached\nThe total number of people reached has increased from 2021 to 2022, almost completely due to more people reached via courses. We do not have complete 2023 data as of this writing (11/21/2023 CMC).\n\n\n# A tibble: 3 × 3\n  Is.Course `2021` `2022`\n  &lt;chr&gt;      &lt;int&gt;  &lt;int&gt;\n1 N            228    259\n2 Y             19    266\n3 Total        247    525\n\n\nThe proportion of total people reached each calendar year has increased by courses for 2022-2023 (though 2023 dataset is not fully entered yet).",
     "crumbs": [
       "Overall analysis",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
@@ -154,88 +132,99 @@
   {
     "objectID": "satisfaction.html",
     "href": "satisfaction.html",
-    "title": "4  Workshop feedback",
+    "title": "4  Feedback",
     "section": "",
-    "text": "4.1 Executive summary\nTentative results suggest no difference in perception of workshop value by learners among learning formats (in person, hybrid, or online) and generally positive feedback.",
+    "text": "4.1 Executive summary\nFeedback data show no difference in perception of workshop value by learners among formats (in person, hybrid, or virtual). Qualitative (word-cloud illustrations) feedback are generally positive.",
     "crumbs": [
       "Overall analysis",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Workshop feedback</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Feedback</span>"
     ]
   },
   {
     "objectID": "satisfaction.html#quantitative-questions",
     "href": "satisfaction.html#quantitative-questions",
-    "title": "4  Workshop feedback",
+    "title": "4  Feedback",
     "section": "4.2 Quantitative questions",
-    "text": "4.2 Quantitative questions\nFor each question, we examine statistically and graphically (if differences were statistically significant) the rankings divided by instruction format (DSI request 2023/07), request/not, and course/outreach variables. In the future, we may check rankings vs length of course in hours. # TODO need to clean out NA for variables we test, as it errors out in the statistical test (graphs work and just automatically remove)\n\n4.2.1 Do you anticipate that this new knowledge can be applied towards your work?\n\n\n\n\n\n\n\n\n\nThere was no significant difference in perception of learning new knowledge from the workshop among learning formats.\n\n\n[1] FALSE\n\n\n\n\n4.2.2 This workshop was valuable towards your program of study.\nMost participants perceived the workshop as valuable towards their program of study. Interestingly, “disagree” is never chosen by any of our several hundred respondents.\n\n\n\n\n\n\n\n\n\nThere was no difference in perception of the material as “valuable to my program of study” between workshop formats (hybrid, online, or in person).\n\n\n[1] FALSE\n\n\n\n\n4.2.3 This workshop was valuable towards your career.\nMost participants perceived the workshop as valuable towards their career.\n\n\n\n\n\n\n\n\n\nThere was no difference in perception of the material as “valuable to my career” between workshop formats (hybrid, online, or in person).\n\n\n[1] FALSE\n\n\nThere was no difference among career levels (classifications) for perception of value towards their careers.\n\n\n[1] FALSE\n\n\n\n\n4.2.4 This workshop was valuable towards your teaching.\nMore respondents felt the workshops were not applicable towards their teaching but were otherwise positive. As our workshops are research focused, this is probably reasonable.\n\n\n\n\n\n\n\n\n\nThere was no difference in perception of the material as “valuable to my teaching” between workshop formats (hybrid, online, or in person).\n\n\n[1] FALSE\n\n\n\n\n4.2.5 How do you rate your skills after learning about this workshop topic?\nWe have a range of skill ratings after the workshop. This could be an area for improvement but could also be dependent on whether we have targeted the right audience with the right level of materials.\n\n\n\n\n\n\n\n\n\nThere was no difference in perception of future abilities to use skills from the workshop between formats (hybrid, online, or in person).\n\n\n[1] FALSE",
+    "text": "4.2 Quantitative questions\nFor each question, we examine statistically and graphically (if differences were statistically significant) the rankings divided by instruction format (DSI request 2023/07), request/not, and course/outreach variables. In the future, we may check rankings vs length of course in hours.",
     "crumbs": [
       "Overall analysis",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Workshop feedback</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Feedback</span>"
     ]
   },
   {
     "objectID": "satisfaction.html#qualitative-feedback-wordcloud-code",
     "href": "satisfaction.html#qualitative-feedback-wordcloud-code",
-    "title": "4  Workshop feedback",
-    "section": "4.3 Qualitative feedback (Wordcloud code)",
-    "text": "4.3 Qualitative feedback (Wordcloud code)\n\n4.3.1 “What did you like about the workshop?”\n\n\n4.3.2 “What about the workshop needed improvement?”\n\n\n4.3.3 “What other workshop topics would interest you?”\nWe can examine this wordcloud to see if we need to advertise existing workshops more in addition to having ideas about new ones.\n\n\n4.3.4 “Any other comments?”",
+    "title": "4  Feedback",
+    "section": "5.1 Qualitative feedback (Wordcloud code)",
+    "text": "5.1 Qualitative feedback (Wordcloud code)\n\n5.1.1 “What did you like about the workshop?”\n\n\n5.1.2 “What about the workshop needed improvement?”\n\n\n5.1.3 “What other workshop topics would interest you?”\nWe can examine this wordcloud to see if we need to advertise existing workshops more in addition to having ideas about new ones.\n\n\n5.1.4 “Any other comments?”",
     "crumbs": [
       "Overall analysis",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Workshop feedback</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Feedback</span>"
     ]
   },
   {
-    "objectID": "per_workshop_info.html",
-    "href": "per_workshop_info.html",
-    "title": "Per-workshop descriptive statistics",
+    "objectID": "topic_details.html",
+    "href": "topic_details.html",
+    "title": "Topics",
     "section": "",
     "text": "These reports are created on request by the instructor for each workshop. Contact Claire or Brianna if you want one for your workshop.",
     "crumbs": [
-      "Per-workshop descriptive statistics"
+      "Topics"
+    ]
+  },
+  {
+    "objectID": "topics.html",
+    "href": "topics.html",
+    "title": "5  Topics",
+    "section": "",
+    "text": "5.1 Data sources\nWe use only scheduled workshops (i.e., not in a course, not on request outside of a course) in these analyses as it has a statistically significant impact on attendance (Chapter 3). We include only workshops with more than four sessions (two years).",
+    "crumbs": [
+      "Topics",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Topics</span>"
     ]
   },
   {
     "objectID": "VIZ101.html",
     "href": "VIZ101.html",
-    "title": "5  Concepts of Data-Driven Visualization",
+    "title": "6  Concepts of Data-Driven Visualization",
     "section": "",
-    "text": "5.1 Descriptive numbers\nHow many times offered per semester, per year. Number of different instructors.",
+    "text": "6.1 Descriptive numbers\nHow many times offered per semester, per year. Number of different instructors.",
     "crumbs": [
-      "Per-workshop descriptive statistics",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Concepts of Data-Driven Visualization</span>"
+      "Topics",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Concepts of Data-Driven Visualization</span>"
     ]
   },
   {
     "objectID": "VIZ101.html#attendance",
     "href": "VIZ101.html#attendance",
-    "title": "5  Concepts of Data-Driven Visualization",
-    "section": "5.2 Attendance",
-    "text": "5.2 Attendance\n\n5.2.1 Over time\n\n\n5.2.2 By semester",
+    "title": "6  Concepts of Data-Driven Visualization",
+    "section": "6.2 Attendance",
+    "text": "6.2 Attendance\n\n6.2.1 Over time\n\n\n6.2.2 By semester",
     "crumbs": [
-      "Per-workshop descriptive statistics",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Concepts of Data-Driven Visualization</span>"
+      "Topics",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Concepts of Data-Driven Visualization</span>"
     ]
   },
   {
     "objectID": "VIZ101.html#marketing",
     "href": "VIZ101.html#marketing",
-    "title": "5  Concepts of Data-Driven Visualization",
-    "section": "5.3 Marketing",
-    "text": "5.3 Marketing\n\n5.3.1 Over time\n\n\n5.3.2 By semester",
+    "title": "6  Concepts of Data-Driven Visualization",
+    "section": "6.3 Marketing",
+    "text": "6.3 Marketing\n\n6.3.1 Over time\n\n\n6.3.2 By semester",
     "crumbs": [
-      "Per-workshop descriptive statistics",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Concepts of Data-Driven Visualization</span>"
+      "Topics",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Concepts of Data-Driven Visualization</span>"
     ]
   },
   {
     "objectID": "VIZ101.html#satisfaction",
     "href": "VIZ101.html#satisfaction",
-    "title": "5  Concepts of Data-Driven Visualization",
-    "section": "5.4 Satisfaction",
-    "text": "5.4 Satisfaction\n\n5.4.1 Over time\n\n\n5.4.2 By semester",
+    "title": "6  Concepts of Data-Driven Visualization",
+    "section": "6.4 Satisfaction",
+    "text": "6.4 Satisfaction\n\n6.4.1 Over time\n\n\n6.4.2 By semester",
     "crumbs": [
-      "Per-workshop descriptive statistics",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Concepts of Data-Driven Visualization</span>"
+      "Topics",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Concepts of Data-Driven Visualization</span>"
     ]
   },
   {

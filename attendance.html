@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.553">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -134,7 +134,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./descriptive_numbers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Workshop descriptive numbers</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Offerings</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -152,15 +152,15 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./satisfaction.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Workshop feedback</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Feedback</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./per_workshop_info.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Per-workshop descriptive statistics</span></a>
+            <a href="./topic_details.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Topics</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -168,8 +168,14 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./topics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Topics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./VIZ101.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Concepts of Data-Driven Visualization</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Concepts of Data-Driven Visualization</span></span></a>
   </div>
 </li>
       </ul>
@@ -191,7 +197,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./overall_analysis.html">Overall analysis</a></li><li class="breadcrumb-item"><a href="./attendance.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Attendance</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Attendance</span></h1>
+<h1 class="title"><span id="sec-attendance" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Attendance</span></span></h1>
 </div>
 
 
@@ -210,23 +216,30 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="executive-summary" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="executive-summary"><span class="header-section-number">3.1</span> Executive summary</h2>
+<p><strong>Counts of workshop attendance are only influenced by whether a workshop was presented as part of course instruction.</strong> Format (virtual, in-person, hybrid) and marketing did not change attendance counts. Even topics (<a href="topics.html" class="quarto-xref"><span>Chapter 5</span></a>) didn’t impact attendance counts.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="workshop-attendance-by-format-and-request" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="workshop-attendance-by-format-and-request"><span class="header-section-number">3.2</span> Workshop attendance by format and request</h2>
+<section id="per-workshop-attendance-by-format-and-request" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="per-workshop-attendance-by-format-and-request"><span class="header-section-number">3.2</span> Per-workshop attendance by format and request</h2>
 <section id="statistical-analysis" class="level3" data-number="3.2.1">
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="statistical-analysis"><span class="header-section-number">3.2.1</span> Statistical analysis</h3>
-<p>For scheduled workshops, none of the following variables impact attendance numbers in a conditional inference tree analysis. - Format (in person vs virtual vs hybrid, DSI request 2023/07) - academic year - calendar year - semester (spring, summer, or fall) - time of day - workshop topic - multi-day vs single day scheduling</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="attendance_files/figure-html/att_tree-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>When we include whether a workshop was in a course, requested or not, and had a known three-week advertising period or not, only whether a workshop was in a course was still the only deciding factor in increased attendance numbers.</p>
+<p>For scheduled workshops, none of the following variables impact attendance numbers in a conditional inference tree analysis.</p>
+<ul>
+<li><p>format (in person vs virtual vs hybrid)</p></li>
+<li><p>academic year (starts in August, goes through July)</p></li>
+<li><p>calendar year (starts in January)</p></li>
+<li><p>semester (spring, summer, or fall)</p></li>
+<li><p>time of day</p></li>
+<li><p>workshop topic</p></li>
+<li><p>multi-day vs single day scheduling</p></li>
+</ul>
+<p>When we examine all workshops (included on-request visits to classes and on-request workshops), we add the following variables:</p>
+<ul>
+<li><p>workshop was in a course</p></li>
+<li><p>requested or not</p></li>
+<li><p>marketing (had a known three-week advertising period or not)</p></li>
+</ul>
+<p>Whether a workshop was in a course (where students are presumably required to attend) was still the only deciding factor in increased attendance numbers.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -237,9 +250,9 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="figures" class="level3" data-number="3.2.2">
-<h3 data-number="3.2.2" class="anchored" data-anchor-id="figures"><span class="header-section-number">3.2.2</span> Figures</h3>
-<p>Format was not significant, but since it was requested, here is the figure.</p>
+<section id="format" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="format"><span class="header-section-number">3.2.2</span> Format</h3>
+<p>Again, per the conditional inference tree analysis, the workshop format was not significantly different. You can also see this with a different visual analysis using notched box plots. The overlapping “notches” here show that there is no difference between median attendance for scheduled (not on request, not in a class) workshops by format.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -250,10 +263,9 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-</section>
-<section id="workshop-attendance-over-time" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="workshop-attendance-over-time"><span class="header-section-number">3.3</span> Workshop attendance over time</h2>
-<p>The average number of people at each scheduled workshop has stayed the same per calendar year from 2021-2023. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrolment to “make”.</p>
+<section id="workshop-attendance-over-time" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="workshop-attendance-over-time"><span class="header-section-number">3.2.3</span> Workshop attendance over time</h3>
+<p>The median number of people at each scheduled workshop has stayed the same per calendar year from 2021-2023. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrollment to “make”.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -263,14 +275,19 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+</section>
+</section>
+<section id="total-people-reached" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="total-people-reached"><span class="header-section-number">3.3</span> Total people reached</h2>
 <p>The total number of people reached has increased from 2021 to 2022, almost completely due to more people reached via courses. We do not have complete 2023 data as of this writing (11/21/2023 CMC).</p>
 <div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="attendance_files/figure-html/total_reached_over_time-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  Is.Course `2021` `2022`
+  &lt;chr&gt;      &lt;int&gt;  &lt;int&gt;
+1 N            228    259
+2 Y             19    266
+3 Total        247    525</code></pre>
 </div>
 </div>
 <p>The proportion of total people reached each calendar year has increased by courses for 2022-2023 (though 2023 dataset is not fully entered yet).</p>
@@ -283,40 +300,9 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-</section>
-<section id="workshop-helper-load-for-on-request-workshops-over-time" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="workshop-helper-load-for-on-request-workshops-over-time"><span class="header-section-number">3.4</span> Workshop helper load for on-request workshops over time</h2>
-<p>DSI request 2023/07: - TODO: Libraries personnel to attendance ratios for On Request workshops. which high-helper topics requested more over time and do we have enough data yet, are those increasing.</p>
-</section>
-<section id="r-attendance_over_time-echofalse-message-false-warning-false-plot_helpers---last_two_years_attendancelast_two_years_attendancerequested.y-ggplotmapping-aesx-as.factorcalendar.year-y-helperstotal.attendees-fill-topic-geom_boxplotnotch-true-plot_helpers" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> <code>{r attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE} # plot_helpers &lt;- last_two_years_attendance[last_two_years_attendance$Requested.=="Y",] %&gt;% #   ggplot(mapping = aes(x = as.factor(Calendar.Year), #                        y = helpers/Total.Attendees, #                        fill = Topic)) + #   geom_boxplot(notch = TRUE) # plot_helpers #</code></h1>
 <div style="page-break-after: always;"></div>
-<section id="workshop-attendance-by-topic" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="workshop-attendance-by-topic"><span class="header-section-number">4.1</span> Workshop attendance by topic</h2>
-<ul>
-<li>DONE BN: modify to show
-<ul>
-<li>scheduled only</li>
-<li>not on request</li>
-<li>workshops with =&gt;4 runs (two years)</li>
-</ul></li>
-</ul>
-<div style="page-break-after: always;"></div>
-</section>
-<section id="workshop-length-vs-attendance" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="workshop-length-vs-attendance"><span class="header-section-number">4.2</span> Workshop length vs attendance</h2>
-<section id="length-of-session" class="level3" data-number="4.2.1">
-<h3 data-number="4.2.1" class="anchored" data-anchor-id="length-of-session"><span class="header-section-number">4.2.1</span> length of session</h3>
-<ul>
-<li>Low priority: session length vs attendance</li>
-</ul>
-</section>
-<section id="single-day-over-multiple-sessions-vs-two-day-workshops" class="level3" data-number="4.2.2">
-<h3 data-number="4.2.2" class="anchored" data-anchor-id="single-day-over-multiple-sessions-vs-two-day-workshops"><span class="header-section-number">4.2.2</span> Single day over multiple sessions vs two-day workshops</h3>
 
 
-</section>
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -736,8 +722,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./satisfaction.html" class="pagination-link" aria-label="Workshop feedback">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Workshop feedback</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./satisfaction.html" class="pagination-link" aria-label="Feedback">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Feedback</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
