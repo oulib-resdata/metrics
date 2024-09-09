@@ -5,7 +5,12 @@ This section covers all workshops combined.
 ## Data sources
 This consists of four datasets.
 - Registration numbers (pre-workshop interest) from LibCal
-  - Downloaded per calendar (?)
+  - Downloaded per calendar then concatenated (?)
+  - Registered <- read.csv("raw_data/processed_Registered.csv")
 - Attendance from LibInsights for Course-integrated instruction
+  - attendance_named <- raw_data/processed_attendance_named.csv
 - Attendance from LibInsights for Outreach
+  - 
 - Post-workshop surveys (feedback and satisfaction) from LibWizard
+  - postworkshopsurveys_named <- read.csv("raw_data/processed_postworkshopsurveys_named.csv")
+
