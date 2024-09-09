@@ -1,3 +1,11 @@
 # Overall analysis
 
 This section covers all workshops combined.
+
+## Data sources
+This consists of four datasets.
+- Registration numbers (pre-workshop interest) from LibCal
+  - Downloaded per calendar (?)
+- Attendance from LibInsights for Course-integrated instruction
+- Attendance from LibInsights for Outreach
+- Post-workshop surveys (feedback and satisfaction) from LibWizard
