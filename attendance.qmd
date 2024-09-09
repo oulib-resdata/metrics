@@ -9,8 +9,8 @@ library(partykit)   # for decision tree statistical analysis
 library(tidyverse)  #for data munging including dates
 library(viridis)    #color scheme
 
-last_two_years_attendance <- read.csv("raw_data/processed_last_two_years_attendance.csv")
-# read.csv("raw_data/processed_attendance_named.csv")
+attendance <- read.csv("raw_data/processed_attendance_named.csv")
+# read.csv("raw_data/processed_last_two_years_attendance.csv")
 # read.csv("raw_data/processed_joined_post.csv")
 # read.csv("raw_data/processed_postworkshopsurveys_named.csv")
 ```
@@ -44,27 +44,27 @@ For scheduled workshops, none of the following variables impact attendance numbe
 ```{r att_tree, echo=FALSE, message = FALSE, warning = FALSE, output = FALSE}
 library(ggplot2)    #for plots
 library(partykit)    #for ctree
-
+this_year <- format(as.Date(Sys.Date(), format="%Y/%m/%d/"),"%Y")
+last_two_years <- as.numeric(this_year)-2
 att_tree <- ctree(Total.Attendees ~ 
                     as.factor(Location.of.Outreach) +
-                   #as.factor(Requested.) +
                     as.factor(Academic.Year) + 
                     as.factor(Calendar.Year)+
                     as.factor(Topic) + 
-                    as.factor(Multiple.Days.)+
+                    as.factor(Multiple.Days.) +
                     as.factor(Semester) +
-                    #as.factor(Is.Course) +
-                    as.factor(Known.three.weeks.advertising)# +
-#                    hour
+                    as.factor(Known.three.weeks.advertising) +
+                    hour
                   ,
-                  data = last_two_years_attendance [
-                    #last_two_years_attendance$Known.three.weeks.advertising == "Y" &
-                                                      last_two_years_attendance$Is.Course == "N" &
-                                                      last_two_years_attendance$Requested. == "N",],
-                  control = ctree_control(
-                               alpha = 0.05)) #cutoff for splits is p = 0.05 significance
+                  data = attendance [
+                    attendance$Is.Course == "N" &
+                      attendance$Requested. == "N" &
+                      attendance$Calendar.Year <= this_year &
+                      attendance$Calendar.Year >= last_two_years,]
+                  )
 
 plot(att_tree)
+print(paste("Workshops from", last_two_years, "to", this_year, "(last two calendar years)"))
 ```
 
 When we examine all workshops (included on-request visits to classes and on-request workshops), we add the following variables:
@@ -80,18 +80,20 @@ Whether a workshop was in a course (where students are presumably required to at
 ```{r att_tree2, echo=FALSE, message = FALSE, warning = FALSE}
 att_tree2 <- ctree(Total.Attendees ~ 
                     as.factor(Location.of.Outreach) +
-                    as.factor(Requested.) +
                     as.factor(Academic.Year) + 
                     as.factor(Calendar.Year)+
                     as.factor(Topic) + 
                     as.factor(Multiple.Days.)+
                     as.factor(Semester) +
+                    hour +
                     as.factor(Is.Course) +
-                    as.factor(Known.three.weeks.advertising)
+                    as.factor(Known.three.weeks.advertising)+
+                    as.factor(Requested.)
                   ,
-                  data = last_two_years_attendance,
-                  control = ctree_control(
-                               alpha = 0.05)) #cutoff for splits is p = 0.05 significance
+                  data = attendance[
+                      attendance$Calendar.Year <= this_year &
+                      attendance$Calendar.Year >= last_two_years,]
+                  )
 
 plot(att_tree2)
 ```
@@ -101,8 +103,8 @@ plot(att_tree2)
 Again, per the conditional inference tree analysis, the workshop format was not significantly different. You can also see this with a different visual analysis using notched box plots. The overlapping "notches" here show that there is no difference between median attendance for scheduled (not on request, not in a class) workshops by format.
 
 ```{r attendance_by_format_request, echo=FALSE, message = FALSE, warning = FALSE}
-last_two_years_attendance[last_two_years_attendance$Is.Course == "N" &
-                             last_two_years_attendance$Requested. == "N",]%>%
+attendance[attendance$Is.Course == "N" &
+                             attendance$Requested. == "N",]%>%
   ggplot(mapping = aes(x = Location.of.Outreach,
                        y = Total.Attendees))+
   geom_boxplot(notch = TRUE) + 
@@ -118,8 +120,8 @@ last_two_years_attendance[last_two_years_attendance$Is.Course == "N" &
 The median number of people at each scheduled workshop has stayed the same per calendar year from 2021-2023. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrollment to "make".
 
 ```{r avg_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
-plot_time <- last_two_years_attendance %>% 
-  ggplot(mapping = aes(x = as.factor(Calendar.Year),
+plot_time <- attendance %>% 
+  ggplot(mapping = aes(x = as.factor(year),
                        y = Total.Attendees,
                        fill = Is.Course)) +
   geom_boxplot(notch = TRUE) +
@@ -136,13 +138,13 @@ The total number of people reached has increased from 2021 to 2022, almost compl
 
 ```{r, total_reached_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 
-last_two_years_attendance[last_two_years_attendance$Calendar.Year!=2023,] %>%
-  group_by(Calendar.Year, Is.Course) %>%
+attendance %>%
+  group_by(year, Is.Course) %>%
   summarize(total_reached = sum(Total.Attendees)) %>%
   bind_rows(summarise(.,
                       across(where(is.numeric), sum),
                       across(where(is.character), ~"Total")))%>% # https://stackoverflow.com/a/50322272
-  pivot_wider(names_from = Calendar.Year,
+  pivot_wider(names_from =  year,
               values_from = total_reached)
   
 ```
@@ -151,12 +153,12 @@ The proportion of total people reached each calendar year has increased by cours
 
 ```{r, prop_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 # https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
-last_two_years_attendance %>%
-  group_by(Calendar.Year,
+attendance %>%
+  group_by(year,
            Is.Course) %>%
   summarize(count_per_each = n()) %>%
 ggplot(
-       aes(x = Calendar.Year,
+       aes(x = year,
            y = count_per_each,
            fill = Is.Course)) +
   geom_col(position = "fill")+
@@ -211,7 +213,7 @@ ggplot(
 DSI request 2023/07: - TODO: Libraries personnel to attendance ratios for On Request workshops. which high-helper topics requested more over time and do we have enough data yet, are those increasing.
 
 ```{r attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
- # plot_helpers <- last_two_years_attendance[last_two_years_attendance$Requested.=="Y",] %>%
+ # plot_helpers <- attendance[attendance$Requested.=="Y",] %>%
  #   ggplot(mapping = aes(x = as.factor(Calendar.Year),
  #                        y = helpers/Total.Attendees,
  #                        fill = Topic)) +
