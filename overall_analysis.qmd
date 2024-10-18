@@ -48,6 +48,9 @@ topics_complete_variations_cleaned <-topics_complete_variations %>%
   dplyr::distinct(WorkshopNameVariations, WorkshopCode)
 
 # Must attach standard titles to all three datasets (registrations, attendance, and post-workshop surveys) to allow joining the three based on topic and date.
+
+# 10/18/2024 cmc TODO Add the LibInsights titles to confirm they are the same.
+
 ```
 
 
@@ -195,6 +198,7 @@ write.csv(attendance_named,
 
 - Post-workshop surveys
 
+- Deal with all these data (attendance data are in ok now)
 
 ```{r}
 # Data for this report are gathered from three sources: pre-registration questionnaire when people register, attendance numbers entered by workshop instructors in LibInsights, and post-workshop surveys.  Registration numbers include learner names and emails and so all three datasets are kept on a private OSF repository and must be downloaded there.  Do not include these in github.
@@ -202,6 +206,9 @@ write.csv(attendance_named,
 ###########
 # Load data from OSF
 ###########
+
+# TODO 10/18/2024 cmc add logic to only run this if files not loaded.
+
 # Authenticate
 # Your OSF PAT should be in .REnviron file following these instructions:
 # https://docs.ropensci.org/osfr/reference/osf_auth.html
