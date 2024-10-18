@@ -21,7 +21,7 @@ topics_desc <- attendance_named %>%
            Is.Course,
            Requested.
       ) %>%
-  summarize(topics_count = n_distinct(Name.of.Workshop))
+  summarize(topics_count = n_distinct(WorkshopCode))
 
 
 ggplot(data = topics_desc,
@@ -38,15 +38,17 @@ While we offer many scheduled workshops each semester (upper left panel, "Not re
 
 ```{r joined_post, echo=FALSE, message = FALSE, warning = FALSE}
 
-to_string <- as_labeller(c(`N` = "Regularly Scheduled", `Y` = "Requested"))
+to_string <- as_labeller(c(`No` = "Regularly Scheduled", `Yes` = "Requested",
+                           `Unknown` = "Request vs schedule unknown"))
 
 ggplot(data = attendance_named,
        mapping = aes(x = year,
                      fill = Is.Course))+
   geom_bar()+
-  facet_grid(Is.Course ~ Requested.)+
+  facet_wrap(. ~ Requested.,
+             labeller = to_string)+
   labs(x = "Calendar year",
-       y = "Number of workshops offered",
+       y = "Number of workshops conducted",
        fill = "Within a course")
 ```
 
@@ -59,7 +61,6 @@ We have increased the number of topics we've brought "on request" to groups and 
 ```{r workshop_descriptive_stats_topics, echo=FALSE, message = FALSE, warning = FALSE}
 topics_desc <- attendance_named %>%
   group_by(year,
-           Semester,
            Is.Course,
            Requested.
       ) %>%

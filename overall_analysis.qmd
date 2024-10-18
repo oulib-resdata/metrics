@@ -8,13 +8,23 @@ This consists of four datasets.
   - Downloaded per calendar then concatenated (?)
   - Registered <- read.csv("raw_data/processed_Registered.csv")
 - Attendance from LibInsights for Course-integrated instruction
-  - attendance_named <- raw_data/processed_attendance_named.csv
+  - How to get this data via download from "Course Integrated Library Instruction"
+    - Method 1
+      - Filter by Custom Date Range (July 1, 2018, to present)
+      - Add Additional Report Filter "Name of Workshop" "Is Not" "Null", then click "Add this filter".
+      - Click "generate report".
+    - Method 2
+      - Use saved filter "Workshop Filters (CMC)"
+    - Method 2
+      - Use saved filter "Workshops in Courses (CMC)"
+    - After either method, click "Reports" tab and then green button "Export Data to CSV"
+    - Save the file in OSF as /raw_data/attendance_courses.csv
 - Attendance from LibInsights for Outreach
   - How to get this data via download from "Outreach and Programming Form Analysis"
     - Method 1
       - Filter by Custom Date Range (July 1, 2018, to present)
       - Add Additional Report Filter "Type of Outreach" "Is" "Workshop", then click "Add this filter".
-      - Click "generate this report".
+      - Click "generate report".
     - Method 2
       - Use saved filter "Workshop Filters (CMC)"
   - After either method, click "Reports" tab and then green button "Export Data to CSV"
@@ -23,6 +33,21 @@ This consists of four datasets.
   - postworkshopsurveys_named <- read.csv("raw_data/processed_postworkshopsurveys_named.csv")
 
 ## Data processing
+
+
+Titles have varied over time with marketing experiments, typos, and accidental changes.  This code assigns a standardized code between each topic.
+
+```{r}
+topics_complete_variations <- read.csv("./workshop_metadata.csv")
+
+# remove any accidental duplicates of name variations (otherwise will create a many-to-many join below in next step)
+topics_complete_variations_cleaned <-topics_complete_variations %>%
+  dplyr::distinct(WorkshopNameVariations, WorkshopCode)
+
+# Must attach standard titles to all three datasets (registrations, attendance, and post-workshop surveys) to allow joining the three based on topic and date.
+```
+
+
 The four raw datasets are combined and cleaned into three working datasets.
 
 - Registration numbers
@@ -36,53 +61,124 @@ The four raw datasets are combined and cleaned into three working datasets.
 # Attendance data is created by combining Course Instruction attendance data from LibInsights and Outreach Instruction attendance data from LibInsights.  It can be filtered by columns such as date, year, month, instructor, and workshop topic.
 ###########
 
+# Outreach
 attendance_outreach <- read.csv("raw_data/attendance_outreach.csv",
                                 header=TRUE,
                                 stringsAsFactors=FALSE)
-attendance_outreach$Is.Course <- "N"
+attendance_outreach$Is.Course <- "Not a course"
+attendance_outreach$Requested.[is.na(attendance_outreach$Requested.)] <- "Unknown"
+attendance_outreach$Requested.[attendance_outreach$Requested.==""] <- "Unknown"
 
-attendance_named <- attendance_outreach #need to dplyr::row_bind but for now testing columsn of one dataset
+# Courses
+attendance_courses <- read.csv("raw_data/attendance_courses.csv",
+                                header=TRUE,
+                                stringsAsFactors=FALSE)
+attendance_courses$Is.Course <- "Within a course"
+attendance_courses$Requested. <- "Yes"
+attendance_courses$Total.Attendees <- attendance_courses$Total.Attendance
 
 
 ###########
 # We clean dates out by weekday, year, month, day, and times for later analysis and data subsetting.
 ###########
 
+# Outreach
+
 # Month, day, year, hour, minute, seconds
-attendance_named$Event.Date.and.Time_2 <- ymd_hms(attendance_named$Event.Date.and.Time,
-                                                           truncated = 3)
+attendance_outreach$Event.Date.and.Time_2 <- ymd_hms(attendance_outreach$Event.Date.and.Time,
+                                                    truncated = 3)
 
 
 # separate year, month, date, times
-attendance_named$year <- year(attendance_named$Event.Date.and.Time_2)
-attendance_named$month <- month(attendance_named$Event.Date.and.Time_2)
-attendance_named$day <- day(attendance_named$Event.Date.and.Time_2)
-attendance_named$wday <- wday(attendance_named$Event.Date.and.Time_2,
+attendance_outreach$year <- year(attendance_outreach$Event.Date.and.Time_2)
+attendance_outreach$month <- month(attendance_outreach$Event.Date.and.Time_2)
+attendance_outreach$day <- day(attendance_outreach$Event.Date.and.Time_2)
+attendance_outreach$wday <- wday(attendance_outreach$Event.Date.and.Time_2,
                                       week_start = 1, #1 = Monday,
                                       label = TRUE    # days of weeks as characters
                                       )
-attendance_named$hour <-as.numeric(
-  format(attendance_named$Event.Date.and.Time_2, "%H"))
+attendance_outreach$hour <-as.numeric(
+  format(attendance_outreach$Event.Date.and.Time_2, "%H"))
 
-attendance_named$Date <-
-  format.Date(attendance_named$Event.Date.and.Time_2, "%m/%d/%Y")
+attendance_outreach$Date <-
+  format.Date(attendance_outreach$Event.Date.and.Time_2, "%m/%d/%Y")
 
 # convert 00 hour to NA
-# attendance_named[attendance_named$hour==00, "hour"] <- NA
+# attendance_outreach[attendance_outreach$hour==00, "hour"] <- NA
 
-attendance_named$hour <- as.numeric(attendance_named$hour)
+attendance_outreach$hour <- as.numeric(attendance_outreach$hour)
 
 # Semester defined as spring (month 1-5), summer (month 6-7), fall (month 8-12)
 
-attendance_named$Semester[attendance_named$month>0&
-                            attendance_named$month<6] <- "Spring"
-attendance_named$Semester[attendance_named$month>5&
-                            attendance_named$month<8] <- "Spring"
-attendance_named$Semester[attendance_named$month>7&
-                            attendance_named$month<=12] <- "Spring"
+attendance_outreach$Semester[attendance_outreach$month>0&
+                            attendance_outreach$month<6] <- "Spring"
+attendance_outreach$Semester[attendance_outreach$month>5&
+                            attendance_outreach$month<8] <- "Spring"
+attendance_outreach$Semester[attendance_outreach$month>7&
+                            attendance_outreach$month<=12] <- "Spring"
+
+
+# Courses
+# Month, day, year, hour, minute, seconds
+attendance_courses$Event.Date.and.Time_2 <-
+  ymd_hms(attendance_courses$Session.Date,
+          truncated = 3)
+
+
+# separate year, month, date, times
+attendance_courses$year <- year(attendance_courses$Event.Date.and.Time_2)
+attendance_courses$month <- month(attendance_courses$Event.Date.and.Time_2)
+attendance_courses$day <- day(attendance_courses$Event.Date.and.Time_2)
+attendance_courses$wday <- wday(attendance_courses$Event.Date.and.Time_2,
+                                      week_start = 1, #1 = Monday,
+                                      label = TRUE    # days of weeks as characters
+                                      )
+attendance_courses$hour <-as.numeric(
+  format(attendance_courses$Event.Date.and.Time_2, "%H"))
+
+attendance_courses$Date <-
+  format.Date(attendance_courses$Event.Date.and.Time_2, "%m/%d/%Y")
+
+# convert 00 hour to NA
+# attendance_courses[attendance_courses$hour==00, "hour"] <- NA
+
+attendance_courses$hour <- as.numeric(attendance_courses$hour)
+
+# Semester defined as spring (month 1-5), summer (month 6-7), fall (month 8-12)
+
+attendance_courses$Semester[attendance_courses$month>0&
+                            attendance_courses$month<6] <- "Spring"
+attendance_courses$Semester[attendance_courses$month>5&
+                            attendance_courses$month<8] <- "Spring"
+attendance_courses$Semester[attendance_courses$month>7&
+                            attendance_courses$month<=12] <- "Spring"
+
+
 
 ###########
-# Write to files for use in qmds.
+# Join outreach and course datasets
+###########
+
+# using dplyr's bind_rows instead of cbind ensures all columns are kept, including those unique to each dataset
+
+attendance_named <- dplyr::bind_rows(attendance_outreach,
+                                    attendance_courses)
+                                    
+
+###########
+
+## attendance
+attendance_named <- left_join(attendance_named,
+                                 topics_complete_variations_cleaned,
+                                 by =  c("Name.of.Workshop" = "WorkshopNameVariations")) %>% 
+  dplyr::filter(!is.na(id))
+
+
+
+
+
+###########
+# Write to file for use in qmds.
 ###########
 # Attendance
 write.csv(attendance_named,
@@ -234,28 +330,12 @@ postworkshopsurveys_wide$ReducedCategories <- postworkshopsurveys_wide$How.did.y
 postworkshopsurveys_wide$ReducedCategories[!(postworkshopsurveys_wide$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
 postworkshopsurveys_wide$OtherDescriptions[!(postworkshopsurveys_wide$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.[!(postworkshopsurveys_wide$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
 
-###########
-# Titles have varied over time with marketing experiments, typos, and accidental changes.  This code assigns a standardized code between each topic.
-###########
 
-topics_complete_variations <- read.csv("./workshop_metadata.csv")
-
-# remove any accidental duplicates of name variations (otherwise will create a many-to-many join below in next step)
-topics_complete_variations_cleaned <-topics_complete_variations %>%
-  dplyr::distinct(WorkshopNameVariations, WorkshopCode)
-
-# Must attach standard titles to all three datasets (registrations, attendance, and post-workshop surveys) to allow joining the three based on topic and date (date will be cleaned in next code chunk).
-
+                                 
 ## registrations
 registrations_named <- left_join(Registered,
                                  topics_complete_variations_cleaned,
                                  by =  c("Title" = "WorkshopNameVariations"))
-## attendance
-attendance_named <- left_join(workshop,
-                                 topics_complete_variations_cleaned,
-                                 by =  c("Topic" = "WorkshopNameVariations")) %>% 
-  dplyr::filter(!is.na(id))
-
 
 
 ## postworkshop surveys

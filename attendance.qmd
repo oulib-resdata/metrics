@@ -29,8 +29,6 @@ For scheduled workshops, none of the following variables impact attendance numbe
 
 -   format (in person vs virtual vs hybrid)
 
--   academic year (starts in August, goes through July)
-
 -   calendar year (starts in January)
 
 -   semester (spring, summer, or fall)
@@ -47,24 +45,21 @@ library(partykit)    #for ctree
 this_year <- format(as.Date(Sys.Date(), format="%Y/%m/%d/"),"%Y")
 last_two_years <- as.numeric(this_year)-2
 att_tree <- ctree(Total.Attendees ~ 
-                    as.factor(Location.of.Outreach) +
-                    as.factor(Academic.Year) + 
-                    as.factor(Calendar.Year)+
-                    as.factor(Topic) + 
-                    as.factor(Multiple.Days.) +
+                    as.factor(Format) +
+                    as.factor(year)+
+                    as.factor(WorkshopCode) + 
+                    as.factor(Is.this.visit.part.of.a.series.) +
                     as.factor(Semester) +
-                    as.factor(Known.three.weeks.advertising) +
-                    hour
-                  ,
+                    hour,
                   data = attendance [
-                    attendance$Is.Course == "N" &
-                      attendance$Requested. == "N" &
-                      attendance$Calendar.Year <= this_year &
-                      attendance$Calendar.Year >= last_two_years,]
+                    attendance$Is.Course == "Not a course" &
+                      attendance$Requested. == "No"&
+                      attendance$year <= this_year &
+                      attendance$year >= last_two_years,]
                   )
 
 plot(att_tree)
-print(paste("Workshops from", last_two_years, "to", this_year, "(last two calendar years)"))
+#print(paste("Workshops from", last_two_years, "to", this_year, "(last two calendar years)"))
 ```
 
 When we examine all workshops (included on-request visits to classes and on-request workshops), we add the following variables:
@@ -73,26 +68,22 @@ When we examine all workshops (included on-request visits to classes and on-requ
 
 -   requested or not
 
--   marketing (had a known three-week advertising period or not)
-
 Whether a workshop was in a course (where students are presumably required to attend) was still the only deciding factor in increased attendance numbers.
 
 ```{r att_tree2, echo=FALSE, message = FALSE, warning = FALSE}
 att_tree2 <- ctree(Total.Attendees ~ 
-                    as.factor(Location.of.Outreach) +
-                    as.factor(Academic.Year) + 
-                    as.factor(Calendar.Year)+
-                    as.factor(Topic) + 
-                    as.factor(Multiple.Days.)+
+                    as.factor(Format) +
+                    as.factor(year)+
+                    as.factor(WorkshopCode) + 
+                    as.factor(Is.this.visit.part.of.a.series.)+
                     as.factor(Semester) +
                     hour +
                     as.factor(Is.Course) +
-                    as.factor(Known.three.weeks.advertising)+
                     as.factor(Requested.)
                   ,
                   data = attendance[
-                      attendance$Calendar.Year <= this_year &
-                      attendance$Calendar.Year >= last_two_years,]
+                      attendance$year <= this_year &
+                      attendance$year >= last_two_years,]
                   )
 
 plot(att_tree2)
@@ -103,9 +94,9 @@ plot(att_tree2)
 Again, per the conditional inference tree analysis, the workshop format was not significantly different. You can also see this with a different visual analysis using notched box plots. The overlapping "notches" here show that there is no difference between median attendance for scheduled (not on request, not in a class) workshops by format.
 
 ```{r attendance_by_format_request, echo=FALSE, message = FALSE, warning = FALSE}
-attendance[attendance$Is.Course == "N" &
-                             attendance$Requested. == "N",]%>%
-  ggplot(mapping = aes(x = Location.of.Outreach,
+attendance[attendance$Is.Course == "Not a course" &
+                             attendance$Requested. == "No",]%>%
+  ggplot(mapping = aes(x = Format,
                        y = Total.Attendees))+
   geom_boxplot(notch = TRUE) + 
   labs(x = "Workshop format",
@@ -117,7 +108,7 @@ attendance[attendance$Is.Course == "N" &
 
 ### Workshop attendance over time
 
-The median number of people at each scheduled workshop has stayed the same per calendar year from 2021-2023. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrollment to "make".
+The median number of people at each scheduled workshop has declined slightly per calendar year from 2021-2024. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrollment to "make".
 
 ```{r avg_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 plot_time <- attendance %>% 
@@ -140,7 +131,7 @@ The total number of people reached has increased from 2021 to 2022, almost compl
 
 attendance %>%
   group_by(year, Is.Course) %>%
-  summarize(total_reached = sum(Total.Attendees)) %>%
+  summarize(total_reached = sum(Total.Attendees, na.rm = TRUE)) %>%
   bind_rows(summarise(.,
                       across(where(is.numeric), sum),
                       across(where(is.character), ~"Total")))%>% # https://stackoverflow.com/a/50322272
@@ -149,7 +140,7 @@ attendance %>%
   
 ```
 
-The proportion of total people reached each calendar year has increased by courses for 2022-2023 (though 2023 dataset is not fully entered yet).
+The proportion of total people reached each calendar year in courses has increased each calendar year since 2022.
 
 ```{r, prop_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 # https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
