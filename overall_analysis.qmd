@@ -38,6 +38,9 @@ This consists of four datasets.
 Titles have varied over time with marketing experiments, typos, and accidental changes.  This code assigns a standardized code between each topic.
 
 ```{r}
+library(dplyr)
+
+
 topics_complete_variations <- read.csv("./workshop_metadata.csv")
 
 # remove any accidental duplicates of name variations (otherwise will create a many-to-many join below in next step)
@@ -57,6 +60,8 @@ The four raw datasets are combined and cleaned into three working datasets.
   - Course and Outreach datasets are each given a column for Is.Course (Y = Course, N = Outreach) before being combined.
 
 ```{r}
+library(lubridate)
+
 ###########
 # Attendance data is created by combining Course Instruction attendance data from LibInsights and Outreach Instruction attendance data from LibInsights.  It can be filtered by columns such as date, year, month, instructor, and workshop topic.
 ###########
@@ -201,24 +206,25 @@ write.csv(attendance_named,
 # Your OSF PAT should be in .REnviron file following these instructions:
 # https://docs.ropensci.org/osfr/reference/osf_auth.html
 
-
-## Retrieve project
-osf_node <- osf_retrieve_node("qjkvf")
-
-## List files in project
-osf_files <- osf_ls_files(osf_node)
-
-## Download the files
-osf_download(x = osf_files,
-             # CHOOSE IF RUNNING FROM RMD FILE
-             #             path = "..", #default save to directory above scripts
-             # CHOOSE IF RUNNING FROM R CONSOLE
-             path = NULL, #default save to local working directory
-             recurse = TRUE, #download all nested files
-             conflicts = "overwrite", #OSF is the canonical version
-             progress = TRUE #show progress bar
-)
-
+# library(osfr)
+# 
+# ## Retrieve project
+# osf_node <- osf_retrieve_node("qjkvf")
+# 
+# ## List files in project
+# osf_files <- osf_ls_files(osf_node)
+# 
+# ## Download the files
+# osf_download(x = osf_files,
+#              # CHOOSE IF RUNNING FROM RMD FILE
+#              #             path = "..", #default save to directory above scripts
+#              # CHOOSE IF RUNNING FROM R CONSOLE
+#              path = NULL, #default save to local working directory
+#              recurse = TRUE, #download all nested files
+#              conflicts = "overwrite", #OSF is the canonical version
+#              progress = TRUE #show progress bar
+# )
+# 
 
 
 ###########
@@ -241,7 +247,7 @@ Registered <- rbind(Room339,
 
 
 ###########
-# Post-workshop survey data are from a subset of learners who attended and also filled out a survey.  In a few cases we forget to adminster the survey or there's not enough time, or individuals opt out even when physically present in the room.
+# Post-workshop survey data are from a subset of learners who attended and also filled out a survey.  In a few cases we forget to administer the survey or there's not enough time, or individuals opt out even when physically present in the room.
 ###########
 
 # Post-workshop surveys from libwizard only
@@ -436,9 +442,4 @@ write.csv(Registered,
           file = "raw_data/processed_Registered.csv",
           row.names = FALSE)
 
-############
-# ultimately get rid of this one, do it by filtering in the analysis itself.
-write.csv(last_two_years_attendance,
-          file = "raw_data/processed_last_two_years_attendance.csv",
-          row.names = FALSE)
 ```

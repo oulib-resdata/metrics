@@ -25,15 +25,13 @@ attendance <- read.csv("raw_data/processed_attendance_named.csv")
 
 ### Statistical analysis
 
-For scheduled workshops, none of the following variables impact attendance numbers in a conditional inference tree analysis.
+For scheduled workshops, format and year impact attendance numbers in a conditional inference tree analysis.  Virtual and hybrid workshops get generally higher numbers.  Within in-person workshops, the most recent two years (2023-2024) have lowest numbers attending per workshop. 
 
 -   format (in person vs virtual vs hybrid)
 
 -   calendar year (starts in January)
 
 -   semester (spring, summer, or fall)
-
--   time of day
 
 -   workshop topic
 
@@ -49,8 +47,8 @@ att_tree <- ctree(Total.Attendees ~
                     as.factor(year)+
                     as.factor(WorkshopCode) + 
                     as.factor(Is.this.visit.part.of.a.series.) +
-                    as.factor(Semester) +
-                    hour,
+                    as.factor(Semester),
+                   # hour,
                   data = attendance [
                     attendance$Is.Course == "Not a course" &
                       attendance$Requested. == "No"&
@@ -68,7 +66,7 @@ When we examine all workshops (included on-request visits to classes and on-requ
 
 -   requested or not
 
-Whether a workshop was in a course (where students are presumably required to attend) was still the only deciding factor in increased attendance numbers.
+Whether a workshop was in a course (where students are presumably required to attend) was the most dramatic factor in increased attendance numbers. For workshops not in a course, virtual and hybrid workshops have the highest attendance.
 
 ```{r att_tree2, echo=FALSE, message = FALSE, warning = FALSE}
 att_tree2 <- ctree(Total.Attendees ~ 
@@ -77,7 +75,7 @@ att_tree2 <- ctree(Total.Attendees ~
                     as.factor(WorkshopCode) + 
                     as.factor(Is.this.visit.part.of.a.series.)+
                     as.factor(Semester) +
-                    hour +
+                    # hour +
                     as.factor(Is.Course) +
                     as.factor(Requested.)
                   ,
@@ -91,7 +89,7 @@ plot(att_tree2)
 
 ### Format
 
-Again, per the conditional inference tree analysis, the workshop format was not significantly different. You can also see this with a different visual analysis using notched box plots. The overlapping "notches" here show that there is no difference between median attendance for scheduled (not on request, not in a class) workshops by format.
+Ignoring all other factors, the workshop format was not significantly different. You can also see this with a different visual analysis using notched box plots. The overlapping "notches" here show that there is no difference between median attendance for scheduled (not on request, not in a class) workshops by format.
 
 ```{r attendance_by_format_request, echo=FALSE, message = FALSE, warning = FALSE}
 attendance[attendance$Is.Course == "Not a course" &
@@ -125,7 +123,7 @@ plot_time
 
 ## Total people reached
 
-The total number of people reached has increased from 2021 to 2022, almost completely due to more people reached via courses. We do not have complete 2023 data as of this writing (11/21/2023 CMC).
+The total number of people reached has no strong trends since 2021.
 
 ```{r, total_reached_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 
@@ -140,7 +138,7 @@ attendance %>%
   
 ```
 
-The proportion of total people reached each calendar year in courses has increased each calendar year since 2022.
+The proportion of total people reached each calendar year in courses peaked in 2020, declined, and then has increased each calendar year since 2021.
 
 ```{r, prop_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 # https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
