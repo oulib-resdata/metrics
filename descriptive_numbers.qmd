@@ -21,7 +21,7 @@ topics_desc <- attendance_named %>%
            Is.Course,
            Requested.
       ) %>%
-  summarize(topics_count = n_distinct(WorkshopCode))
+  summarize(topics_count = n_distinct(Name.of.Workshop))
 
 
 ggplot(data = topics_desc,
