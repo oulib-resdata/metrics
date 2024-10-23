@@ -32,6 +32,48 @@ This consists of four datasets.
 - Post-workshop surveys (feedback and satisfaction) from LibWizard
   - postworkshopsurveys_named <- read.csv("raw_data/processed_postworkshopsurveys_named.csv")
 
+## Data download from OSF
+
+```{r}
+# Data for this report are gathered from three sources: pre-registration questionnaire when people register, attendance numbers entered by workshop instructors in LibInsights, and post-workshop surveys.  Registration numbers include learner names and emails and so all three datasets are kept on a private OSF repository and must be downloaded there.  Do not include these in github.
+
+###########
+# Load data from OSF
+###########
+
+# TODO 10/18/2024 cmc add logic to only run this if files not loaded.
+# https://www.statology.org/r-check-if-file-exists/
+
+# Authenticate
+# Your OSF PAT should be in .REnviron file following these instructions:
+# https://docs.ropensci.org/osfr/reference/osf_auth.html
+
+if(file.exists("raw_data/README.md")){
+  print("OSF data already downloaded.")
+} else {
+  print("Download it!")
+
+library(osfr)
+
+# ## Retrieve project
+osf_node <- osf_retrieve_node("qjkvf")
+
+## List files in project
+osf_files <- osf_ls_files(osf_node)
+
+## Download the files
+osf_download(x = osf_files,
+              path = NULL, #default save to local working directory
+              recurse = TRUE, #download all nested files
+              conflicts = "overwrite", #OSF is the canonical version
+              progress = TRUE #show progress bar
+ )
+}
+
+```
+
+
+
 ## Data processing
 
 
@@ -200,40 +242,8 @@ write.csv(attendance_named,
 
 - Deal with all these data (attendance data are in ok now)
 
+
 ```{r}
-# Data for this report are gathered from three sources: pre-registration questionnaire when people register, attendance numbers entered by workshop instructors in LibInsights, and post-workshop surveys.  Registration numbers include learner names and emails and so all three datasets are kept on a private OSF repository and must be downloaded there.  Do not include these in github.
-
-###########
-# Load data from OSF
-###########
-
-# TODO 10/18/2024 cmc add logic to only run this if files not loaded.
-
-# Authenticate
-# Your OSF PAT should be in .REnviron file following these instructions:
-# https://docs.ropensci.org/osfr/reference/osf_auth.html
-
-# library(osfr)
-# 
-# ## Retrieve project
-# osf_node <- osf_retrieve_node("qjkvf")
-# 
-# ## List files in project
-# osf_files <- osf_ls_files(osf_node)
-# 
-# ## Download the files
-# osf_download(x = osf_files,
-#              # CHOOSE IF RUNNING FROM RMD FILE
-#              #             path = "..", #default save to directory above scripts
-#              # CHOOSE IF RUNNING FROM R CONSOLE
-#              path = NULL, #default save to local working directory
-#              recurse = TRUE, #download all nested files
-#              conflicts = "overwrite", #OSF is the canonical version
-#              progress = TRUE #show progress bar
-# )
-# 
-
-
 ###########
 # Registration data has to be imported per-room from LibCal.
 ###########
