@@ -1,184 +1,182 @@
-WorkshopCode,WorkshopNameVariations,CurrentlyUsedName,,Topic
-BACKUPS101,Backups,FALSE,,
-BACKUPS101,Keeping Your Research Safe with Backups,FALSE,,
-BACKUPS101,Love Data Week - Survival Skills: Keep Your Research Safe with Backups,FALSE,,
-BACKUPS101,Survival Skills 101: Back-ups,FALSE,,
-BACKUPS101,Survival Skills: Backups,TRUE,,
-BACKUPS101,Survival Skills: Backups 101,FALSE,,
-BACKUPS101,Survival Skills: Keep Your Research Safe with Backups,FALSE,,
-BBASH,Bash for Beginners,FALSE,,
-BBASH,Intro to Unix Shell (Software Carpentries On-line),FALSE,,
-BBASH,Introduction to the Unix/Linux Shell,TRUE,,
-BBASH,Introduction to the Unix/Linux Shell On-line,FALSE,,
-BBASH,Standalone Bash,FALSE,,
-BBASH,Unix Shell (Bash) for Beginners,FALSE,,
-BBASH,Unix/Bash Shell,FALSE,,
-BLATEX,Beginner LaTeX,TRUE,,
-BLATEX,Beginner LaTeX Workshop,FALSE,,
-BLATEX,LaTeX,FALSE,,
-COMP101,Survival Skills: Using Computers for Research,TRUE,,
-COMP101,Using comptuers,FALSE,,
-COMP101,Using computers,FALSE,,
-COMP101,Using Computers for Scholarly Research,FALSE,,
-CUSTOM,Custom Workshop,TRUE,,
-DCGEO,Data Carpentry for Geospatial with R,TRUE,,
-DCR,Data Carpentry for the Social Sciences 2-Day Workshop,FALSE,,
-DCR,Data Carpentry for the Social Sciences Workshop,FALSE,,
-DCR,Data Carpentry with R (two day workshop),TRUE,,
-DCR,Two-day Carpentries with R,FALSE,,
-DCSQL,Data Management with SQL,TRUE,,
-DCSQL,Standalone SQL,FALSE,,
-DMPTOOLS,Data Management Plan Tool for Funding,TRUE,,
-DMPTOOLS,Data Management Plan Tools for Funding,FALSE,,
-DMPTOOLS,DMPTool,FALSE,,
-ESRI,Moving from ESRI ArcMap to ArcGIS Pro,TRUE,,
-GGPLOT2,ggplot2,FALSE,,
-GGPLOT2,Visualization in R using 'ggplot2',FALSE,,
-GGPLOT2,Visualization in R with 'ggplot2',TRUE,,
-GIT,Standalone Git,FALSE,,
-GIT,Tracking Changes with Version Control in Git/Github,TRUE,,
-GIT,Version Control using Git and GitHub,FALSE,,
-GIT,Version Control using Git and GitHub On-line,FALSE,,
-GIT,Version Control using Git and GitHub On-Line,FALSE,,
-GIT,Version Control with Git/GitHub,TRUE,,
-GIT,Version Control with Git/GitHub (Software Carpentries On-line),FALSE,,
-GIT,Version Control with Git/Github 101,FALSE,,
-IBASH,Intermediate shell,FALSE,,
-IBASH,Intermediate Skills for Bash,FALSE,,
-IBASH,Shortcuts and Hints for Shell (Intermediate Bash),TRUE,,
-IBASH,Shortcuts and Hints for Shell: Intermediate Shell,FALSE,,
-INTROPY,Plotting and Programming in Python,FALSE,,
-INTROPY,Python (Software Carpentry On-line Parts 1&2 ),FALSE,,
-INTROPY,Software Carpentry Python Lesson (Online),FALSE,,
-INTROPY,Software Carpentry Python Lesson On-line,FALSE,,
-INTROPY,Software Carpentry Python Parts 1 & 2,FALSE,,
-INTROPY,Software Carpentry with Python,TRUE,,
-INTROPY,Standalone Python,FALSE,,
-INTROR,Introductory R (Data Carpentry - 8 hrs),TRUE,,
-INTROR,Standalone Carpentries R,FALSE,,
-MATLAB,MATLAB,FALSE,,
-MATLAB,MATLAB for Data Analysis,TRUE,,
-MATLAB,Programming with MATLAB,FALSE,,
-MATPLOTLIB,Matplotlib,FALSE,,
-MATPLOTLIB,Python: Visualization using Matplotlib,FALSE,,
-MATPLOTLIB,Visualization in Python using Matplotlib,FALSE,,
-MATPLOTLIB,Visualization in Python with Matplotlib,TRUE,,
-MATPLOTLIB,Visualization in Python with 'matplotlib',FALSE,,
-MATPLOTLIB,Visualizations in Python,FALSE,,
-MATPLOTLIB,Visualizations in Python using Matplotlib,FALSE,,
-MRD101,Love Data Week - Survival Skills: Managing Research Files,FALSE,,
-MRD101,Managing research files,FALSE,,
-MRD101,Survival Skills 101: Managing Research Data,FALSE,,
-MRD101,Survival Skills: Managing Research Data,FALSE,,
-MRD101,Survival skills: Managing Research Data,FALSE,,
-MRD101,Survival Skills: Managing Research Files,TRUE,,
-NEWSAA,African American Newspapers and Primary Sources,TRUE,,
-NEWSAA,African American Newspapers and Primary Sources,FALSE,,
-NEWSD,Digital newspapers,FALSE,,
-NIGHTMARE,Nightmare on Research Street,TRUE,,
-OAOUP,How to Publish Open Access in Oxford University Press Journals,FALSE,,
-OPENR,Cleaning Data with OpenRefine,FALSE,,
-OPENR,Cleaning Messy Data with OpenRefine,TRUE,,
-OPENR,Standalone Openrefine,FALSE,,
-OSF1HOUR,Data Management Compliance with OSF,FALSE,,
-OSF1HOUR,Love Data Week - Managing Research Projects with OSF,FALSE,,
-OSF1HOUR,Manage Research Projects with OSF (Online),FALSE,,
-OSF1HOUR,Managing Research Projects with Open Science Framework,FALSE,,
-OSF1HOUR,Managing Research Projects with OSF,TRUE,,
-OSF1HOUR,OSF,FALSE,,
-OSFLONG,"Durable Data, Your Career, and Open Science Framework",TRUE,,
-PRESENT,Presentations,FALSE,,
-PRESENT,Presentations: Concepts and Practice,TRUE,,
-PUBLISHING,Understanding Scholarly Publishing,FALSE,,
-PUBLISHING,Understanding the Scholarly Publishing Process,TRUE,,
-RREP,Repetitive Tasks in R,TRUE,,
-RREP,Repetitive tasks in R,FALSE,,
-SMOOTH,Smoother Academic Meetings: Tips from Your Librarians,FALSE,,
-SMOOTH,Smoother meetings,FALSE,,
-SMOOTH,Smoother Meetings: Tips from Your Librarians,TRUE,,
-SWCNA,Software Carpentry Workshop,TRUE,,
-SWCPY,Software Carpentry with Python (two day workshop),TRUE,,
-SWCPY,Two-day Carpentries with Python,FALSE,,
-SWCR,Software Carpentry with R (two day workshop),TRUE,,
-SWCTIDY,Data Organization in Spreadsheets: Tidy Data,TRUE,,
-TABLEAU,Tableau,FALSE,,
-TABLEAU,Visualizing Data with Tableau,TRUE,,
-TIDY101,Formatting information for analysis,FALSE,,
-TIDY101,Love Data Week - Survival Skills: Formatting Research Data for Analysis,FALSE,,
-TIDY101,Survival Skills 101: Formatting Data for Analysis,FALSE,,
-TIDY101,Survival Skills: Formatting Data for Analysis,FALSE,,
-TIDY101,Survival Skills: Formatting Information for Analysis,TRUE,,
-TIDY101,Survival Skills: Formatting Research Data for Analysis,FALSE,,
-TIDY101,Survival Skills: Tidy Data 101,FALSE,,
-TRBL101,Survival Skills: Troubleshooting Computer Code,TRUE,,
-TRBL101,Troubleshooting,FALSE,,
-UNKNOWN,Unknown,FALSE,,
-VIZ101,Concepts in Data-Driven Visualizations,FALSE,,
-VIZ101,Concepts of Data-driven visualization,FALSE,,
-VIZ101,Concepts of data-driven visualizations,FALSE,,
-VIZ101,Creating Data-Driven Visualizations,FALSE,,
-VIZ101,Love Data Week: Survival Skills - Concepts of Data-Driven Visualization,FALSE,,
-VIZ101,Survival Skills 101: Data-driven Visualizations,FALSE,,
-VIZ101,Survival Skills: Concepts of Data-driven Visualizations,TRUE,,
-VIZ101,Survival Skills: Data-driven Visualizations,FALSE,,
-ZOTERO,Citation Management with Zotero,TRUE,,
-ZOTERO,Citation Management with Zotero (Online),FALSE,,
-ZOTERO,Zotero,FALSE,,
-IES,An Introduction to Evidence Synthesis,TRUE,,
-WHC,Archival Research at WHC,TRUE,,
-,A Very Short Introduction to Geospatial R,TRUE,,
-,A Very Short Introduction to Git/GitHub,TRUE,,
-,A Very Short Introduction to R,TRUE,,
-,Beginner LaTeX,TRUE,,
-,Data Carpentry for Geospatial with Python,TRUE,,
-,Data Carpentry for Geospatial with R,TRUE,,
-,"Data Carpentry for Social Scientists with R, Spreadsheets, and OpenRefine (Two Day Workshop)",TRUE,,
-,"Data Carpentry with R, Spreadsheets, and OpenRefine (Two Day Workshop)",TRUE,,
-,Data Management with SQL (Data Carpentry Lesson),TRUE,,
-,Data Organization with Spreadsheets (Data Carpentry Lesson),TRUE,,
-,DMP Tool for Funding,TRUE,,
-,ESRI workshop: Moving from ArcMap to ArcGIS Pro,TRUE,,
-,Fiber Arts: Knitting,TRUE,,
-,Fiber Arts: Knitting in the round,TRUE,,
-,Fiber Arts: Kumihumo,TRUE,,
-,Graduate Research Retreat,TRUE,,
-,How to Publish Open Access in Oxford University Press Journals,TRUE,,
-,Intermediate Bash Shell,TRUE,,
-,Intro to LaTeX,TRUE,,
-,Intro to Unix Shell (Software Carpentries Lesson),TRUE,,
-,Introduction to Docker,TRUE,,
-,Level Up League,TRUE,,
-,Managing Research Projects with OSF,TRUE,,
-,MATLAB for Data Analysis,TRUE,,
-,Measuring Workshop,TRUE,,
-,Newspapers as Primary Sources,TRUE,,
-,Nightmare on Research Street,TRUE,,
-,Nightmare on Research Street Social Media Contest,TRUE,,
-,Open Educational Resources Workshop,TRUE,,
-,Open Refine for Data Cleaning (Data Carpentry Lesson),TRUE,,
-,OUCreate and Displaying Your 3D Models,TRUE,,
-,Presentations: Concepts and Practice,TRUE,,
-,Python (Software Carpentry Lesson),TRUE,,
-,Python: Visualization using Matplotlib,TRUE,,
-,R for Ecology (Data Carpentries Lesson),TRUE,,
-,R for Social Sciences (Data Carpentries Lesson),TRUE,,
-,R for Social Sciences (Software Carpentries Lesson),TRUE,,
-,Repetitive Tasks in R,TRUE,,
-,Research on Display: Public Engagement through Exhibits,TRUE,,
-,Should I embargo my thesis or dissertation?,TRUE,,
-,Smoother Meetings,TRUE,,
-,"Software Carpentry with Python, Bash, and Git/GitHub (Two Day Workshop)",TRUE,,
-,"Software Carpentry with R, Bash, and Git/GitHub (Two Day Workshop)",TRUE,,
-,Special Collections Research,TRUE,,
-,Survival skills: Backups,TRUE,,
-,Survival Skills: Concepts in Data-Driven Visualizations,TRUE,,
-,Survival Skills: Formatting Information for Analysis,TRUE,,
-,Survival Skills: Managing Research Files,TRUE,,
-,Survival skills: Troubleshooting Computer Code,TRUE,,
-,Survival skills: Using Computers for Research,TRUE,,
-,Things to Think About When Preparing Models for 3D Printing @ The Bizz,TRUE,,
-,Tidy Data in R,TRUE,,
-,Version Control with Git/GitHub (Software Carpentries Lesson),TRUE,,
-,Visualizations in R with 'ggplot2',TRUE,,
-,Visualizations in Tableau,TRUE,,
-,Working with Spreadsheets (Humanities),TRUE,,
+WorkshopCode,WorkshopNameVariations,CurrentlyUsedName
+AVSIGEO,A Very Short Introduction to Geospatial R,TRUE
+AVSIGIT,A Very Short Introduction to Git/GitHub,TRUE
+AVSILATEX,Intro to LaTeX,TRUE
+AVSIR,A Very Short Introduction to R,TRUE
+BACKUPS101,Survival Skills: Backups,TRUE
+BACKUPS101,Survival skills: Backups,FALSE
+BACKUPS101,Backups,FALSE
+BACKUPS101,Keeping Your Research Safe with Backups,FALSE
+BACKUPS101,Love Data Week - Survival Skills: Keep Your Research Safe with Backups,FALSE
+BACKUPS101,Survival Skills 101: Back-ups,FALSE
+BACKUPS101,Survival Skills: Backups 101,FALSE
+BACKUPS101,Survival Skills: Keep Your Research Safe with Backups,FALSE
+BBASH,Intro to Unix Shell (Software Carpentries Lesson),TRUE
+BBASH,Introduction to the Unix/Linux Shell,FALSE
+BBASH,Bash for Beginners,FALSE
+BBASH,Intro to Unix Shell (Software Carpentries On-line),FALSE
+BBASH,Introduction to the Unix/Linux Shell On-line,FALSE
+BBASH,Standalone Bash,FALSE
+BBASH,Unix Shell (Bash) for Beginners,FALSE
+BBASH,Unix/Bash Shell,FALSE
+BLATEX,Beginner LaTeX,TRUE
+BLATEX,Beginner LaTeX Workshop,FALSE
+BLATEX,LaTeX,FALSE
+COMP101,Survival Skills: Using Computers for Research,TRUE
+COMP101,Survival skills: Using Computers for Research,FALSE
+COMP101,Using comptuers,FALSE
+COMP101,Using computers,FALSE
+COMP101,Using Computers for Scholarly Research,FALSE
+CUSTOM,Custom Workshop,TRUE
+DCGEO,Data Carpentry for Geospatial with R,TRUE
+DCGEO,Data Carpentry for Geospatial with R,TRUE
+DCGEOPY,Data Carpentry for Geospatial with Python,TRUE
+DCR,"Data Carpentry with R, Spreadsheets, and OpenRefine (Two Day Workshop)",TRUE
+DCR,Data Carpentry with R (two day workshop),FALSE
+DCR,"Data Carpentry for Social Scientists with R, Spreadsheets, and OpenRefine (Two Day Workshop)",FALSE
+DCR,Data Carpentry for the Social Sciences 2-Day Workshop,FALSE
+DCR,Data Carpentry for the Social Sciences Workshop,FALSE
+DCR,Two-day Carpentries with R,FALSE
+DCSQL,Data Management with SQL (Data Carpentry Lesson),TRUE
+DCSQL,Data Management with SQL,FALSE
+DCSQL,Standalone SQL,FALSE
+DMPTOOLS,DMP Tool for Funding,TRUE
+DMPTOOLS,Data Management Plan Tool for Funding,FALSE
+DMPTOOLS,Data Management Plan Tools for Funding,FALSE
+DMPTOOLS,DMPTool,FALSE
+DOCKER,Introduction to Docker,TRUE
+EMBARGO,Should I embargo my thesis or dissertation?,TRUE
+ESRI,ESRI workshop: Moving from ArcMap to ArcGIS Pro,TRUE
+ESRI,Moving from ESRI ArcMap to ArcGIS Pro,FALSE
+EXHIBIT,Research on Display: Public Engagement through Exhibits,TRUE
+FIBERKN,Fiber Arts: Knitting,TRUE
+FIBERKR,Fiber Arts: Knitting in the round,TRUE
+FIBERKU,Fiber Arts: Kumihumo,TRUE
+GGPLOT2,Visualization in R with 'ggplot2',TRUE
+GGPLOT2,Visualizations in R with 'ggplot2',FALSE
+GGPLOT2,ggplot2,FALSE
+GGPLOT2,Visualization in R using 'ggplot2',FALSE
+GIT,Version Control with Git/GitHub,TRUE
+GIT,Tracking Changes with Version Control in Git/Github,FALSE
+GIT,Version Control with Git/GitHub (Software Carpentries Lesson),FALSE
+GIT,Standalone Git,FALSE
+GIT,Version Control using Git and GitHub,FALSE
+GIT,Version Control using Git and GitHub On-line,FALSE
+GIT,Version Control using Git and GitHub On-Line,FALSE
+GIT,Version Control with Git/GitHub (Software Carpentries On-line),FALSE
+GIT,Version Control with Git/Github 101,FALSE
+GRR,Graduate Research Retreat,TRUE
+IBASH,Shortcuts and Hints for Shell (Intermediate Bash),TRUE
+IBASH,Intermediate Bash Shell,TRUE
+IBASH,Intermediate shell,FALSE
+IBASH,Intermediate Skills for Bash,FALSE
+IBASH,Shortcuts and Hints for Shell: Intermediate Shell,FALSE
+IES,An Introduction to Evidence Synthesis,TRUE
+INTROPY,Python (Software Carpentry Lesson),TRUE
+INTROPY,Software Carpentry with Python,FALSE
+INTROPY,Plotting and Programming in Python,FALSE
+INTROPY,Python (Software Carpentry On-line Parts 1&2 ),FALSE
+INTROPY,Software Carpentry Python Lesson (Online),FALSE
+INTROPY,Software Carpentry Python Lesson On-line,FALSE
+INTROPY,Software Carpentry Python Parts 1 & 2,FALSE
+INTROPY,Standalone Python,FALSE
+INTROR,Standalone Carpentries R,TRUE
+INTROR,Introductory R (Data Carpentry - 8 hrs),FALSE
+INTROR,R for Ecology (Data Carpentries Lesson),FALSE
+INTROR,R for Social Sciences (Data Carpentries Lesson),FALSE
+INTROR,R for Social Sciences (Software Carpentries Lesson),FALSE
+LUL,Level Up League,TRUE
+MATLAB,MATLAB for Data Analysis,TRUE
+MATLAB,MATLAB for Data Analysis,FALSE
+MATLAB,MATLAB,FALSE
+MATLAB,Programming with MATLAB,FALSE
+MATPLOTLIB,Visualization in Python with Matplotlib,TRUE
+MATPLOTLIB,Python: Visualization using Matplotlib,FALSE
+MATPLOTLIB,Matplotlib,FALSE
+MATPLOTLIB,Python: Visualization using Matplotlib,FALSE
+MATPLOTLIB,Visualization in Python using Matplotlib,FALSE
+MATPLOTLIB,Visualization in Python with 'matplotlib',FALSE
+MATPLOTLIB,Visualizations in Python,FALSE
+MATPLOTLIB,Visualizations in Python using Matplotlib,FALSE
+MEASURE,Measuring Workshop,TRUE
+MODEL3D,OUCreate and Displaying Your 3D Models,TRUE
+MRD101,Survival Skills: Managing Research Files,TRUE
+MRD101,Survival Skills: Managing Research Files,FALSE
+MRD101,Love Data Week - Survival Skills: Managing Research Files,FALSE
+MRD101,Managing research files,FALSE
+MRD101,Survival Skills 101: Managing Research Data,FALSE
+MRD101,Survival Skills: Managing Research Data,FALSE
+MRD101,Survival skills: Managing Research Data,FALSE
+NEWSAA,African American Newspapers and Primary Sources,TRUE
+NEWSAA,African American Newspapers and Primary Sources,FALSE
+NEWSD,Newspapers as Primary Sources,TRUE
+NEWSD,Digital newspapers,FALSE
+NIGHTMARE,Nightmare on Research Street,TRUE
+NIGHTMARE,Nightmare on Research Street,FALSE
+OER,Open Educational Resources Workshop,TRUE
+OPENR,Cleaning Messy Data with OpenRefine,TRUE
+OPENR,Open Refine for Data Cleaning (Data Carpentry Lesson),TRUE
+OPENR,Cleaning Data with OpenRefine,FALSE
+OPENR,Standalone Openrefine,FALSE
+OSF1HOUR,Managing Research Projects with OSF,TRUE
+OSF1HOUR,Managing Research Projects with OSF,TRUE
+OSF1HOUR,Data Management Compliance with OSF,FALSE
+OSF1HOUR,Love Data Week - Managing Research Projects with OSF,FALSE
+OSF1HOUR,Manage Research Projects with OSF (Online),FALSE
+OSF1HOUR,Managing Research Projects with Open Science Framework,FALSE
+OSF1HOUR,OSF,FALSE
+OSFLONG,"Durable Data, Your Career, and Open Science Framework",TRUE
+OXFORD,How to Publish Open Access in Oxford University Press Journals,FALSE
+OXFORD,How to Publish Open Access in Oxford University Press Journals,FALSE
+PRESENT,Presentations: Concepts and Practice,TRUE
+PRESENT,Presentations: Concepts and Practice,FALSE
+PRESENT,Presentations,FALSE
+PRINT3D,Things to Think About When Preparing Models for 3D Printing @ The Bizz,TRUE
+PUBLISHING,Understanding the Scholarly Publishing Process,TRUE
+PUBLISHING,Understanding Scholarly Publishing,FALSE
+RREP,Repetitive Tasks in R,TRUE
+RREP,Repetitive Tasks in R,FALSE
+RREP,Repetitive tasks in R,FALSE
+SMOOTH,Smoother Meetings: Tips from Your Librarians,TRUE
+SMOOTH,Smoother Meetings,FALSE
+SMOOTH,Smoother Academic Meetings: Tips from Your Librarians,FALSE
+SMOOTH,Smoother meetings,FALSE
+SPCLR,Special Collections Research,TRUE
+SWCNA,Software Carpentry Workshop,TRUE
+SWCPY,"Software Carpentry with Python, Bash, and Git/GitHub (Two Day Workshop)",TRUE
+SWCPY,Software Carpentry with Python (two day workshop),FALSE
+SWCPY,Two-day Carpentries with Python,FALSE
+SWCR,"Software Carpentry with R, Bash, and Git/GitHub (Two Day Workshop)",TRUE
+SWCR,Software Carpentry with R (two day workshop),FALSE
+SWCTIDY,Data Organization in Spreadsheets: Tidy Data,TRUE
+SWCTIDY,Data Organization with Spreadsheets (Data Carpentry Lesson),FALSE
+SWCTIDY,Working with Spreadsheets (Humanities),FALSE
+TABLEAU,Visualizing Data with Tableau,TRUE
+TABLEAU,Visualizations in Tableau,FALSE
+TABLEAU,Tableau,FALSE
+TIDY101,Survival Skills: Formatting Information for Analysis,TRUE
+TIDY101,Survival Skills: Formatting Information for Analysis,FALSE
+TIDY101,Formatting information for analysis,FALSE
+TIDY101,Love Data Week - Survival Skills: Formatting Research Data for Analysis,FALSE
+TIDY101,Survival Skills 101: Formatting Data for Analysis,FALSE
+TIDY101,Survival Skills: Formatting Data for Analysis,FALSE
+TIDY101,Survival Skills: Formatting Research Data for Analysis,FALSE
+TIDY101,Survival Skills: Tidy Data 101,FALSE
+TIDYR,Tidy Data in R,TRUE
+TRBL101,Survival Skills: Troubleshooting Computer Code,TRUE
+TRBL101,Survival skills: Troubleshooting Computer Code,FALSE
+TRBL101,Troubleshooting,FALSE
+UNKNOWN,Unknown,FALSE
+VIZ101,Survival Skills: Concepts of Data-driven Visualizations,TRUE
+VIZ101,Survival Skills: Concepts in Data-Driven Visualizations,FALSE
+VIZ101,Concepts in Data-Driven Visualizations,FALSE
+VIZ101,Concepts of Data-driven visualization,FALSE
+VIZ101,Concepts of data-driven visualizations,FALSE
+VIZ101,Creating Data-Driven Visualizations,FALSE
+VIZ101,Love Data Week: Survival Skills - Concepts of Data-Driven Visualization,FALSE
+VIZ101,Survival Skills 101: Data-driven Visualizations,FALSE
+VIZ101,Survival Skills: Data-driven Visualizations,FALSE
+WHC,Archival Research at WHC,TRUE
+ZOTERO,Citation Management with Zotero,TRUE
+ZOTERO,Citation Management with Zotero (Online),FALSE
+ZOTERO,Zotero,FALSE
