@@ -87,19 +87,9 @@ ggplot(data = topics_desc,
 ```{r workshop_descriptive_stats_staff, echo=FALSE, message = FALSE, warning = FALSE}
 
 ggplot(data = attendance_named,
-       mapping = aes(x = as.factor(year),
-                     y = Number.of.Helpers))+
-  geom_boxplot()+
-  facet_grid(~Requested., labeller = to_string)+
-  labs(x = "Calendar year",
-       y = "Number of helpers per workshop",
-       fill = "Within a course")
-
-ggplot(data = attendance_named,
        mapping = aes(x = Total.Attendees,
                      y = Number.of.Helpers))+
   geom_point()+
-  facet_grid(~Requested., labeller = to_string)+
   labs(x = "Total attendees at each workshop",
        y = "Number of helpers per workshop")
 
@@ -111,15 +101,12 @@ topics_common <- attendance_named %>%
   dplyr::filter(times_offered > 10,
                 !is.na(WorkshopCode))
   
-
-
 ggplot(data = attendance_named[attendance_named$WorkshopCode %in% topics_common$WorkshopCode,],
-       mapping = aes(x = Total.Attendees,
-                     y = Number.of.Helpers,
-                     color = Is.Course))+
-  geom_point()+
+       mapping = aes(x = Number.of.Helpers,
+                     y = Format))+
+  geom_boxplot()+
   facet_wrap(.~WorkshopCode)+
-  labs(x = "Workshop topic (offered more than five times)",
+  labs(x = "Workshop topic (offered >10 times)",
        y = "Number of helpers per workshop")
 
 
