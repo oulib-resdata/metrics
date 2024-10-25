@@ -13,6 +13,8 @@ attendance_named <- read.csv("raw_data/processed_attendance_named.csv")
 
 ```
 
+## Workshop topics offered
+
 The number of distinct topics has declined since 2022, likely due to loss of digital scholarship specialist expertise.
 ```{r workshop_descriptive_stats_topics_unique, echo=FALSE, message = FALSE, warning = FALSE}
 topics_desc <- attendance_named %>%
@@ -54,11 +56,10 @@ ggplot(data = attendance_named,
 
 
 
-::: {.content-hidden}
-
 We have increased the number of topics we've brought "on request" to groups and courses.
 
 ```{r workshop_descriptive_stats_topics, echo=FALSE, message = FALSE, warning = FALSE}
+
 topics_desc <- attendance_named %>%
   group_by(year,
            Is.Course,
@@ -77,11 +78,50 @@ ggplot(data = topics_desc,
        y = "Number of unique topics offered",
        fill = "Within a course")
 
+
+
 ```
 
-LATER TODO: How many instructors and helpers per semester
-  - BN gather number of helpers from Libraries collaborators + internal notes.  later in report will cover helper to attendee ratio.
-  - 11/28/2023 requested BN to request MB to add external helper count.  DONE but need to backfill data from notes.
+## Workshop staffing needs
+
+```{r workshop_descriptive_stats_staff, echo=FALSE, message = FALSE, warning = FALSE}
+
+ggplot(data = attendance_named,
+       mapping = aes(x = as.factor(year),
+                     y = Number.of.Helpers))+
+  geom_boxplot()+
+  facet_grid(~Requested., labeller = to_string)+
+  labs(x = "Calendar year",
+       y = "Number of helpers per workshop",
+       fill = "Within a course")
+
+ggplot(data = attendance_named,
+       mapping = aes(x = Total.Attendees,
+                     y = Number.of.Helpers))+
+  geom_point()+
+  facet_grid(~Requested., labeller = to_string)+
+  labs(x = "Total attendees at each workshop",
+       y = "Number of helpers per workshop")
+
+
+## how many helpers analysis for common workshops
+topics_common <- attendance_named %>%
+  group_by(WorkshopCode) %>%
+  summarize(times_offered = n()) %>%
+  dplyr::filter(times_offered > 10,
+                !is.na(WorkshopCode))
   
+
+
+ggplot(data = attendance_named[attendance_named$WorkshopCode %in% topics_common$WorkshopCode,],
+       mapping = aes(x = Total.Attendees,
+                     y = Number.of.Helpers,
+                     color = Is.Course))+
+  geom_point()+
+  facet_wrap(.~WorkshopCode)+
+  labs(x = "Workshop topic (offered more than five times)",
+       y = "Number of helpers per workshop")
+
+
+```
   
-:::
