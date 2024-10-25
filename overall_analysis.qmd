@@ -270,6 +270,9 @@ FeedbackActuallyAttended <- read.csv("./raw_data/postworkshop/report.csv",
                                      na.strings=c("","NA"))
 
 
+library(tidyr)
+library(stringr)
+
 FeedbackActuallyAttended2 <- FeedbackActuallyAttended %>%
   separate_longer_delim(This.workshop.was...,
                         delim = ", ...") %>%
