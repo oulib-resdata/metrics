@@ -18,11 +18,13 @@ BBASH,Intro to Unix Shell (Software Carpentries On-line),FALSE
 BBASH,Introduction to the Unix/Linux Shell On-line,FALSE
 BBASH,Standalone Bash,FALSE
 BBASH,Unix Shell (Bash) for Beginners,FALSE
+BBASH,Software Carpentry: Intro to Unix Shell,FALSE
 BBASH,Unix/Bash Shell,FALSE
 BLATEX,Beginner LaTeX,TRUE
 BLATEX,Beginner LaTeX Workshop,FALSE
 BLATEX,LaTeX,FALSE
-COMP101,Survival Skills: Using Computers for Research,TRUE
+COMP101,Survival Skills: Using Computers for Scholarly Research,TRUE
+COMP101,Survival Skills: Using Computers for Research,FALSE
 COMP101,Survival skills: Using Computers for Research,FALSE
 COMP101,Using comptuers,FALSE
 COMP101,Using computers,FALSE
@@ -31,6 +33,8 @@ CUSTOM,Custom Workshop,TRUE
 DCGEO,Data Carpentry for Geospatial with R,TRUE
 DCGEO,Data Carpentry for Geospatial with R,TRUE
 DCGEOPY,Data Carpentry for Geospatial with Python,TRUE
+DCOPENRTIDY,Data Carpentry: Spreadsheets and OpenRefine (Combined),TRUE
+DCOPENRTIDY,Data Carpentry: Spreadsheets and OpenRefine,FALSE
 DCR,"Data Carpentry with R, Spreadsheets, and OpenRefine (Two Day Workshop)",TRUE
 DCR,Data Carpentry with R (two day workshop),FALSE
 DCR,"Data Carpentry for Social Scientists with R, Spreadsheets, and OpenRefine (Two Day Workshop)",FALSE
@@ -45,6 +49,7 @@ DMPTOOLS,Data Management Plan Tool for Funding,FALSE
 DMPTOOLS,Data Management Plan Tools for Funding,FALSE
 DMPTOOLS,DMPTool,FALSE
 DOCKER,Introduction to Docker,TRUE
+DRYAD,Dryad: A File and Collaborative Repository for Scholarly Outputs,TRUE
 EMBARGO,Should I embargo my thesis or dissertation?,TRUE
 ESRI,ESRI workshop: Moving from ArcMap to ArcGIS Pro,TRUE
 ESRI,Moving from ESRI ArcMap to ArcGIS Pro,FALSE
@@ -64,6 +69,7 @@ GIT,Version Control using Git and GitHub,FALSE
 GIT,Version Control using Git and GitHub On-line,FALSE
 GIT,Version Control using Git and GitHub On-Line,FALSE
 GIT,Version Control with Git/GitHub (Software Carpentries On-line),FALSE
+GIT,Software Carpentry: Version Control using Git/GitHub,FALSE
 GIT,Version Control with Git/Github 101,FALSE
 GRR,Graduate Research Retreat,TRUE
 IBASH,Shortcuts and Hints for Shell (Intermediate Bash),TRUE
@@ -73,6 +79,7 @@ IBASH,Intermediate Skills for Bash,FALSE
 IBASH,Shortcuts and Hints for Shell: Intermediate Shell,FALSE
 IES,An Introduction to Evidence Synthesis,TRUE
 INTROPY,Python (Software Carpentry Lesson),TRUE
+INTROPY,Software Carpentry: Python (Two Part Lesson),FALSE
 INTROPY,Software Carpentry with Python,FALSE
 INTROPY,Plotting and Programming in Python,FALSE
 INTROPY,Python (Software Carpentry On-line Parts 1&2 ),FALSE
@@ -84,8 +91,10 @@ INTROR,Standalone Carpentries R,TRUE
 INTROR,Introductory R (Data Carpentry - 8 hrs),FALSE
 INTROR,R for Ecology (Data Carpentries Lesson),FALSE
 INTROR,R for Social Sciences (Data Carpentries Lesson),FALSE
+INTROR,Data Carpentry: R for Social Sciences,FALSE
 INTROR,R for Social Sciences (Software Carpentries Lesson),FALSE
 LUL,Level Up League,TRUE
+LUL,Level-Up League,FALSE
 MATLAB,MATLAB for Data Analysis,TRUE
 MATLAB,MATLAB for Data Analysis,FALSE
 MATLAB,MATLAB,FALSE
@@ -113,10 +122,15 @@ NEWSD,Newspapers as Primary Sources,TRUE
 NEWSD,Digital newspapers,FALSE
 NIGHTMARE,Nightmare on Research Street,TRUE
 NIGHTMARE,Nightmare on Research Street,FALSE
+NVIVO,NVivo for Windows,TRUE
+OA2025,Increase Your Impact with Open Access,FALSE
 OER,Open Educational Resources Workshop,TRUE
+OMEKA,Creating a Digital Exhibit with Omeka,TRUE
 OPENR,Cleaning Messy Data with OpenRefine,TRUE
 OPENR,Open Refine for Data Cleaning (Data Carpentry Lesson),TRUE
 OPENR,Cleaning Data with OpenRefine,FALSE
+OPENR,Data Cleaning with Open Refine (Library Carpentry Lesson),FALSE
+OPENR,Data Cleaning with Open Refine,FALSE
 OPENR,Standalone Openrefine,FALSE
 OSF1HOUR,Managing Research Projects with OSF,TRUE
 OSF1HOUR,Managing Research Projects with OSF,TRUE
@@ -126,6 +140,7 @@ OSF1HOUR,Manage Research Projects with OSF (Online),FALSE
 OSF1HOUR,Managing Research Projects with Open Science Framework,FALSE
 OSF1HOUR,OSF,FALSE
 OSFLONG,"Durable Data, Your Career, and Open Science Framework",TRUE
+OTL,Engineering and Transportation Resources: The Oklahoma Transportation Library and the Southern Plains Transportation Center ,TRUE
 OXFORD,How to Publish Open Access in Oxford University Press Journals,FALSE
 OXFORD,How to Publish Open Access in Oxford University Press Journals,FALSE
 PRESENT,Presentations: Concepts and Practice,TRUE
@@ -142,6 +157,7 @@ SMOOTH,Smoother Meetings,FALSE
 SMOOTH,Smoother Academic Meetings: Tips from Your Librarians,FALSE
 SMOOTH,Smoother meetings,FALSE
 SPCLR,Special Collections Research,TRUE
+STORY,Creating an Interactive Map with StoryMap JS,TRUE
 SWCNA,Software Carpentry Workshop,TRUE
 SWCPY,"Software Carpentry with Python, Bash, and Git/GitHub (Two Day Workshop)",TRUE
 SWCPY,Software Carpentry with Python (two day workshop),FALSE
@@ -168,6 +184,7 @@ TRBL101,Survival skills: Troubleshooting Computer Code,FALSE
 TRBL101,Troubleshooting,FALSE
 UNKNOWN,Unknown,FALSE
 VIZ101,Survival Skills: Concepts of Data-driven Visualizations,TRUE
+VIZ101,Survival Skills: Concepts of Data-driven Visualization,FALSE
 VIZ101,Survival Skills: Concepts in Data-Driven Visualizations,FALSE
 VIZ101,Concepts in Data-Driven Visualizations,FALSE
 VIZ101,Concepts of Data-driven visualization,FALSE
