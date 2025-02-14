@@ -170,7 +170,8 @@ SWCTIDY,Working with Spreadsheets (Humanities),FALSE
 TABLEAU,Visualizing Data with Tableau,TRUE
 TABLEAU,Visualizations in Tableau,FALSE
 TABLEAU,Tableau,FALSE
-TIDY101,Survival Skills: Formatting Information for Analysis,TRUE
+TIDY101,Survival Skills: Formatting Information for Analysis,FALSE
+TIDY101,Survival Skills: Organizing Information in Spreadsheets, TRUE
 TIDY101,Survival Skills: Formatting Information for Analysis,FALSE
 TIDY101,Formatting information for analysis,FALSE
 TIDY101,Love Data Week - Survival Skills: Formatting Research Data for Analysis,FALSE
