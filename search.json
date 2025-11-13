@@ -10,6 +10,16 @@
     ]
   },
   {
+    "objectID": "index.html#attendance",
+    "href": "index.html#attendance",
+    "title": "Research Workshop Attendance, Marketing, and Satisfaction",
+    "section": "Attendance",
+    "text": "Attendance\nFrom most recent data (2023-2025) for scheduled workshops, virtual and hybrid workshops have the highest attendance. A few topics have higher attendance than others. A short 2023 analysis showed longer (presumably more detailed) event descriptions got higher attendance relative to title/date only short descriptions.\nOtherwise, workshops requested by someone either standalone or in a course have the highest attendances.",
+    "crumbs": [
+      "Executive Summary"
+    ]
+  },
+  {
     "objectID": "descriptive_numbers.html",
     "href": "descriptive_numbers.html",
     "title": "1  Offerings",
@@ -102,7 +112,7 @@
     "href": "attendance.html",
     "title": "3  Attendance",
     "section": "",
-    "text": "3.1 Executive summary\nCounts of workshop attendance are only influenced by whether a workshop was presented as part of course instruction. Format (virtual, in-person, hybrid) and marketing did not change attendance counts. Even topics (Chapter 4) didn’t impact attendance counts.",
+    "text": "3.1 Executive summary\nFrom most recent data (2023-2025) for scheduled workshops, virtual and hybrid workshops have the highest attendance. A few topics have higher attendance than others. A short 2023 analysis showed longer (presumably more detailed) event descriptions got higher attendance relative to title/date only short descriptions.\nOtherwise, workshops requested by someone either standalone or in a course have the highest attendances.",
     "crumbs": [
       "Overall analysis",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Attendance</span>"
