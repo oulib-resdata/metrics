@@ -76,17 +76,20 @@ This consists of four datasets.
 
 
 - Attendance from LibInsights for Course-integrated instruction
-  - How to get this data via download from "Course Integrated Library Instruction"
+  - How to get this data via download from ["Course Integrated Library Instruction"](https://ou.libinsight.com/admin/custom-dataset/13799)
     - Method 1
       - Filter by Custom Date Range (July 1, 2018, to present)
       - Add Additional Report Filter "Name of Workshop" "Is Not" "Null", then click "Add this filter".
       - Click "generate report".
     - Method 2
-      - Use saved filter "Workshop Filters (CMC)"
-    - Method 2
       - Use saved filter "Workshops in Courses (CMC)"
+        - Update so end date is present.
     - After either method, click "Reports" tab and then green button "Export Data to CSV"
     - Save the file in OSF as /raw_data/attendance_courses.csv
+      - This overwrites the previous version.  You can see previous versions with OSF's versioning.
+    - Save the file locally in the same folder structure.
+    
+
 - Attendance from LibInsights for Outreach
   - How to get this data via download from "Outreach and Programming Form Analysis"
     - Method 1
@@ -97,6 +100,8 @@ This consists of four datasets.
       - Use saved filter "Workshop Filters (CMC)"
   - After either method, click "Reports" tab and then green button "Export Data to CSV"
     - Save the file in OSF as /raw_data/attendance_outreach.csv
+
+
 - Post-workshop surveys (feedback and satisfaction) from LibWizard
   - postworkshopsurveys_named <- read.csv("raw_data/processed_postworkshopsurveys_named.csv")
 
