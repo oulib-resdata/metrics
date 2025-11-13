@@ -182,12 +182,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Attendance</span></span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./satisfaction.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Feedback</span></span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -202,13 +196,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./topics.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Topics</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Topics</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./VIZ101.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Concepts of Data-Driven Visualization</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Concepts of Data-Driven Visualization</span></span></a>
   </div>
 </li>
       </ul>
@@ -302,16 +296,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="if-data-update-needed">If data update needed</h3>
 <section id="raw-data-downloads" class="level4">
 <h4 class="anchored" data-anchor-id="raw-data-downloads">Raw data downloads</h4>
-<p>This consists of four datasets.</p>
+<p>This consists of four raw datasets that turn into three processed datasets.</p>
+<section id="registration-data" class="level5">
+<h5 class="anchored" data-anchor-id="registration-data">Registration data</h5>
 <ul>
 <li>Registration numbers (pre-workshop interest) from LibCal
 <ul>
-<li>Downloaded per calendar then concatenated (?)</li>
-<li>Registered &lt;- read.csv(“raw_data/processed_Registered.csv”)</li>
+<li>Go to Libcal.ou.edu and click “Dashboard” in bottom of screen (left of “logout”) while logged in.</li>
+<li>Click “Events” menu.</li>
+<li>Click “Libraries Events” in the list of calendars.</li>
+<li>Click “Event Explorer” tab.
+<ul>
+<li>Choose date range (last download, which is 11/13/2025) to present.</li>
+<li>Internal tags = “Research Workshop”</li>
+<li>Booking Form = “Research workshops (pre-registration)</li>
+<li>Show registration responses = “Yes”</li>
+<li>Click “submit”.</li>
+<li>Click “Export data”.</li>
+<li>Save file to raw_data/preworkshop in OSF and locally.</li>
+<li>Add to list of files used in the Registered section.</li>
 </ul></li>
+<li>After processing, load back in via
+<ul>
+<li>Registered &lt;- read.csv(“raw_data/processed_Registered.csv”) in each analysis page.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="attendance-data" class="level5">
+<h5 class="anchored" data-anchor-id="attendance-data">Attendance data</h5>
+<p>Two datasets must be combined to get one attendance file.</p>
+<ul>
 <li>Attendance from LibInsights for Course-integrated instruction
 <ul>
-<li>How to get this data via download from “Course Integrated Library Instruction”
+<li>How to get this data via download from <a href="https://ou.libinsight.com/admin/custom-dataset/13799">“Course Integrated Library Instruction”</a>
 <ul>
 <li>Method 1
 <ul>
@@ -321,14 +339,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 <li>Method 2
 <ul>
-<li>Use saved filter “Workshop Filters (CMC)”</li>
-</ul></li>
-<li>Method 2
+<li>Use saved filter “Workshops in Courses (CMC)”
 <ul>
-<li>Use saved filter “Workshops in Courses (CMC)”</li>
+<li>Update so end date is present.</li>
+</ul></li>
 </ul></li>
 <li>After either method, click “Reports” tab and then green button “Export Data to CSV”</li>
-<li>Save the file in OSF as /raw_data/attendance_courses.csv</li>
+<li>Save the file in OSF as /raw_data/attendance_courses.csv
+<ul>
+<li>This overwrites the previous version. You can see previous versions with OSF’s versioning.</li>
+</ul></li>
+<li>Save the file locally in the same folder structure.</li>
 </ul></li>
 </ul></li>
 <li>Attendance from LibInsights for Outreach
@@ -348,14 +369,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 <li>After either method, click “Reports” tab and then green button “Export Data to CSV”
 <ul>
-<li>Save the file in OSF as /raw_data/attendance_outreach.csv</li>
-</ul></li>
-</ul></li>
-<li>Post-workshop surveys (feedback and satisfaction) from LibWizard
+<li>Save the file in OSF as /raw_data/attendance_outreach.csv
 <ul>
-<li>postworkshopsurveys_named &lt;- read.csv(“raw_data/processed_postworkshopsurveys_named.csv”)</li>
+<li>This overwrites the previous version. You can see previous versions with OSF’s versioning.</li>
+</ul></li>
+</ul></li>
 </ul></li>
 </ul>
+<p>After processing and combining both, the working version of this file/object loaded into each analysis page, the working file/objects will be into processed_attendance_named.csv</p>
+</section>
+<section id="feedback-data" class="level5">
+<h5 class="anchored" data-anchor-id="feedback-data">Feedback data</h5>
+<ul>
+<li>Post-workshop surveys (feedback and satisfaction) from <a href="https://ou.libwizard.com/">LibWizard</a>
+<ul>
+<li>Click “Surveys”</li>
+<li>Filter items by keyword searching “post”</li>
+<li>Choose “Post-Workshop Surveys” (Owner should be Curry, Claire; created January 14, 2020)</li>
+<li>Click “View Reports” in the upper right corner.</li>
+<li>Update “Max Submissions to Retrieve” to the number available (it will usually start at 500, but we have over 865 as of Nov.&nbsp;2025)</li>
+<li>Click blue “Export report” button.</li>
+<li>Save “report.csv” in raw_data/postworkshop/ folder in OSF and locally.
+<ul>
+<li>This overwrites the previous version. You can see previous versions with OSF’s versioning.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>After processing, the working version of this file/object loaded into each analysis page will be postworkshopsurveys_named &lt;- read.csv(“raw_data/processed_postworkshopsurveys_named.csv”)</p>
+</section>
 </section>
 <section id="raw-data-processing-to-write-three-working-files" class="level4">
 <h4 class="anchored" data-anchor-id="raw-data-processing-to-write-three-working-files">Raw data processing to write three working files</h4>
@@ -523,19 +564,7 @@ Attaching package: 'lubridate'</code></pre>
 <span id="cb13-112"><a href="#cb13-112" aria-hidden="true" tabindex="-1"></a>attendance_named <span class="ot">&lt;-</span> <span class="fu">left_join</span>(attendance_named,</span>
 <span id="cb13-113"><a href="#cb13-113" aria-hidden="true" tabindex="-1"></a>                                 topics_complete_variations_cleaned,</span>
 <span id="cb13-114"><a href="#cb13-114" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">by =</span>  <span class="fu">c</span>(<span class="st">"Name.of.Workshop"</span> <span class="ot">=</span> <span class="st">"WorkshopNameVariations"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-115"><a href="#cb13-115" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(id))</span>
-<span id="cb13-116"><a href="#cb13-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-117"><a href="#cb13-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-118"><a href="#cb13-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-119"><a href="#cb13-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-120"><a href="#cb13-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-121"><a href="#cb13-121" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb13-122"><a href="#cb13-122" aria-hidden="true" tabindex="-1"></a><span class="co"># Write to file for use in qmds.</span></span>
-<span id="cb13-123"><a href="#cb13-123" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb13-124"><a href="#cb13-124" aria-hidden="true" tabindex="-1"></a><span class="co"># Attendance</span></span>
-<span id="cb13-125"><a href="#cb13-125" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(attendance_named,</span>
-<span id="cb13-126"><a href="#cb13-126" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">"raw_data/processed_attendance_named.csv"</span>,</span>
-<span id="cb13-127"><a href="#cb13-127" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-115"><a href="#cb13-115" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><p>Post-workshop surveys</p></li>
@@ -545,242 +574,266 @@ Attaching package: 'lubridate'</code></pre>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Registration data has to be imported per-room from LibCal.</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Event registration </span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Event registrations pre-July 2025.</span></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>Room339 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./raw_data/preworkshop/Room339_lc_events_20230105043223.csv"</span>)</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>RoomLL123 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./raw_data/preworkshop/LL123_lc_events_20230105043507.csv"</span>)</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>RoomGeneral <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./raw_data/preworkshop/General_lc_events_20230105043258.csv"</span>)</span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>RoomLearningLabClassroom <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./raw_data/preworkshop/LearningLabClassroom_lc_events_20230105043409.csv"</span>)</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>Registered <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Room339,</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>                    RoomLL123,</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>                    RoomGeneral,</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>                    RoomLearningLabClassroom</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="do">## There is a 2023-2024 gap??  # </span><span class="al">TODO</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Event registrations post-July 2025.</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>Library_events <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./raw_data/preworkshop/lc_events_20251113014155.csv"</span>)  </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co"># New format has one new column (End.Date) and has renamed two columns.</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Start.Date (was formerly Date)</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co"># End.Date (did not exist)</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Event.Note (was Notes)</span></span>
 <span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Post-workshop survey data are from a subset of learners who attended and also filled out a survey.  In a few cases we forget to administer the survey or there's not enough time, or individuals opt out even when physically present in the room.</span></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Post-workshop surveys from libwizard only</span></span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="do">## Used for both feedback AND marketing</span></span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>FeedbackActuallyAttended <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./raw_data/postworkshop/report.csv"</span>,</span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">na.strings=</span><span class="fu">c</span>(<span class="st">""</span>,<span class="st">"NA"</span>))</span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>Registered.old.format <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Room339,</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>                    RoomLL123,</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>                    RoomGeneral,</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>                    RoomLearningLabClassroom</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>Registered.old.format.standardize <span class="ot">&lt;-</span> Registered.old.format <span class="sc">%&gt;%</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Notes)</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>Library_events.standardize <span class="ot">&lt;-</span> Library_events <span class="sc">%&gt;%</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Event.Note,</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>                <span class="sc">-</span>End.Date) <span class="sc">%&gt;%</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Date =</span> Start.Date)</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>Registered <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Registered.old.format.standardize,</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>                    Library_events.standardize</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>                    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Post-workshop survey data are from a subset of learners who attended and also filled out a survey.  In a few cases we forget to administer the survey or there's not enough time, or individuals opt out even when physically present in the room.</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Post-workshop surveys from libwizard only</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Used for both feedback AND marketing</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>FeedbackActuallyAttended <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./raw_data/postworkshop/report.csv"</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">na.strings=</span><span class="fu">c</span>(<span class="st">""</span>,<span class="st">"NA"</span>))</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: package 'tidyr' was built under R version 4.4.1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: package 'stringr' was built under R version 4.4.1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>FeedbackActuallyAttended2 <span class="ot">&lt;-</span> FeedbackActuallyAttended <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_longer_delim</span>(This.workshop.was...,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">delim =</span> <span class="st">", ..."</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_wider_delim</span>(<span class="at">cols =</span> This.workshop.was...,</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">delim =</span> <span class="st">". - "</span>,</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"This_workshop_was"</span>,</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"Ranking"</span>),</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">too_few =</span> <span class="st">"align_start"</span>)</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>FeedbackActuallyAttended2<span class="sc">$</span>This_workshop_was <span class="ot">&lt;-</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_remove</span>(FeedbackActuallyAttended2<span class="sc">$</span>This_workshop_was,</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">pattern =</span> <span class="fu">fixed</span>(<span class="st">"..."</span>))</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide <span class="ot">&lt;-</span> FeedbackActuallyAttended2 <span class="sc">%&gt;%</span></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> This_workshop_was,</span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> Ranking) <span class="sc">%&gt;%</span></span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="st">`</span><span class="at">NA</span><span class="st">`</span>)</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="co">#rows &lt;- as.numeric(count(postworkshopsurvey))</span></span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="co">#postworkshopsurvey &lt;- na.omit(postworkshopsurvey)</span></span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Changes in categories recorded over time have resulted in the need for some automated clean up code, which allows us to look at older categories if we need to, but use the updated equivalents for this report.</span></span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating and splitting current levels for marketing</span></span>
-<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>marketing_current_categories <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Announcement in Class by Instructor"</span>,</span>
-<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Announcement in Class by Librarian"</span>,</span>
-<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Non-Library Calendar or Newsletter"</span>,</span>
-<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Another Libraries Workshop"</span>,</span>
-<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Walk-in"</span>,</span>
-<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Digital Signage in Non-Library Building"</span>,</span>
-<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Digital Signage in a Library Building"</span>,</span>
-<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Social Media - Other"</span>,</span>
-<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Social Media - Instagram"</span>,</span>
-<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Social Media - Facebook"</span>,</span>
-<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Social Media - Twitter"</span>,</span>
-<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Personal recommendation from OU Librarian"</span>,</span>
-<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Class requirement"</span>,</span>
-<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Departmental/program requirement"</span>,</span>
-<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"OU Libraries website"</span>,</span>
-<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Direct Email from OU Librarian to Departmental Listserv"</span>,</span>
-<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Direct Email from OU Libraries Workshop Listserv"</span>,</span>
-<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Direct Email from OU Libraries (Source Unknown)"</span>,</span>
-<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Flyer (Paper or Digital Unspecified)"</span>,</span>
-<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Flyer (Paper or Paper Signage)"</span>,</span>
-<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Supervisor (Forwarded email, word of mouth)"</span>,</span>
-<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Colleagues (Forwarded email, word of mouth)"</span>)</span>
-<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a><span class="do">## Convert old categories to equivalent new</span></span>
-<span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.[Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Email from University Libraries"</span>] <span class="ot">&lt;-</span> <span class="st">"Direct Email from OU Libraries (Source Unknown)"</span></span>
-<span id="cb18-61"><a href="#cb18-61" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.[Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Colleagues"</span>] <span class="ot">&lt;-</span> <span class="st">"Colleagues (Forwarded email, word of mouth)"</span></span>
-<span id="cb18-62"><a href="#cb18-62" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.[Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Supervisor"</span>] <span class="ot">&lt;-</span> <span class="st">"Supervisor (Forwarded email, word of mouth)"</span></span>
-<span id="cb18-63"><a href="#cb18-63" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.[Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Department/Program Requirement"</span>] <span class="ot">&lt;-</span> <span class="st">"Departmental/program requirement"</span></span>
-<span id="cb18-64"><a href="#cb18-64" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.[Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Flyer"</span>] <span class="ot">&lt;-</span> <span class="st">"Flyer (Paper or Digital Unspecified)"</span></span>
-<span id="cb18-65"><a href="#cb18-65" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.[Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Walk-in"</span>] <span class="ot">&lt;-</span> <span class="st">"Other (please describe)"</span> <span class="co">#correcting that walk-in should not be a pre-registration option</span></span>
-<span id="cb18-66"><a href="#cb18-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-67"><a href="#cb18-67" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>ReducedCategories <span class="ot">&lt;-</span> Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.</span>
-<span id="cb18-68"><a href="#cb18-68" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>ReducedCategories[<span class="sc">!</span>(Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop. <span class="sc">%in%</span> marketing_current_categories)] <span class="ot">&lt;-</span> <span class="st">"Other (please describe)"</span></span>
-<span id="cb18-69"><a href="#cb18-69" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>OtherDescriptions[<span class="sc">!</span>(Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop. <span class="sc">%in%</span> marketing_current_categories)] <span class="ot">&lt;-</span> Registered<span class="sc">$</span>If.other..please.describe.[<span class="sc">!</span>(Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop. <span class="sc">%in%</span> marketing_current_categories)]</span>
-<span id="cb18-70"><a href="#cb18-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-71"><a href="#cb18-71" aria-hidden="true" tabindex="-1"></a><span class="do">## Convert old categories to equivalent new in feedback/post-workshop surveyd ata too.</span></span>
-<span id="cb18-72"><a href="#cb18-72" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Email from OU Libraries"</span>] <span class="ot">&lt;-</span> <span class="st">"Direct Email from OU Libraries (Source Unknown)"</span></span>
-<span id="cb18-73"><a href="#cb18-73" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Colleagues"</span>] <span class="ot">&lt;-</span> <span class="st">"Colleagues (Forwarded email, word of mouth)"</span></span>
-<span id="cb18-74"><a href="#cb18-74" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Supervisor"</span>] <span class="ot">&lt;-</span> <span class="st">"Supervisor (Forwarded email, word of mouth)"</span></span>
-<span id="cb18-75"><a href="#cb18-75" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Flyer"</span>] <span class="ot">&lt;-</span> <span class="st">"Flyer (Paper or Digital Unspecified)"</span></span>
-<span id="cb18-76"><a href="#cb18-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-77"><a href="#cb18-77" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>ReducedCategories <span class="ot">&lt;-</span> postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.</span>
-<span id="cb18-78"><a href="#cb18-78" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>ReducedCategories[<span class="sc">!</span>(postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop. <span class="sc">%in%</span> marketing_current_categories)] <span class="ot">&lt;-</span> <span class="st">"Other (please describe)"</span></span>
-<span id="cb18-79"><a href="#cb18-79" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>OtherDescriptions[<span class="sc">!</span>(postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop. <span class="sc">%in%</span> marketing_current_categories)] <span class="ot">&lt;-</span> postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.[<span class="sc">!</span>(postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop. <span class="sc">%in%</span> marketing_current_categories)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>FeedbackActuallyAttended2 <span class="ot">&lt;-</span> FeedbackActuallyAttended <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_longer_delim</span>(This.workshop.was...,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">delim =</span> <span class="st">", ..."</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_wider_delim</span>(<span class="at">cols =</span> This.workshop.was...,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">delim =</span> <span class="st">". - "</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"This_workshop_was"</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"Ranking"</span>),</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">too_few =</span> <span class="st">"align_start"</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>FeedbackActuallyAttended2<span class="sc">$</span>This_workshop_was <span class="ot">&lt;-</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_remove</span>(FeedbackActuallyAttended2<span class="sc">$</span>This_workshop_was,</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">pattern =</span> <span class="fu">fixed</span>(<span class="st">"..."</span>))</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide <span class="ot">&lt;-</span> FeedbackActuallyAttended2 <span class="sc">%&gt;%</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> This_workshop_was,</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> Ranking) <span class="sc">%&gt;%</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="st">`</span><span class="at">NA</span><span class="st">`</span>)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="co">#rows &lt;- as.numeric(count(postworkshopsurvey))</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="co">#postworkshopsurvey &lt;- na.omit(postworkshopsurvey)</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Changes in categories recorded over time have resulted in the need for some automated clean up code, which allows us to look at older categories if we need to, but use the updated equivalents for this report.</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating and splitting current levels for marketing</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>marketing_current_categories <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Announcement in Class by Instructor"</span>,</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Announcement in Class by Librarian"</span>,</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Non-Library Calendar or Newsletter"</span>,</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Another Libraries Workshop"</span>,</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Walk-in"</span>,</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Digital Signage in Non-Library Building"</span>,</span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Digital Signage in a Library Building"</span>,</span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Social Media - Other"</span>,</span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Social Media - Instagram"</span>,</span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Social Media - Facebook"</span>,</span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Social Media - Twitter"</span>,</span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Personal recommendation from OU Librarian"</span>,</span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Class requirement"</span>,</span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Departmental/program requirement"</span>,</span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"OU Libraries website"</span>,</span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Direct Email from OU Librarian to Departmental Listserv"</span>,</span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Direct Email from OU Libraries Workshop Listserv"</span>,</span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Direct Email from OU Libraries (Source Unknown)"</span>,</span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Flyer (Paper or Digital Unspecified)"</span>,</span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Flyer (Paper or Paper Signage)"</span>,</span>
+<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Supervisor (Forwarded email, word of mouth)"</span>,</span>
+<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Colleagues (Forwarded email, word of mouth)"</span>)</span>
+<span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-56"><a href="#cb19-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-57"><a href="#cb19-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-58"><a href="#cb19-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-59"><a href="#cb19-59" aria-hidden="true" tabindex="-1"></a><span class="do">## Convert old categories to equivalent new</span></span>
+<span id="cb19-60"><a href="#cb19-60" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.[Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Email from University Libraries"</span>] <span class="ot">&lt;-</span> <span class="st">"Direct Email from OU Libraries (Source Unknown)"</span></span>
+<span id="cb19-61"><a href="#cb19-61" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.[Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Colleagues"</span>] <span class="ot">&lt;-</span> <span class="st">"Colleagues (Forwarded email, word of mouth)"</span></span>
+<span id="cb19-62"><a href="#cb19-62" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.[Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Supervisor"</span>] <span class="ot">&lt;-</span> <span class="st">"Supervisor (Forwarded email, word of mouth)"</span></span>
+<span id="cb19-63"><a href="#cb19-63" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.[Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Department/Program Requirement"</span>] <span class="ot">&lt;-</span> <span class="st">"Departmental/program requirement"</span></span>
+<span id="cb19-64"><a href="#cb19-64" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.[Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Flyer"</span>] <span class="ot">&lt;-</span> <span class="st">"Flyer (Paper or Digital Unspecified)"</span></span>
+<span id="cb19-65"><a href="#cb19-65" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.[Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Walk-in"</span>] <span class="ot">&lt;-</span> <span class="st">"Other (please describe)"</span> <span class="co">#correcting that walk-in should not be a pre-registration option</span></span>
+<span id="cb19-66"><a href="#cb19-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-67"><a href="#cb19-67" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>ReducedCategories <span class="ot">&lt;-</span> Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop.</span>
+<span id="cb19-68"><a href="#cb19-68" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>ReducedCategories[<span class="sc">!</span>(Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop. <span class="sc">%in%</span> marketing_current_categories)] <span class="ot">&lt;-</span> <span class="st">"Other (please describe)"</span></span>
+<span id="cb19-69"><a href="#cb19-69" aria-hidden="true" tabindex="-1"></a>Registered<span class="sc">$</span>OtherDescriptions[<span class="sc">!</span>(Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop. <span class="sc">%in%</span> marketing_current_categories)] <span class="ot">&lt;-</span> Registered<span class="sc">$</span>If.other..please.describe.[<span class="sc">!</span>(Registered<span class="sc">$</span>How.did.you.hear.about.this.workshop. <span class="sc">%in%</span> marketing_current_categories)]</span>
+<span id="cb19-70"><a href="#cb19-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-71"><a href="#cb19-71" aria-hidden="true" tabindex="-1"></a><span class="do">## Convert old categories to equivalent new in feedback/post-workshop surveyd ata too.</span></span>
+<span id="cb19-72"><a href="#cb19-72" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Email from OU Libraries"</span>] <span class="ot">&lt;-</span> <span class="st">"Direct Email from OU Libraries (Source Unknown)"</span></span>
+<span id="cb19-73"><a href="#cb19-73" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Colleagues"</span>] <span class="ot">&lt;-</span> <span class="st">"Colleagues (Forwarded email, word of mouth)"</span></span>
+<span id="cb19-74"><a href="#cb19-74" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Supervisor"</span>] <span class="ot">&lt;-</span> <span class="st">"Supervisor (Forwarded email, word of mouth)"</span></span>
+<span id="cb19-75"><a href="#cb19-75" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.<span class="sc">==</span><span class="st">"Flyer"</span>] <span class="ot">&lt;-</span> <span class="st">"Flyer (Paper or Digital Unspecified)"</span></span>
+<span id="cb19-76"><a href="#cb19-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-77"><a href="#cb19-77" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>ReducedCategories <span class="ot">&lt;-</span> postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.</span>
+<span id="cb19-78"><a href="#cb19-78" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>ReducedCategories[<span class="sc">!</span>(postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop. <span class="sc">%in%</span> marketing_current_categories)] <span class="ot">&lt;-</span> <span class="st">"Other (please describe)"</span></span>
+<span id="cb19-79"><a href="#cb19-79" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_wide<span class="sc">$</span>OtherDescriptions[<span class="sc">!</span>(postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop. <span class="sc">%in%</span> marketing_current_categories)] <span class="ot">&lt;-</span> postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop.[<span class="sc">!</span>(postworkshopsurveys_wide<span class="sc">$</span>How.did.you.hear.about.this.workshop. <span class="sc">%in%</span> marketing_current_categories)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Unknown or uninitialised column: `OtherDescriptions`.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">## registrations</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>registrations_named <span class="ot">&lt;-</span> <span class="fu">left_join</span>(Registered,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                                 topics_complete_variations_cleaned,</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">by =</span>  <span class="fu">c</span>(<span class="st">"Title"</span> <span class="ot">=</span> <span class="st">"WorkshopNameVariations"</span>))</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="do">## postworkshop surveys</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named <span class="ot">&lt;-</span> <span class="fu">left_join</span>(postworkshopsurveys_wide,</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>                                       topics_complete_variations_cleaned,</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">by =</span>  <span class="fu">c</span>(<span class="st">"What.workshop.did.you.attend."</span> <span class="ot">=</span> <span class="st">"WorkshopNameVariations"</span>))</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Month, day, year, hour, minute, seconds</span></span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>Date_2 <span class="ot">&lt;-</span> <span class="fu">ymd_hms</span>(postworkshopsurveys_named<span class="sc">$</span>What.date.was.the.workshop.,</span>
-<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>                                                           <span class="at">truncated =</span> <span class="dv">3</span>)</span>
-<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co"># separate year, month, date, times</span></span>
-<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">year</span>(postworkshopsurveys_named<span class="sc">$</span>Date_2)</span>
-<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">month</span>(postworkshopsurveys_named<span class="sc">$</span>Date_2)</span>
-<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>day <span class="ot">&lt;-</span> <span class="fu">day</span>(postworkshopsurveys_named<span class="sc">$</span>Date_2)</span>
-<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>wday <span class="ot">&lt;-</span> <span class="fu">wday</span>(postworkshopsurveys_named<span class="sc">$</span>Date_2,</span>
-<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">week_start =</span> <span class="dv">1</span>, <span class="co">#1 = Monday,</span></span>
-<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">label =</span> <span class="cn">TRUE</span>    <span class="co"># days of weeks as characters</span></span>
-<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>                                      )</span>
-<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Overwrite original column with formatted date</span></span>
-<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>Date <span class="ot">&lt;-</span></span>
-<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format.Date</span>(postworkshopsurveys_named<span class="sc">$</span>Date_2, <span class="st">"%m/%d/%Y"</span>)</span>
-<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordered scales require using R levels to order categories for later graphing or analysis.</span></span>
-<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a><span class="co">#This will need to be repeated for all three "valuable for" questions, so the levels are ordered in the plots.</span></span>
-<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a><span class="co"># First, rename difficult columns</span></span>
-<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a><span class="co"># rename(df, newname = oldname)</span></span>
-<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named <span class="ot">&lt;-</span> postworkshopsurveys_named <span class="sc">%&gt;%</span> </span>
-<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Valuable.for.Program =</span> <span class="st">`</span><span class="at">valuable towards your program of study</span><span class="st">`</span>, </span>
-<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a>                <span class="at">Valuable.for.Teaching  =</span> <span class="st">`</span><span class="at">valuable towards your teaching</span><span class="st">`</span>,</span>
-<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>                <span class="at">Valuable.for.Career =</span> <span class="st">`</span><span class="at">valuable towards your career</span><span class="st">`</span>,</span>
-<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>                <span class="at">Using.New.Knowledge. =</span> <span class="st">`</span><span class="at">Do.you.anticipate.that.this.new.knowledge.can.b...</span><span class="st">`</span>)</span>
-<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a><span class="do">## Next, order the levels for all three.</span></span>
-<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>Valuable.for.Program <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="at">x =</span> postworkshopsurveys_named<span class="sc">$</span>Valuable.for.Program,</span>
-<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a>                                                  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"No answer"</span>,</span>
-<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Not applicable"</span>, </span>
-<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Strongly agree"</span>,</span>
-<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Agree"</span>,</span>
-<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Somewhat agree"</span>,</span>
-<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Neither agree nor disagree"</span>,</span>
-<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Somewhat disagree"</span>,</span>
-<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Disagree"</span>,</span>
-<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Strongly disagree"</span></span>
-<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a>                                                             </span>
-<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a>                                                  ))</span>
-<span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally, the tidied feedback and attendance data are combined to compare feedback with per-workshop characteristics such as format of instruction.  This is a smaller dataset as not all the workshops appear to have been entered into LibInsights, where the attendance and format data are stored.</span></span>
-<span id="cb20-69"><a href="#cb20-69" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb20-70"><a href="#cb20-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-71"><a href="#cb20-71" aria-hidden="true" tabindex="-1"></a>joined_post <span class="ot">&lt;-</span> <span class="fu">full_join</span>(postworkshopsurveys_named, </span>
-<span id="cb20-72"><a href="#cb20-72" aria-hidden="true" tabindex="-1"></a>                         attendance_named,</span>
-<span id="cb20-73"><a href="#cb20-73" aria-hidden="true" tabindex="-1"></a>                         <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"Date"</span>, <span class="st">"WorkshopCode"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in full_join(postworkshopsurveys_named, attendance_named, by = c("Date", : Detected an unexpected many-to-many relationship between `x` and `y`.
-ℹ Row 91 of `x` matches multiple rows in `y`.
-ℹ Row 91 of `y` matches multiple rows in `x`.
-ℹ If a many-to-many relationship is expected, set `relationship =
-  "many-to-many"` to silence this warning.</code></pre>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">## registrations</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>registrations_named <span class="ot">&lt;-</span> <span class="fu">left_join</span>(Registered,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                                 topics_complete_variations_cleaned,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">by =</span>  <span class="fu">c</span>(<span class="st">"Title"</span> <span class="ot">=</span> <span class="st">"WorkshopNameVariations"</span>))</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="do">## postworkshop surveys</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named <span class="ot">&lt;-</span> <span class="fu">left_join</span>(postworkshopsurveys_wide,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>                                       topics_complete_variations_cleaned,</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">by =</span>  <span class="fu">c</span>(<span class="st">"What.workshop.did.you.attend."</span> <span class="ot">=</span> <span class="st">"WorkshopNameVariations"</span>))</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Month, day, year, hour, minute, seconds</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>Date_2 <span class="ot">&lt;-</span> <span class="fu">ymd_hms</span>(postworkshopsurveys_named<span class="sc">$</span>What.date.was.the.workshop.,</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>                                                           <span class="at">truncated =</span> <span class="dv">3</span>)</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="co"># separate year, month, date, times</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">year</span>(postworkshopsurveys_named<span class="sc">$</span>Date_2)</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">month</span>(postworkshopsurveys_named<span class="sc">$</span>Date_2)</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>day <span class="ot">&lt;-</span> <span class="fu">day</span>(postworkshopsurveys_named<span class="sc">$</span>Date_2)</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>wday <span class="ot">&lt;-</span> <span class="fu">wday</span>(postworkshopsurveys_named<span class="sc">$</span>Date_2,</span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">week_start =</span> <span class="dv">1</span>, <span class="co">#1 = Monday,</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">label =</span> <span class="cn">TRUE</span>    <span class="co"># days of weeks as characters</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>                                      )</span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Overwrite original column with formatted date</span></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>Date <span class="ot">&lt;-</span></span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format.Date</span>(postworkshopsurveys_named<span class="sc">$</span>Date_2, <span class="st">"%m/%d/%Y"</span>)</span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordered scales require using R levels to order categories for later graphing or analysis.</span></span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a><span class="co">#This will need to be repeated for all three "valuable for" questions, so the levels are ordered in the plots.</span></span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a><span class="co"># First, rename difficult columns</span></span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a><span class="co"># rename(df, newname = oldname)</span></span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named <span class="ot">&lt;-</span> postworkshopsurveys_named <span class="sc">%&gt;%</span> </span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Valuable.for.Program =</span> <span class="st">`</span><span class="at">valuable towards your program of study</span><span class="st">`</span>, </span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>                <span class="at">Valuable.for.Teaching  =</span> <span class="st">`</span><span class="at">valuable towards your teaching</span><span class="st">`</span>,</span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>                <span class="at">Valuable.for.Career =</span> <span class="st">`</span><span class="at">valuable towards your career</span><span class="st">`</span>,</span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>                <span class="at">Using.New.Knowledge. =</span> <span class="st">`</span><span class="at">Do.you.anticipate.that.this.new.knowledge.can.b...</span><span class="st">`</span>)</span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a><span class="do">## Next, order the levels for all three.</span></span>
+<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a>postworkshopsurveys_named<span class="sc">$</span>Valuable.for.Program <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="at">x =</span> postworkshopsurveys_named<span class="sc">$</span>Valuable.for.Program,</span>
+<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a>                                                  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"No answer"</span>,</span>
+<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Not applicable"</span>, </span>
+<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Strongly agree"</span>,</span>
+<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Agree"</span>,</span>
+<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Somewhat agree"</span>,</span>
+<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Neither agree nor disagree"</span>,</span>
+<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Somewhat disagree"</span>,</span>
+<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Disagree"</span>,</span>
+<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a>                                                             <span class="st">"Strongly disagree"</span></span>
+<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a>                                                             </span>
+<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a>                                                  ))</span>
+<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a><span class="co"># ###########</span></span>
+<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a><span class="co"># # Finally, the tidied feedback and attendance data are combined to compare feedback with per-workshop characteristics such as format of instruction.  This is a smaller dataset as not all the workshops appear to have been entered into LibInsights, where the attendance and format data are stored.</span></span>
+<span id="cb21-69"><a href="#cb21-69" aria-hidden="true" tabindex="-1"></a><span class="co"># ###########</span></span>
+<span id="cb21-70"><a href="#cb21-70" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb21-71"><a href="#cb21-71" aria-hidden="true" tabindex="-1"></a><span class="co"># joined_post &lt;- full_join(postworkshopsurveys_named, </span></span>
+<span id="cb21-72"><a href="#cb21-72" aria-hidden="true" tabindex="-1"></a><span class="co">#                          attendance_named,</span></span>
+<span id="cb21-73"><a href="#cb21-73" aria-hidden="true" tabindex="-1"></a><span class="co">#                          by = c("Date", "WorkshopCode"))</span></span>
+<span id="cb21-74"><a href="#cb21-74" aria-hidden="true" tabindex="-1"></a><span class="co"># # It is necessary to join by both date and workshop code as occasionally 2 or more people will teach on the same day in different events or classes.</span></span>
+<span id="cb21-75"><a href="#cb21-75" aria-hidden="true" tabindex="-1"></a><span class="co"># # needs to be a full join because there are some courses not entered and vice versa.</span></span>
+<span id="cb21-76"><a href="#cb21-76" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb21-77"><a href="#cb21-77" aria-hidden="true" tabindex="-1"></a><span class="co"># # Filtering by NA is necessary because not everyone has entered their workshops into LibInsights and past workshops did not use the same feedback form, resulting in no attendance or format data to associate with the feedback or vice versa.  filtering by workshop code removes non-workshop course visits.</span></span>
+<span id="cb21-78"><a href="#cb21-78" aria-hidden="true" tabindex="-1"></a><span class="co"># joined_attendance_post_clean &lt;- joined_post %&gt;%</span></span>
+<span id="cb21-79"><a href="#cb21-79" aria-hidden="true" tabindex="-1"></a><span class="co">#   dplyr::filter(!is.na(WorkshopCode))</span></span>
+<span id="cb21-80"><a href="#cb21-80" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb21-81"><a href="#cb21-81" aria-hidden="true" tabindex="-1"></a><span class="co"># # Later data analysis will remove observations with no feedback automatically.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># It is necessary to join by both date and workshop code as occasionally 2 or more people will teach on the same day in different events or classes.</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># needs to be a full join because there are some courses not entered and vice versa.</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtering by NA is necessary because not everyone has entered their workshops into LibInsights and past workshops did not use the same feedback form, resulting in no attendance or format data to associate with the feedback or vice versa.  filtering by workshop code removes non-workshop course visits.</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>joined_attendance_post_clean <span class="ot">&lt;-</span> joined_post <span class="sc">%&gt;%</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(WorkshopCode))</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Later data analysis will remove observations with no feedback automatically.</span></span>
+</section>
+</section>
+</section>
+<section id="write-to-files-for-use-in-qmds." class="level1">
+<h1>Write to files for use in qmds.</h1>
+<p>Upload these files to OSF manually under “raw_data” folder.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Write to file for use in qmds.</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Attendance</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(attendance_named,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">"raw_data/processed_attendance_named.csv"</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Write to files for use in qmds.</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Satisfaction</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(joined_attendance_post_clean,</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">"raw_data/processed_joined_attendance_post_clean.csv"</span>,</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Marketing</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Satisfaction</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># write.csv(joined_attendance_post_clean,</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co">#           file = "raw_data/processed_joined_attendance_post_clean.csv",</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co">#           row.names = FALSE)</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="co"># # Has an invalid many-to-many relationship, need to process per-workshop instead later with summaries.</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="co"># # </span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(postworkshopsurveys_named,</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">file =</span> <span class="st">"raw_data/processed_postworkshopsurveys_named.csv"</span>,</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="co">#not sure why this one is different</span></span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(postworkshopsurveys_named,</span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">"raw_data/processed_postworkshopsurveys_named.csv"</span>,</span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(Registered,</span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">"raw_data/processed_Registered.csv"</span>,</span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Registration (Marketing)</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(Registered,</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">"raw_data/processed_Registered.csv"</span>,</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="page-break-after: always;"></div>
-</section>
-</section>
-</section>
 <section id="website-info" class="level2">
 <h2 class="anchored" data-anchor-id="website-info">Website info</h2>
-<p>This document was created are using the <strong>quarto</strong> package <span class="citation" data-cites="R-quarto">(<a href="#ref-R-quarto" role="doc-biblioref"><strong>R-quarto?</strong></a>)</span> to format this book. Each page can be updated by editing the .qmd file and pressing “render”. Use Build &gt; Render Book to make whole website again.</p>
+<p>This document was created are using the <strong>quarto</strong> package <span class="citation" data-cites="R-quarto">(<a href="#ref-R-quarto" role="doc-biblioref"><strong>R-quarto?</strong></a>)</span> to format this book. Each page can be updated by editing the .qmd file and pressing “render”.</p>
+<p><a href="https://quarto.org/docs/publishing/github-pages.html#publishing">To publish changes</a>, type quarto publish gh-pages into terminal.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1207,7 +1260,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./VIZ101.html" class="pagination-link" aria-label="Concepts of Data-Driven Visualization">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Concepts of Data-Driven Visualization</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Concepts of Data-Driven Visualization</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
