@@ -21,7 +21,7 @@ book:
         - descriptive_numbers.qmd
         - marketing.qmd
         - attendance.qmd
-        - satisfaction.qmd
+#        - satisfaction.qmd
     - part: topic_details.qmd
       chapters:
         - topics.qmd
@@ -49,10 +49,10 @@ format:
     fontsize: 12pt
     reference-location: margin
     citation-location: margin
-  pdf:
-    documentclass: book
-    keep-tex: false
-    cite-method: natbib
-    reference-location: margin
-    citation-location: margin
+  # pdf:
+  #   documentclass: book
+  #   keep-tex: false
+  #   cite-method: natbib
+  #   reference-location: margin
+  #   citation-location: margin
 # reference_docx: word_styles.docx
