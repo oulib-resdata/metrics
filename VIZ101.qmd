@@ -1,17 +1,76 @@
 # Concepts of Data-Driven Visualization
-Link to OSF.
 
-words(@sec-topics)
+The materials for this workshop are available in [OSF]() and [GitHub]().
 
+For aggregate workshop metrics, please read Attendance (@sec-attendance), Marketing (@sec-marketing) or Feedback (@sec-feedback). For an overall description of how many topics and frequencies of offerings, see Offerings (@sec-offerings).
+
+```{r setup, include=FALSE}
+# FUNCTIONS AND LIBRARIES
+# have to load all data over again each document https://forum.posit.co/t/quarto-cant-find-r-objects/156848
+knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2)    #for plots
+library(tidyverse)  #for data munging including dates
+library(viridis)    #color scheme
+
+
+attendance_named <- read.csv("raw_data/processed_attendance_named.csv")
+
+```
 
 ## Descriptive numbers
 How many times offered per semester, per year.  Number of different instructors.
 
+```{r}
+
+attendance_named %>%
+  dplyr::filter(WorkshopCode == "VIZ101") %>%
+  dplyr::count(Entered.By, )
+
+```
+
 ## Attendance
 
-### Over time
+### By Timing
 
-### By semester
+There are no obvious trends based on time of day or weekday with the current sample size.  In-class workshops do not record time of day and thus are not included.
+
+```{r}
+
+plot_time <- attendance_named %>% 
+  dplyr::filter(WorkshopCode == "VIZ101" & hour != 0) %>%
+  ggplot(mapping = aes(x = hour,
+                       y = Total.Attendees,
+                       color = Is.Course,
+                       shape = Is.Course)) +
+  geom_point() +
+  labs (y = "Total attendees per workshop",
+        x = "Hour of day (24 hr scale)",
+        fill = "Workshop offered in course") +
+  facet_wrap(~wday)
+plot_time
+
+
+```
+
+### By semester and year
+
+This workshop is offered only in spring semesters. More attendees come to in-class offerings.
+
+```{r}
+
+plot_date <- attendance_named %>% 
+  dplyr::filter(WorkshopCode == "VIZ101") %>%
+  ggplot(mapping = aes(x = as.factor(year),
+                       y = Total.Attendees,
+                       fill = Is.Course)) +
+  geom_boxplot(notch = TRUE) +
+  labs (y = "Total attendees per workshop",
+        x = "Semester",
+        fill = "Workshop offered in course") +
+  facet_wrap(~Semester)
+plot_date
+
+```
 
 
 ## Marketing
@@ -19,6 +78,8 @@ How many times offered per semester, per year.  Number of different instructors.
 ### Over time
 
 ### By semester
+
+
 
 ## Satisfaction
 
