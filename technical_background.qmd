@@ -2,13 +2,483 @@
 
 ## Data sources and processing
 
-Are available in Data_munging.R
+### If no data update needed
+
+#### Data download from OSF
+
+Data for this report are gathered from three sources (created by processing the four datasets below in "update data"):
+
+- pre-registration questionnaire when people register
+- attendance numbers entered by workshop instructors in LibInsights
+- post-workshop surveys.
+
+Registration numbers include learner names and emails and so all three datasets are kept on a private OSF repository and must be downloaded there.  Do not include these in github.
+
+
+```{r}
+
+
+###########
+# Load data from OSF
+###########
+
+# https://www.statology.org/r-check-if-file-exists/
+
+# Authenticate
+# Your OSF PAT should be in .REnviron file following these instructions:
+# https://docs.ropensci.org/osfr/reference/osf_auth.html
+
+if(file.exists("raw_data/README.md")){
+  print("OSF data already downloaded.")
+} else {
+  print("Download it!")
+
+library(osfr)
+
+# ## Retrieve project
+osf_node <- osf_retrieve_node("qjkvf")
+
+## List files in project
+osf_files <- osf_ls_files(osf_node)
+
+## Download the files
+osf_download(x = osf_files,
+              path = NULL, #default save to local working directory
+              recurse = TRUE, #download all nested files
+              conflicts = "overwrite", #OSF is the canonical version
+              progress = TRUE #show progress bar
+ )
+}
+
+```
+
+### If data update needed
+
+#### Raw data downloads
+
+This consists of four datasets.
+
+- Registration numbers (pre-workshop interest) from LibCal
+  - Downloaded per calendar then concatenated (?)
+  - Registered <- read.csv("raw_data/processed_Registered.csv")
+- Attendance from LibInsights for Course-integrated instruction
+  - How to get this data via download from "Course Integrated Library Instruction"
+    - Method 1
+      - Filter by Custom Date Range (July 1, 2018, to present)
+      - Add Additional Report Filter "Name of Workshop" "Is Not" "Null", then click "Add this filter".
+      - Click "generate report".
+    - Method 2
+      - Use saved filter "Workshop Filters (CMC)"
+    - Method 2
+      - Use saved filter "Workshops in Courses (CMC)"
+    - After either method, click "Reports" tab and then green button "Export Data to CSV"
+    - Save the file in OSF as /raw_data/attendance_courses.csv
+- Attendance from LibInsights for Outreach
+  - How to get this data via download from "Outreach and Programming Form Analysis"
+    - Method 1
+      - Filter by Custom Date Range (July 1, 2018, to present)
+      - Add Additional Report Filter "Type of Outreach" "Is" "Workshop", then click "Add this filter".
+      - Click "generate report".
+    - Method 2
+      - Use saved filter "Workshop Filters (CMC)"
+  - After either method, click "Reports" tab and then green button "Export Data to CSV"
+    - Save the file in OSF as /raw_data/attendance_outreach.csv
+- Post-workshop surveys (feedback and satisfaction) from LibWizard
+  - postworkshopsurveys_named <- read.csv("raw_data/processed_postworkshopsurveys_named.csv")
+
+
+#### Raw data processing to write three working files
+
+Titles have varied over time with marketing experiments, typos, and accidental changes.  This code assigns a standardized code between each topic.
+
+```{r}
+library(dplyr)
+
+
+topics_complete_variations <- read.csv("./workshop_metadata.csv")
+
+# remove any accidental duplicates of name variations (otherwise will create a many-to-many join below in next step)
+topics_complete_variations_cleaned <-topics_complete_variations %>%
+  dplyr::distinct(WorkshopNameVariations, WorkshopCode)
+
+# Must attach standard titles to all three datasets (registrations, attendance, and post-workshop surveys) to allow joining the three based on topic and date.
+
+```
+
+
+The four raw datasets are combined and cleaned into three working datasets.
+
+- Registration numbers
+
+- Attendance
+  
+  - Course and Outreach datasets are each given a column for Is.Course (Y = Course, N = Outreach) before being combined.
+
+```{r}
+library(lubridate)
+
+###########
+# Attendance data is created by combining Course Instruction attendance data from LibInsights and Outreach Instruction attendance data from LibInsights.  It can be filtered by columns such as date, year, month, instructor, and workshop topic.
+###########
+
+# Outreach
+attendance_outreach <- read.csv("raw_data/attendance_outreach.csv",
+                                header=TRUE,
+                                stringsAsFactors=FALSE)
+attendance_outreach$Is.Course <- "Not a course"
+attendance_outreach$Requested.[is.na(attendance_outreach$Requested.)] <- "Unknown"
+attendance_outreach$Requested.[attendance_outreach$Requested.==""] <- "Unknown"
+
+# Courses
+attendance_courses <- read.csv("raw_data/attendance_courses.csv",
+                                header=TRUE,
+                                stringsAsFactors=FALSE)
+attendance_courses$Is.Course <- "Within a course"
+attendance_courses$Requested. <- "Yes"
+attendance_courses$Total.Attendees <- attendance_courses$Total.Attendance
+
+
+###########
+# We clean dates out by weekday, year, month, day, and times for later analysis and data subsetting.
+###########
+
+# Outreach
+
+# Month, day, year, hour, minute, seconds
+attendance_outreach$Event.Date.and.Time_2 <- ymd_hms(attendance_outreach$Event.Date.and.Time,
+                                                    truncated = 3)
+
+
+# separate year, month, date, times
+attendance_outreach$year <- year(attendance_outreach$Event.Date.and.Time_2)
+attendance_outreach$month <- month(attendance_outreach$Event.Date.and.Time_2)
+attendance_outreach$day <- day(attendance_outreach$Event.Date.and.Time_2)
+attendance_outreach$wday <- wday(attendance_outreach$Event.Date.and.Time_2,
+                                      week_start = 1, #1 = Monday,
+                                      label = TRUE    # days of weeks as characters
+                                      )
+attendance_outreach$hour <-as.numeric(
+  format(attendance_outreach$Event.Date.and.Time_2, "%H"))
+
+attendance_outreach$Date <-
+  format.Date(attendance_outreach$Event.Date.and.Time_2, "%m/%d/%Y")
+
+# convert 00 hour to NA
+# attendance_outreach[attendance_outreach$hour==00, "hour"] <- NA
+
+attendance_outreach$hour <- as.numeric(attendance_outreach$hour)
+
+# Semester defined as spring (month 1-5), summer (month 6-7), fall (month 8-12)
+
+attendance_outreach$Semester[attendance_outreach$month>0&
+                            attendance_outreach$month<6] <- "Spring"
+attendance_outreach$Semester[attendance_outreach$month>5&
+                            attendance_outreach$month<8] <- "Spring"
+attendance_outreach$Semester[attendance_outreach$month>7&
+                            attendance_outreach$month<=12] <- "Spring"
+
+
+# Courses
+# Month, day, year, hour, minute, seconds
+attendance_courses$Event.Date.and.Time_2 <-
+  ymd_hms(attendance_courses$Session.Date,
+          truncated = 3)
+
+
+# separate year, month, date, times
+attendance_courses$year <- year(attendance_courses$Event.Date.and.Time_2)
+attendance_courses$month <- month(attendance_courses$Event.Date.and.Time_2)
+attendance_courses$day <- day(attendance_courses$Event.Date.and.Time_2)
+attendance_courses$wday <- wday(attendance_courses$Event.Date.and.Time_2,
+                                      week_start = 1, #1 = Monday,
+                                      label = TRUE    # days of weeks as characters
+                                      )
+attendance_courses$hour <-as.numeric(
+  format(attendance_courses$Event.Date.and.Time_2, "%H"))
+
+attendance_courses$Date <-
+  format.Date(attendance_courses$Event.Date.and.Time_2, "%m/%d/%Y")
+
+# convert 00 hour to NA
+# attendance_courses[attendance_courses$hour==00, "hour"] <- NA
+
+attendance_courses$hour <- as.numeric(attendance_courses$hour)
+
+# Semester defined as spring (month 1-5), summer (month 6-7), fall (month 8-12)
+
+attendance_courses$Semester[attendance_courses$month>0&
+                            attendance_courses$month<6] <- "Spring"
+attendance_courses$Semester[attendance_courses$month>5&
+                            attendance_courses$month<8] <- "Spring"
+attendance_courses$Semester[attendance_courses$month>7&
+                            attendance_courses$month<=12] <- "Spring"
+
+
+
+###########
+# Join outreach and course datasets
+###########
+
+# using dplyr's bind_rows instead of cbind ensures all columns are kept, including those unique to each dataset
+
+attendance_named <- dplyr::bind_rows(attendance_outreach,
+                                    attendance_courses)
+                                    
+
+###########
+
+## attendance
+attendance_named <- left_join(attendance_named,
+                                 topics_complete_variations_cleaned,
+                                 by =  c("Name.of.Workshop" = "WorkshopNameVariations")) %>% 
+  dplyr::filter(!is.na(id))
+
+
+
+
+
+###########
+# Write to file for use in qmds.
+###########
+# Attendance
+write.csv(attendance_named,
+          file = "raw_data/processed_attendance_named.csv",
+          row.names = FALSE)
+
+
+```
+
+- Post-workshop surveys
+
+- Deal with all these data (attendance data are in ok now)
+
+
+```{r}
+###########
+# Registration data has to be imported per-room from LibCal.
+###########
+# Event registration 
+Room339 <- read.csv("./raw_data/preworkshop/Room339_lc_events_20230105043223.csv")
+RoomLL123 <- read.csv("./raw_data/preworkshop/LL123_lc_events_20230105043507.csv")
+RoomGeneral <- read.csv("./raw_data/preworkshop/General_lc_events_20230105043258.csv")
+RoomLearningLabClassroom <- read.csv("./raw_data/preworkshop/LearningLabClassroom_lc_events_20230105043409.csv")
+
+# Merge
+Registered <- rbind(Room339,
+                    RoomLL123,
+                    RoomGeneral,
+                    RoomLearningLabClassroom
+)
+
+
+
+
+###########
+# Post-workshop survey data are from a subset of learners who attended and also filled out a survey.  In a few cases we forget to administer the survey or there's not enough time, or individuals opt out even when physically present in the room.
+###########
+
+# Post-workshop surveys from libwizard only
+## Used for both feedback AND marketing
+FeedbackActuallyAttended <- read.csv("./raw_data/postworkshop/report.csv",
+                                     na.strings=c("","NA"))
+
+
+library(tidyr)
+library(stringr)
+
+FeedbackActuallyAttended2 <- FeedbackActuallyAttended %>%
+  separate_longer_delim(This.workshop.was...,
+                        delim = ", ...") %>%
+  separate_wider_delim(cols = This.workshop.was...,
+                       delim = ". - ",
+                       names = c("This_workshop_was",
+                                 "Ranking"),
+                       too_few = "align_start")
+
+FeedbackActuallyAttended2$This_workshop_was <-
+  str_remove(FeedbackActuallyAttended2$This_workshop_was,
+             pattern = fixed("..."))
+
+postworkshopsurveys_wide <- FeedbackActuallyAttended2 %>%
+  pivot_wider(names_from = This_workshop_was,
+              values_from = Ranking) %>%
+  dplyr::select(-`NA`)
+
+
+
+#rows <- as.numeric(count(postworkshopsurvey))
+
+#postworkshopsurvey <- na.omit(postworkshopsurvey)
+
+
+
+
+###########
+# Changes in categories recorded over time have resulted in the need for some automated clean up code, which allows us to look at older categories if we need to, but use the updated equivalents for this report.
+###########
+
+# Creating and splitting current levels for marketing
+marketing_current_categories <- c("Announcement in Class by Instructor",
+                                  "Announcement in Class by Librarian",
+                                  "Non-Library Calendar or Newsletter",
+                                  "Another Libraries Workshop",
+                                  "Walk-in",
+                                  "Digital Signage in Non-Library Building",
+                                  "Digital Signage in a Library Building",
+                                  "Social Media - Other",
+                                  "Social Media - Instagram",
+                                  "Social Media - Facebook",
+                                  "Social Media - Twitter",
+                                  "Personal recommendation from OU Librarian",
+                                  "Class requirement",
+                                  "Departmental/program requirement",
+                                  "OU Libraries website",
+                                  "Direct Email from OU Librarian to Departmental Listserv",
+                                  "Direct Email from OU Libraries Workshop Listserv",
+                                  "Direct Email from OU Libraries (Source Unknown)",
+                                  "Flyer (Paper or Digital Unspecified)",
+                                  "Flyer (Paper or Paper Signage)",
+                                  "Supervisor (Forwarded email, word of mouth)",
+                                  "Colleagues (Forwarded email, word of mouth)")
+
+
+
+
+## Convert old categories to equivalent new
+Registered$How.did.you.hear.about.this.workshop.[Registered$How.did.you.hear.about.this.workshop.=="Email from University Libraries"] <- "Direct Email from OU Libraries (Source Unknown)"
+Registered$How.did.you.hear.about.this.workshop.[Registered$How.did.you.hear.about.this.workshop.=="Colleagues"] <- "Colleagues (Forwarded email, word of mouth)"
+Registered$How.did.you.hear.about.this.workshop.[Registered$How.did.you.hear.about.this.workshop.=="Supervisor"] <- "Supervisor (Forwarded email, word of mouth)"
+Registered$How.did.you.hear.about.this.workshop.[Registered$How.did.you.hear.about.this.workshop.=="Department/Program Requirement"] <- "Departmental/program requirement"
+Registered$How.did.you.hear.about.this.workshop.[Registered$How.did.you.hear.about.this.workshop.=="Flyer"] <- "Flyer (Paper or Digital Unspecified)"
+Registered$How.did.you.hear.about.this.workshop.[Registered$How.did.you.hear.about.this.workshop.=="Walk-in"] <- "Other (please describe)" #correcting that walk-in should not be a pre-registration option
+
+Registered$ReducedCategories <- Registered$How.did.you.hear.about.this.workshop.
+Registered$ReducedCategories[!(Registered$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
+Registered$OtherDescriptions[!(Registered$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- Registered$If.other..please.describe.[!(Registered$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
+
+## Convert old categories to equivalent new in feedback/post-workshop surveyd ata too.
+postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.=="Email from OU Libraries"] <- "Direct Email from OU Libraries (Source Unknown)"
+postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.=="Colleagues"] <- "Colleagues (Forwarded email, word of mouth)"
+postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.=="Supervisor"] <- "Supervisor (Forwarded email, word of mouth)"
+postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.[postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.=="Flyer"] <- "Flyer (Paper or Digital Unspecified)"
+
+postworkshopsurveys_wide$ReducedCategories <- postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.
+postworkshopsurveys_wide$ReducedCategories[!(postworkshopsurveys_wide$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- "Other (please describe)"
+postworkshopsurveys_wide$OtherDescriptions[!(postworkshopsurveys_wide$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)] <- postworkshopsurveys_wide$How.did.you.hear.about.this.workshop.[!(postworkshopsurveys_wide$How.did.you.hear.about.this.workshop. %in% marketing_current_categories)]
+
+
+                                 
+## registrations
+registrations_named <- left_join(Registered,
+                                 topics_complete_variations_cleaned,
+                                 by =  c("Title" = "WorkshopNameVariations"))
+
+
+## postworkshop surveys
+postworkshopsurveys_named <- left_join(postworkshopsurveys_wide,
+                                       topics_complete_variations_cleaned,
+                                       by =  c("What.workshop.did.you.attend." = "WorkshopNameVariations"))
+
+
+
+
+
+
+###########
+# Month, day, year, hour, minute, seconds
+###########
+postworkshopsurveys_named$Date_2 <- ymd_hms(postworkshopsurveys_named$What.date.was.the.workshop.,
+                                                           truncated = 3)
+
+
+# separate year, month, date, times
+postworkshopsurveys_named$year <- year(postworkshopsurveys_named$Date_2)
+postworkshopsurveys_named$month <- month(postworkshopsurveys_named$Date_2)
+postworkshopsurveys_named$day <- day(postworkshopsurveys_named$Date_2)
+postworkshopsurveys_named$wday <- wday(postworkshopsurveys_named$Date_2,
+                                      week_start = 1, #1 = Monday,
+                                      label = TRUE    # days of weeks as characters
+                                      )
+
+# Overwrite original column with formatted date
+postworkshopsurveys_named$Date <-
+  format.Date(postworkshopsurveys_named$Date_2, "%m/%d/%Y")
+
+
+###########
+# Ordered scales require using R levels to order categories for later graphing or analysis.
+###########
+
+#This will need to be repeated for all three "valuable for" questions, so the levels are ordered in the plots.
+
+# First, rename difficult columns
+# rename(df, newname = oldname)
+postworkshopsurveys_named <- postworkshopsurveys_named %>% 
+  dplyr::rename(Valuable.for.Program = `valuable towards your program of study`, 
+                Valuable.for.Teaching  = `valuable towards your teaching`,
+                Valuable.for.Career = `valuable towards your career`,
+                Using.New.Knowledge. = `Do.you.anticipate.that.this.new.knowledge.can.b...`)
+
+## Next, order the levels for all three.
+postworkshopsurveys_named$Valuable.for.Program <- factor(x = postworkshopsurveys_named$Valuable.for.Program,
+                                                  levels = c("No answer",
+                                                             "Not applicable", 
+                                                             "Strongly agree",
+                                                             "Agree",
+                                                             "Somewhat agree",
+                                                             "Neither agree nor disagree",
+                                                             "Somewhat disagree",
+                                                             "Disagree",
+                                                             "Strongly disagree"
+                                                             
+                                                  ))
+
+
+###########
+# Finally, the tidied feedback and attendance data are combined to compare feedback with per-workshop characteristics such as format of instruction.  This is a smaller dataset as not all the workshops appear to have been entered into LibInsights, where the attendance and format data are stored.
+###########
+
+joined_post <- full_join(postworkshopsurveys_named, 
+                         attendance_named,
+                         by = c("Date", "WorkshopCode"))
+# It is necessary to join by both date and workshop code as occasionally 2 or more people will teach on the same day in different events or classes.
+# needs to be a full join because there are some courses not entered and vice versa.
+
+# Filtering by NA is necessary because not everyone has entered their workshops into LibInsights and past workshops did not use the same feedback form, resulting in no attendance or format data to associate with the feedback or vice versa.  filtering by workshop code removes non-workshop course visits.
+joined_attendance_post_clean <- joined_post %>%
+  dplyr::filter(!is.na(WorkshopCode))
+
+# Later data analysis will remove observations with no feedback automatically.
+
+
+###########
+# Write to files for use in qmds.
+###########
+
+
+# Satisfaction
+write.csv(joined_attendance_post_clean,
+          file = "raw_data/processed_joined_attendance_post_clean.csv",
+          row.names = FALSE)
+
+# Marketing
+
+#not sure why this one is different
+write.csv(postworkshopsurveys_named,
+          file = "raw_data/processed_postworkshopsurveys_named.csv",
+          row.names = FALSE)
+
+write.csv(Registered,
+          file = "raw_data/processed_Registered.csv",
+          row.names = FALSE)
+
+```
 
 {{< pagebreak >}}
 
-## Book info
+## Website info
 
-This document was created are using the **quarto** package [@R-quarto] to format this book.
+This document was created are using the **quarto** package [@R-quarto] to format this book.  Each page can be updated by editing the .qmd file and pressing "render".  Use Build > Render Book to make whole website again.
 
 ```{r include=FALSE}
 # automatically create a bib database for R packages
