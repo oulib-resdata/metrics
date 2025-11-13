@@ -478,7 +478,9 @@ write.csv(Registered,
 
 ## Website info
 
-This document was created are using the **quarto** package [@R-quarto] to format this book.  Each page can be updated by editing the .qmd file and pressing "render".  Use Build > Render Book to make whole website again.
+This document was created are using the **quarto** package [@R-quarto] to format this book.  Each page can be updated by editing the .qmd file and pressing "render".  
+
+[To publish changes](https://quarto.org/docs/publishing/github-pages.html#publishing), type quarto publish gh-pages into terminal.
 
 ```{r include=FALSE}
 # automatically create a bib database for R packages
