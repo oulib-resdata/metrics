@@ -59,8 +59,22 @@ osf_download(x = osf_files,
 This consists of four datasets.
 
 - Registration numbers (pre-workshop interest) from LibCal
-  - Downloaded per calendar then concatenated (?)
-  - Registered <- read.csv("raw_data/processed_Registered.csv")
+  - Go to Libcal.ou.edu and click "Dashboard" in bottom of screen (left of "logout") while logged in.
+  - Click "Events" menu.
+  - Click "Libraries Events" in the list of calendars.
+  - Click "Event Explorer" tab.
+    - Choose date range (last download, which is 11/13/2025) to present.
+    - Internal tags = "Research Workshop"
+    - Booking Form = "Research workshops (pre-registration)
+    - Show registration responses = "Yes"
+    - Click "submit".
+    - Click "Export data".
+    - Save file to raw_data/preworkshop in OSF and locally.
+    - Add to list of files used in the Registered section.
+  - After processing, load via 
+    - Registered <- read.csv("raw_data/processed_Registered.csv") in each analysis page.
+
+
 - Attendance from LibInsights for Course-integrated instruction
   - How to get this data via download from "Course Integrated Library Instruction"
     - Method 1
@@ -257,20 +271,44 @@ write.csv(attendance_named,
 ###########
 # Registration data has to be imported per-room from LibCal.
 ###########
-# Event registration 
+# Event registrations pre-July 2025.
 Room339 <- read.csv("./raw_data/preworkshop/Room339_lc_events_20230105043223.csv")
 RoomLL123 <- read.csv("./raw_data/preworkshop/LL123_lc_events_20230105043507.csv")
 RoomGeneral <- read.csv("./raw_data/preworkshop/General_lc_events_20230105043258.csv")
 RoomLearningLabClassroom <- read.csv("./raw_data/preworkshop/LearningLabClassroom_lc_events_20230105043409.csv")
 
+## There is a 2023-2024 gap??  # TODO
+
+# Event registrations post-July 2025.
+Library_events <- read.csv("./raw_data/preworkshop/lc_events_20251113014155.csv")  
+# New format has one new column (End.Date) and has renamed two columns.
+# Start.Date (was formerly Date)
+# End.Date (did not exist)
+# Event.Note (was Notes)
+
+
 # Merge
-Registered <- rbind(Room339,
+Registered.old.format <- rbind(Room339,
                     RoomLL123,
                     RoomGeneral,
                     RoomLearningLabClassroom
 )
 
+Registered.old.format.standardize <- Registered.old.format %>%
+  dplyr::select(-Notes)
+Library_events.standardize <- Library_events %>%
+  dplyr::select(-Event.Note,
+                -End.Date) %>%
+  dplyr::rename(Date = Start.Date)
 
+
+Registered <- rbind(Registered.old.format.standardize,
+                    Library_events.standardize
+                    )
+
+```
+
+```{r}
 
 
 ###########
@@ -449,11 +487,14 @@ joined_attendance_post_clean <- joined_post %>%
   dplyr::filter(!is.na(WorkshopCode))
 
 # Later data analysis will remove observations with no feedback automatically.
+```
 
 
-###########
 # Write to files for use in qmds.
-###########
+
+Upload these files to OSF manually under "raw_data" folder.
+
+```{r}
 
 
 # Satisfaction
@@ -468,6 +509,7 @@ write.csv(postworkshopsurveys_named,
           file = "raw_data/processed_postworkshopsurveys_named.csv",
           row.names = FALSE)
 
+# Registration
 write.csv(Registered,
           file = "raw_data/processed_Registered.csv",
           row.names = FALSE)
