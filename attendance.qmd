@@ -25,7 +25,12 @@ attendance <- read.csv("raw_data/processed_attendance_named.csv")
 
 ### Statistical analysis
 
-For scheduled workshops, format and year impact attendance numbers in a conditional inference tree analysis.  Virtual and hybrid workshops get generally higher numbers.  Within in-person workshops, the most recent two years (2023-2024) have lowest numbers attending per workshop. 
+
+#### For last two years (2023-2025): Scheduled (not requested, not in a class) workshops
+
+For scheduled (non-course) workshops in 2023-2025, topic and format are impacting numbers a conditional inference tree analysis.  Virtual and hybrid workshops are grouped within most workshops.  A few workshops (INTROPY = Introduction to Python), NEWSAA=African American Newspapers, TIDY101=Introduction to Spreadsheets/Formatting Data for Analysis, and ZOTERO=Citation Management with Zotero) are format-agnostic for attendance.
+
+The variables included were:
 
 -   format (in person vs virtual vs hybrid)
 
@@ -53,12 +58,16 @@ att_tree <- ctree(Total.Attendees ~
                     attendance$Is.Course == "Not a course" &
                       attendance$Requested. == "No"&
                       attendance$year <= this_year &
-                      attendance$year >= last_two_years,]
+                      attendance$year >= last_two_years,],
+                  na.action = na.omit
                   )
+
+att_tree
 
 plot(att_tree)
 #print(paste("Workshops from", last_two_years, "to", this_year, "(last two calendar years)"))
 ```
+#### For last two years: All workshops (including visits to classes and requested workshops)
 
 When we examine all workshops (included on-request visits to classes and on-request workshops), we add the following variables:
 
@@ -66,7 +75,7 @@ When we examine all workshops (included on-request visits to classes and on-requ
 
 -   requested or not
 
-Whether a workshop was in a course (where students are presumably required to attend) was the most dramatic factor in increased attendance numbers. For workshops not in a course, virtual and hybrid workshops have the highest attendance.
+Whether a workshop was requested (most of which are courses, where students are presumably required to attend) was the most dramatic factor in increased attendance numbers. For workshops not requested (our scheduled ones), virtual and hybrid workshops have the highest attendance.  For in person not requested, BBASH, INTROPY, INTROR, STORY, ZOTERO have the highest attendance.
 
 ```{r att_tree2, echo=FALSE, message = FALSE, warning = FALSE}
 att_tree2 <- ctree(Total.Attendees ~ 
@@ -81,15 +90,24 @@ att_tree2 <- ctree(Total.Attendees ~
                   ,
                   data = attendance[
                       attendance$year <= this_year &
-                      attendance$year >= last_two_years,]
+                      attendance$year >= last_two_years,],
+                  na.action = na.omit
                   )
+
+att_tree2
 
 plot(att_tree2)
 ```
 
-### Format
+#### For all time
 
-Ignoring all other factors, the workshop format was not significantly different. You can also see this with a different visual analysis using notched box plots. The overlapping "notches" here show that there is no difference between median attendance for scheduled (not on request, not in a class) workshops by format.
+
+
+
+
+### Format (for all workshops ever)
+
+Ignoring all other factors, the workshop format was not significantly different using a different statistical test, a visual analysis called notched box plots. The overlapping "notches" here show that there is no difference between median attendance for scheduled (not on request, not in a class) workshops by format.  This differs slightly from the analyses above, where we also account for topics and are clustering based on a different algorithm.
 
 ```{r attendance_by_format_request, echo=FALSE, message = FALSE, warning = FALSE}
 attendance[attendance$Is.Course == "Not a course" &
@@ -106,7 +124,7 @@ attendance[attendance$Is.Course == "Not a course" &
 
 ### Workshop attendance over time
 
-The median number of people at each scheduled workshop has declined slightly per calendar year from 2021-2024. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrollment to "make".
+The median number of people at each scheduled workshop has declined slightly per calendar year after 2022 and appears to be stable now as of late 2025. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrollment to "make".
 
 ```{r avg_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 plot_time <- attendance %>% 
@@ -123,7 +141,7 @@ plot_time
 
 ## Total people reached
 
-The total number of people reached has no strong trends since 2021.
+The total number of people reached has no strong trends between 2021-2024 and has increased in 2025 compared to 2024.
 
 ```{r, total_reached_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 
@@ -138,7 +156,7 @@ attendance %>%
   
 ```
 
-The proportion of total people reached each calendar year in courses peaked in 2020, declined, and then has increased each calendar year since 2021.
+The proportion of total people reached each calendar year in courses peaked in 2020, declined, and then has increased each calendar year since 2021, appearing to stabilize in 2024-2025.  It seems plausible that most people were only attending classes during 2020, peak Covid.
 
 ```{r, prop_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 # https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
