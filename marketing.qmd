@@ -141,9 +141,11 @@ other_source_registrations
 
 ## Relative effectiveness in marketing methods
 
-We do not get 100% survey responses at our workshops.  However, I wanted to see to see if some marketing methods are proportionately more effective in getting pre-registrants to actually show up at the workshop.  The differences are overall statistically significantly different (Chi-squared = 71.5, df =- 20, p < 0.0001).
+We do not get 100% survey responses at our workshops.  However, I wanted to see to see if some marketing methods are proportionately more effective in getting pre-registrants to actually show up at the workshop.  The differences are overall statistically significantly different (Chi-squared = 204.31, df = 21, p < 0.0001).
 
 Below is a chart that represents this visually as a ratio of attendance to pre-registrant counts.  The vertical beige bar shows approximately where about the same proportion (i.e., 0.5 out of 1, or 50/100) of people who pre-registered (red) ended up actually attending and filling out a survey (black).
+
+Class requirements, direct emails from OU Libraries, personal recommendations from a librarian, and announcement in class are among the differentially effective ways to get people to attend vs register.
 
 
 
@@ -202,14 +204,16 @@ marketing_effectiveness
 
 ```
 
-A completely red bar indicates that none of the people who completed the pre-registration survey later completed a post-workshop survey.  It is possible some of those attendees showed up but did not complete the offered post-workshop survey.  People who pre-registered and heard about the workshop via Twitter, Facebook, Other Social Media Not Specified, Announcement in Class by Librarian, and paper fliers have this result, suggesting those media may not be resulting in attendees or not resulting in attendees willing to provide feedback.
+A completely red bar indicates that none of the people who completed the pre-registration survey later completed a post-workshop survey.  It is possible some of those attendees showed up but did not complete the offered post-workshop survey.  People who pre-registered and heard about the workshop via Twitter (no longer used), Facebook (no longer used), Other Social Media Not Specified (no longer used), and paper fliers have this result, suggesting those media may not be resulting in attendees or not resulting in attendees willing to provide feedback.
 
-A completely black bar indicates that pre-registration did not occur but people attended anyways (you see these attendees as the red caps to the black bars in the previous section).  This occurred more with people who attended a workshop given in a class ("Class Requirement"; that category suggests either we visited the class, which does not involve LibCal registration, or that the instructor asked people to attend a workshop outside of class).  With online workshops requiring pre-registration, we don't necessarily expect any bar to be completely black (all walk-ins).  However, in-person workshops can accept passer-by walk-ins who didn't pre-register or people who saw the event via any other marketing method (again, see the previous section's chart) and just showed up without pre-registering. Zoom workshops could have other registrants also forward the Zoom link.
+A completely black bar indicates that pre-registration did not occur but people attended anyways (you see these attendees as the red caps to the black bars in the previous section).  This occurred more with people who attended a workshop given in a class ("Class Requirement"; that category suggests either we visited the class, which does not involve LibCal registration, or that the instructor asked people to attend a workshop outside of class).  With online workshops requiring pre-registration, we don't necessarily expect any bar to be completely black (all walk-ins).  However, in-person workshops can accept passer-by walk-ins who didn't pre-register or people who saw the event via any other marketing method (again, see the previous section's chart) and just showed up without pre-registering. This rarely occurs anymore.  Zoom workshops could have other registrants also forward the Zoom link.
 
-Thus, any method with some black has some attendance, and methods with larger amounts of black indicate relatively stronger responses.  Thus, the highest response "intensity" are for class requirements, librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and people who find events by examining the OU Libraries website.
+Thus, any method with some black has some attendance, and methods with larger amounts of black indicate relatively stronger responses.  Thus, the highest response "intensity" are for class requirements and direct communication.
 
 ## Marketing implementation details
 ### Email detail level and timing
+
+This subset study was conducted by B. Narr and Claire Curry in 2023 and has not been re-done.
 
 ```{r email_code, include=FALSE}
 #emails <- read.csv("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/EmailLengthStudyFinal.csv")
