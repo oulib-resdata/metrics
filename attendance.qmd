@@ -118,7 +118,7 @@ The variables included were:
 
 Workshop topic had to be excluded for too  many splits in the model.
 
-```{r att_tree, echo=FALSE, message = FALSE, warning = FALSE, output = FALSE}
+```{r att_tree3, echo=FALSE, message = FALSE, warning = FALSE, output = FALSE}
 library(ggplot2)    #for plots
 library(partykit)    #for ctree
 att_tree3 <- ctree(Total.Attendees ~ 
@@ -148,7 +148,7 @@ When we examine all workshops (included on-request visits to classes and on-requ
 
 The plot is more complex now, but reflects trends in all the previous subset analyses.  Early years are highest attended for non-requested events.  Requested and within-course workshops and hybrid/virtual workshops are more highly attended.
 
-```{r att_tree2, echo=FALSE, message = FALSE, warning = FALSE}
+```{r att_tree4, echo=FALSE, message = FALSE, warning = FALSE}
 att_tree4 <- ctree(Total.Attendees ~ 
                     as.factor(Format) +
                     as.factor(year)+
