@@ -100,7 +100,7 @@ This consists of four datasets.
       - Use saved filter "Workshop Filters (CMC)"
   - After either method, click "Reports" tab and then green button "Export Data to CSV"
     - Save the file in OSF as /raw_data/attendance_outreach.csv
-
+      - This overwrites the previous version.  You can see previous versions with OSF's versioning.
 
 - Post-workshop surveys (feedback and satisfaction) from LibWizard
   - postworkshopsurveys_named <- read.csv("raw_data/processed_postworkshopsurveys_named.csv")
