@@ -2,7 +2,7 @@
 
 The materials for this workshop are available in [OSF]() and [GitHub]().
 
-For aggregate workshop metrics, please read Attendance (@sec-attendance), Marketing (@sec-marketing) or Feedback (@sec-feedback). For an overall description of how many topics and frequencies of offerings, see Offerings (@sec-offerings).
+For aggregate workshop metrics, please read Attendance (@sec-attendance) or Marketing (@sec-marketing). For an overall description of how many topics and frequencies of offerings, see Offerings (@sec-offerings).
 
 ```{r setup, include=FALSE}
 # FUNCTIONS AND LIBRARIES

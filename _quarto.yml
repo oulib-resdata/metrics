@@ -45,7 +45,7 @@ format:
     toc: false
     code-background: true
     code-copy: true
-    css: style.css
+  #  css: style.css
     fontsize: 12pt
     reference-location: margin
     citation-location: margin
