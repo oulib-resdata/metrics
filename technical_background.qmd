@@ -56,7 +56,9 @@ osf_download(x = osf_files,
 
 #### Raw data downloads
 
-This consists of four datasets.
+This consists of four raw datasets that turn into three processed datasets.
+
+##### Registration data
 
 - Registration numbers (pre-workshop interest) from LibCal
   - Go to Libcal.ou.edu and click "Dashboard" in bottom of screen (left of "logout") while logged in.
@@ -71,9 +73,12 @@ This consists of four datasets.
     - Click "Export data".
     - Save file to raw_data/preworkshop in OSF and locally.
     - Add to list of files used in the Registered section.
-  - After processing, load via 
+  - After processing, load back in via 
     - Registered <- read.csv("raw_data/processed_Registered.csv") in each analysis page.
 
+##### Attendance data
+
+Two datasets must be combined to get one attendance file.
 
 - Attendance from LibInsights for Course-integrated instruction
   - How to get this data via download from ["Course Integrated Library Instruction"](https://ou.libinsight.com/admin/custom-dataset/13799)
@@ -102,8 +107,23 @@ This consists of four datasets.
     - Save the file in OSF as /raw_data/attendance_outreach.csv
       - This overwrites the previous version.  You can see previous versions with OSF's versioning.
 
-- Post-workshop surveys (feedback and satisfaction) from LibWizard
-  - postworkshopsurveys_named <- read.csv("raw_data/processed_postworkshopsurveys_named.csv")
+After processing and combining both, the working version of this file/object loaded into each analysis page, the working file/objects will be into processed_attendance_named.csv
+
+
+##### Feedback data
+
+- Post-workshop surveys (feedback and satisfaction) from [LibWizard](https://ou.libwizard.com/)
+  - Click "Surveys"
+  - Filter items by keyword searching "post"
+  - Choose "Post-Workshop Surveys" (Owner should be Curry, Claire; created January 14, 2020)
+  - Click "View Reports" in the upper right corner.
+  - Update "Max Submissions to Retrieve" to the number available (it will usually start at 500, but we have over 865 as of Nov. 2025)
+  - Click blue "Export report" button.
+  - Save "report.csv" in raw_data/postworkshop/ folder in OSF and locally.
+    - This overwrites the previous version.  You can see previous versions with OSF's versioning.
+
+
+After processing, the working version of this file/object loaded into each analysis page will be postworkshopsurveys_named <- read.csv("raw_data/processed_postworkshopsurveys_named.csv")
 
 
 #### Raw data processing to write three working files
@@ -254,15 +274,6 @@ attendance_named <- left_join(attendance_named,
 
 
 
-
-
-###########
-# Write to file for use in qmds.
-###########
-# Attendance
-write.csv(attendance_named,
-          file = "raw_data/processed_attendance_named.csv",
-          row.names = FALSE)
 
 
 ```
@@ -477,21 +488,21 @@ postworkshopsurveys_named$Valuable.for.Program <- factor(x = postworkshopsurveys
                                                   ))
 
 
-###########
-# Finally, the tidied feedback and attendance data are combined to compare feedback with per-workshop characteristics such as format of instruction.  This is a smaller dataset as not all the workshops appear to have been entered into LibInsights, where the attendance and format data are stored.
-###########
-
-joined_post <- full_join(postworkshopsurveys_named, 
-                         attendance_named,
-                         by = c("Date", "WorkshopCode"))
-# It is necessary to join by both date and workshop code as occasionally 2 or more people will teach on the same day in different events or classes.
-# needs to be a full join because there are some courses not entered and vice versa.
-
-# Filtering by NA is necessary because not everyone has entered their workshops into LibInsights and past workshops did not use the same feedback form, resulting in no attendance or format data to associate with the feedback or vice versa.  filtering by workshop code removes non-workshop course visits.
-joined_attendance_post_clean <- joined_post %>%
-  dplyr::filter(!is.na(WorkshopCode))
-
-# Later data analysis will remove observations with no feedback automatically.
+# ###########
+# # Finally, the tidied feedback and attendance data are combined to compare feedback with per-workshop characteristics such as format of instruction.  This is a smaller dataset as not all the workshops appear to have been entered into LibInsights, where the attendance and format data are stored.
+# ###########
+# 
+# joined_post <- full_join(postworkshopsurveys_named, 
+#                          attendance_named,
+#                          by = c("Date", "WorkshopCode"))
+# # It is necessary to join by both date and workshop code as occasionally 2 or more people will teach on the same day in different events or classes.
+# # needs to be a full join because there are some courses not entered and vice versa.
+# 
+# # Filtering by NA is necessary because not everyone has entered their workshops into LibInsights and past workshops did not use the same feedback form, resulting in no attendance or format data to associate with the feedback or vice versa.  filtering by workshop code removes non-workshop course visits.
+# joined_attendance_post_clean <- joined_post %>%
+#   dplyr::filter(!is.na(WorkshopCode))
+# 
+# # Later data analysis will remove observations with no feedback automatically.
 ```
 
 
@@ -501,20 +512,29 @@ Upload these files to OSF manually under "raw_data" folder.
 
 ```{r}
 
+###########
+# Write to file for use in qmds.
+###########
+
+# Attendance
+write.csv(attendance_named,
+          file = "raw_data/processed_attendance_named.csv",
+          row.names = FALSE)
 
 # Satisfaction
-write.csv(joined_attendance_post_clean,
-          file = "raw_data/processed_joined_attendance_post_clean.csv",
-          row.names = FALSE)
+# write.csv(joined_attendance_post_clean,
+#           file = "raw_data/processed_joined_attendance_post_clean.csv",
+#           row.names = FALSE)
+# 
+# # Has an invalid many-to-many relationship, need to process per-workshop instead later with summaries.
+# # 
 
-# Marketing
-
-#not sure why this one is different
 write.csv(postworkshopsurveys_named,
-          file = "raw_data/processed_postworkshopsurveys_named.csv",
-          row.names = FALSE)
+         file = "raw_data/processed_postworkshopsurveys_named.csv",
+         row.names = FALSE)
 
-# Registration
+
+# Registration (Marketing)
 write.csv(Registered,
           file = "raw_data/processed_Registered.csv",
           row.names = FALSE)

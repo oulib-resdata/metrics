@@ -14,8 +14,8 @@ library(wordcloud)  #word clouds
 # Load custom function for "other" block
 source("scripts/ggwordcloud_analysis_complete_ou_colors.R")
 
-# Fix join
-joined_attendance_post_clean <- read.csv("raw_data/processed_joined_attendance_post_clean.csv")
+# # Fix join
+# joined_attendance_post_clean <- read.csv("raw_data/processed_joined_attendance_post_clean.csv")
 postworkshopsurveys_named <- read.csv("raw_data/processed_postworkshopsurveys_named.csv")
 
 
