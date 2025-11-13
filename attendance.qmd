@@ -42,7 +42,7 @@ The variables included were:
 
 -   multi-day vs single day scheduling
 
-```{r att_tree, echo=FALSE, message = FALSE, warning = FALSE, output = FALSE}
+```{r att_tree, echo=FALSE, message = FALSE, warning = FALSE}
 library(ggplot2)    #for plots
 library(partykit)    #for ctree
 this_year <- format(as.Date(Sys.Date(), format="%Y/%m/%d/"),"%Y")
@@ -118,7 +118,7 @@ The variables included were:
 
 Workshop topic had to be excluded for too  many splits in the model.
 
-```{r att_tree3, echo=FALSE, message = FALSE, warning = FALSE, output = FALSE}
+```{r att_tree3, echo=FALSE, message = FALSE, warning = FALSE}
 library(ggplot2)    #for plots
 library(partykit)    #for ctree
 att_tree3 <- ctree(Total.Attendees ~ 
@@ -139,6 +139,8 @@ att_tree3
 plot(att_tree3)
 
 print(paste("Workshops from all data all time"))
+
+
 ```
 When we examine all workshops (included on-request visits to classes and on-request workshops), we add the following variables:
 
