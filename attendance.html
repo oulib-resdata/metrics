@@ -76,7 +76,6 @@ ul.task-list li input[type="checkbox"] {
 </script>
 
 
-<link rel="stylesheet" href="style.css">
 </head>
 
 <body class="nav-sidebar floating fullcontent">
@@ -228,6 +227,34 @@ ul.task-list li input[type="checkbox"] {
 <li><p>workshop topic</p></li>
 <li><p>multi-day vs single day scheduling</p></li>
 </ul>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Model formula:
+Total.Attendees ~ as.factor(Format) + as.factor(year) + as.factor(WorkshopCode) + 
+    as.factor(Is.this.visit.part.of.a.series.) + as.factor(Semester)
+
+Fitted party:
+[1] root
+|   [2] as.factor(WorkshopCode) in BBASH, BLATEX, COMP101, DCR, DMPTOOLS, GGPLOT2, IBASH, INTROR, LUL, MATLAB, MRD101, OMEKA, OSF1HOUR, PRESENT, RREP, SMOOTH, STORY, TRBL101, VIZ101
+|   |   [3] as.factor(Format) in , Hybrid, Virtual: 5.857 (n = 28, err = 231.4)
+|   |   [4] as.factor(Format) in In-Person: 4.427 (n = 82, err = 270.1)
+|   [5] as.factor(WorkshopCode) in INTROPY, NEWSAA, TIDY101, ZOTERO: 15.222 (n = 9, err = 525.6)
+
+Number of inner nodes:    2
+Number of terminal nodes: 3</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="attendance_files/figure-html/att_tree-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Workshops from 2023 to 2025 (last two calendar years)"</code></pre>
+</div>
+</div>
 </section>
 <section id="for-last-two-years-all-workshops-including-visits-to-classes-and-requested-workshops" class="level4" data-number="3.2.1.2">
 <h4 data-number="3.2.1.2" class="anchored" data-anchor-id="for-last-two-years-all-workshops-including-visits-to-classes-and-requested-workshops"><span class="header-section-number">3.2.1.2</span> For last two years: All workshops (including visits to classes and requested workshops)</h4>
@@ -268,6 +295,84 @@ Number of terminal nodes: 4</code></pre>
 </section>
 <section id="for-all-time" class="level4" data-number="3.2.1.3">
 <h4 data-number="3.2.1.3" class="anchored" data-anchor-id="for-all-time"><span class="header-section-number">3.2.1.3</span> For all time</h4>
+<p>Scheduled non-requested workshops in 2018, 2019, 2021 with multi-day scheduling had the highest attendance (aka Carpentries workshops). In more recent years, hybrid and virtual had the highest attendance.</p>
+<p>The variables included were:</p>
+<ul>
+<li><p>format (in person vs virtual vs hybrid)</p></li>
+<li><p>calendar year (starts in January)</p></li>
+<li><p>semester (spring, summer, or fall)</p></li>
+<li><p>multi-day vs single day scheduling</p></li>
+</ul>
+<p>Workshop topic had to be excluded for too many splits in the model.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Model formula:
+Total.Attendees ~ as.factor(Format) + as.factor(year) + as.factor(Is.this.visit.part.of.a.series.) + 
+    as.factor(Semester)
+
+Fitted party:
+[1] root
+|   [2] as.factor(year) in 2018, 2019, 2021
+|   |   [3] as.factor(Is.this.visit.part.of.a.series.) in No: 8.370 (n = 54, err = 2282.6)
+|   |   [4] as.factor(Is.this.visit.part.of.a.series.) in Yes: 22.733 (n = 15, err = 914.9)
+|   [5] as.factor(year) in 2020, 2022, 2023, 2024, 2025
+|   |   [6] as.factor(Format) in , Hybrid, Virtual: 7.494 (n = 83, err = 2190.7)
+|   |   [7] as.factor(Format) in In-Person: 4.882 (n = 102, err = 612.6)
+
+Number of inner nodes:    3
+Number of terminal nodes: 4</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="attendance_files/figure-html/att_tree3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Workshops from all data all time"</code></pre>
+</div>
+</div>
+<p>When we examine all workshops (included on-request visits to classes and on-request workshops), we add the following variables:</p>
+<ul>
+<li><p>workshop was in a course</p></li>
+<li><p>requested or not</p></li>
+</ul>
+<p>The plot is more complex now, but reflects trends in all the previous subset analyses. Early years are highest attended for non-requested events. Requested and within-course workshops and hybrid/virtual workshops are more highly attended.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Model formula:
+Total.Attendees ~ as.factor(Format) + as.factor(year) + as.factor(Is.this.visit.part.of.a.series.) + 
+    as.factor(Semester) + as.factor(Is.Course) + as.factor(Requested.)
+
+Fitted party:
+[1] root
+|   [2] as.factor(Is.Course) in Not a course
+|   |   [3] as.factor(year) in 2018, 2019, 2021
+|   |   |   [4] as.factor(Is.this.visit.part.of.a.series.) in No: 8.217 (n = 60, err = 2502.2)
+|   |   |   [5] as.factor(Is.this.visit.part.of.a.series.) in Yes
+|   |   |   |   [6] as.factor(year) in 2018, 2021: 20.875 (n = 8, err = 794.9)
+|   |   |   |   [7] as.factor(year) in 2019: 21.769 (n = 13, err = 714.3)
+|   |   [8] as.factor(year) in 2020, 2022, 2023, 2024, 2025
+|   |   |   [9] as.factor(Requested.) in No, Unknown
+|   |   |   |   [10] as.factor(Format) in , Hybrid, Virtual: 7.440 (n = 84, err = 2210.7)
+|   |   |   |   [11] as.factor(Format) in In-Person: 4.882 (n = 102, err = 612.6)
+|   |   |   [12] as.factor(Requested.) in Yes: 11.000 (n = 28, err = 4884.0)
+|   [13] as.factor(Is.Course) in Within a course: 15.627 (n = 83, err = 6167.4)
+
+Number of inner nodes:    6
+Number of terminal nodes: 7</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="attendance_files/figure-html/att_tree4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="format-for-all-workshops-ever" class="level3" data-number="3.2.2">
