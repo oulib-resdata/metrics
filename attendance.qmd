@@ -17,7 +17,9 @@ attendance <- read.csv("raw_data/processed_attendance_named.csv")
 
 ## Executive summary
 
-**Counts of workshop attendance are only influenced by whether a workshop was presented as part of course instruction.** Format (virtual, in-person, hybrid) and marketing did not change attendance counts. Even topics (@sec-topics) didn't impact attendance counts.
+**From most recent data (2023-2025) for scheduled workshops, virtual and hybrid workshops have the highest attendance.**  A few topics have higher attendance than others.  A short 2023 analysis showed longer (presumably more detailed) event descriptions got higher attendance relative to title/date only short descriptions. 
+
+Otherwise, workshops requested by someone either standalone or in a course have the highest attendances.
 
 \newpage
 
