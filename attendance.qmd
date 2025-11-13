@@ -65,7 +65,9 @@ att_tree <- ctree(Total.Attendees ~
 att_tree
 
 plot(att_tree)
-#print(paste("Workshops from", last_two_years, "to", this_year, "(last two calendar years)"))
+
+print(paste("Workshops from", last_two_years, "to", this_year, "(last two calendar years)"))
+
 ```
 #### For last two years: All workshops (including visits to classes and requested workshops)
 
@@ -101,8 +103,70 @@ plot(att_tree2)
 
 #### For all time
 
+Scheduled non-requested workshops in 2018, 2019, 2021 with  multi-day scheduling had the highest attendance (aka Carpentries workshops).  In more recent years, hybrid and virtual had the highest attendance.
 
 
+The variables included were:
+
+-   format (in person vs virtual vs hybrid)
+
+-   calendar year (starts in January)
+
+-   semester (spring, summer, or fall)
+
+-   multi-day vs single day scheduling
+
+Workshop topic had to be excluded for too  many splits in the model.
+
+```{r att_tree, echo=FALSE, message = FALSE, warning = FALSE, output = FALSE}
+library(ggplot2)    #for plots
+library(partykit)    #for ctree
+att_tree3 <- ctree(Total.Attendees ~ 
+                    as.factor(Format) +
+                    as.factor(year)+
+                    # as.factor(WorkshopCode) + 
+                    as.factor(Is.this.visit.part.of.a.series.) +
+                    as.factor(Semester),
+                   # hour,
+                  data = attendance [
+                    attendance$Is.Course == "Not a course" &
+                      attendance$Requested. == "No",],
+                  na.action = na.omit
+                  )
+
+att_tree3
+
+plot(att_tree3)
+
+print(paste("Workshops from all data all time"))
+```
+When we examine all workshops (included on-request visits to classes and on-request workshops), we add the following variables:
+
+-   workshop was in a course
+
+-   requested or not
+
+The plot is more complex now, but reflects trends in all the previous subset analyses.  Early years are highest attended for non-requested events.  Requested and within-course workshops and hybrid/virtual workshops are more highly attended.
+
+```{r att_tree2, echo=FALSE, message = FALSE, warning = FALSE}
+att_tree4 <- ctree(Total.Attendees ~ 
+                    as.factor(Format) +
+                    as.factor(year)+
+                    # as.factor(WorkshopCode) + 
+                    as.factor(Is.this.visit.part.of.a.series.)+
+                    as.factor(Semester) +
+                    # hour +
+                    as.factor(Is.Course) +
+                    as.factor(Requested.)
+                  ,
+                  data = attendance,
+                  na.action = na.omit
+                  )
+
+att_tree4
+
+plot(att_tree4)
+```
 
 
 ### Format (for all workshops ever)
