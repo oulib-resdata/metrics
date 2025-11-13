@@ -1,4 +1,4 @@
-# Feedback {#sec-satisfaction}
+# Not ready for use: Feedback {#sec-satisfaction}
 
 ```{r setup, include=FALSE}
 # FUNCTIONS AND LIBRARIES
