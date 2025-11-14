@@ -9,7 +9,7 @@ library(partykit)   # for decision tree statistical analysis
 library(tidyverse)  #for data munging including dates
 library(viridis)    #color scheme
 
-attendance <- read.csv("raw_data/processed_attendance_named.csv")
+attendance_named <- read.csv("raw_data/processed_attendance_named.csv")
 # read.csv("raw_data/processed_last_two_years_attendance.csv")
 # read.csv("raw_data/processed_joined_post.csv")
 # read.csv("raw_data/processed_postworkshopsurveys_named.csv")
@@ -37,7 +37,7 @@ Otherwise, workshops requested by someone either standalone (such as by a depart
 ```{r}
 # Code to determine which workshops offered regularly, here equal to or more than 3 times since two years past (2023-present)
 
-topics_common_ctree <- attendance %>%
+topics_common_ctree <- attendance_named %>%
   dplyr::filter(year > 2022) %>%
   group_by(WorkshopCode) %>%
   summarize(times_offered = n()) %>%
@@ -92,12 +92,12 @@ att_tree <- ctree(Total.Attendees ~
                     as.factor(WorkshopCode) + 
                     as.factor(Is.this.visit.part.of.a.series.) +
                     as.factor(Semester),
-                  data = attendance [
-                    attendance$Is.Course == "Not a course" &
-                      attendance$Requested. == "No"&
-                      attendance$year <= this_year &
-                      attendance$year >= last_two_years &
-                      attendance$WorkshopCode %in% topics_common_ctree$WorkshopCode,],
+                  data = attendance_named [
+                    attendance_named$Is.Course == "Not a course" &
+                      attendance_named$Requested. == "No"&
+                      attendance_named$year <= this_year &
+                      attendance_named$year >= last_two_years &
+                      attendance_named$WorkshopCode %in% topics_common_ctree$WorkshopCode,],
                   na.action = na.omit
                   )
 
@@ -135,7 +135,7 @@ att_tree4 <- ctree(Total.Attendees ~
                     as.factor(Is.Course) +
                     as.factor(Requested.)
                   ,
-                  data = attendance,
+                  data = attendance_named,
                   na.action = na.omit
                   )
 
@@ -152,7 +152,7 @@ plot(att_tree4)
 The median number of people at each scheduled workshop has declined slightly per calendar year after 2022 and appears to be stable now as of late 2025. Workshop attendance at courses is higher, presumably because most classes have to reach a certain enrollment to "make".
 
 ```{r avg_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
-plot_time <- attendance %>% 
+plot_time <- attendance_named %>% 
   ggplot(mapping = aes(x = as.factor(year),
                        y = Total.Attendees,
                        fill = Is.Course)) +
@@ -170,7 +170,7 @@ The total number of people reached has no strong trends between 2021-2024 and ha
 
 ```{r, total_reached_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 
-attendance %>%
+attendance_named %>%
   group_by(year, Is.Course) %>%
   summarize(total_reached = sum(Total.Attendees, na.rm = TRUE)) %>%
   bind_rows(summarise(.,
@@ -185,7 +185,7 @@ When we examined whether proportionately we reach more people in or out of cours
 
 ```{r, prop_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 # https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
-attendance %>%
+attendance_named %>%
   group_by(year,
            Is.Course) %>%
   summarize(total_reached = sum(Total.Attendees, na.rm = TRUE)) %>%
@@ -245,7 +245,7 @@ ggplot(
 DSI request 2023/07: - TODO: Libraries personnel to attendance ratios for On Request workshops. which high-helper topics requested more over time and do we have enough data yet, are those increasing.
 
 ```{r attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
- # plot_helpers <- attendance[attendance$Requested.=="Y",] %>%
+ # plot_helpers <- attendance_named[attendance_named$Requested.=="Y",] %>%
  #   ggplot(mapping = aes(x = as.factor(Calendar.Year),
  #                        y = helpers/Total.Attendees,
  #                        fill = Topic)) +

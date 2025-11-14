@@ -85,7 +85,7 @@ The proportion of workshops offered each calendar year in courses peaked in 2020
 
 ```{r, prop_offered_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 # https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
-attendance %>%
+attendance_named %>%
   group_by(year,
            Is.Course) %>%
   summarize(count_per_each = n()) %>%
