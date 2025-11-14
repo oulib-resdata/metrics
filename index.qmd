@@ -4,6 +4,19 @@ options(tinytex.verbose = TRUE)
 
 # Executive Summary {.unnumbered}
 
+## Marketing
+
+Our overall most effective marketing methods are emails, the OU Libraries website, word-of-mouth, and outreach to instructors.
+
+This determination is made by combining what methods bring in high attendee counts (1) and what methods bring the highest ratio of attendance to registration (2).
+
+1. The top three marketing methods that bring in the highest counts of attendees who fill out our post-workshop surveys (hereafter, "attendees" and "attendance") are emails (including directly from UL), word-of-mouth (particularly supervisors and colleagues), and the OU Libraries website (which at the time of this analysis in fall 2025 featured 2-3 events from each upcoming week)
+
+2. The marketing methods with the highest response "intensities" (relative proportion of attendees to registrant numbers) were class requirements (making liaison outreach to instructors critical), direct emails from OU Libraries, personal recommendations from a librarian, and announcement in class
+
+
+
+
 ## Attendance
 
 For workshops that we as librarians independently schedule,
