@@ -119,7 +119,11 @@ When we examine all workshops over all dates with data (included on-request visi
 
 We removed workshop topic as a variable to split on, because some topics were only offered once and so that variable is a less informative split.
   
-Requested and within-course workshops and hybrid/virtual workshops are more highly attended. The plot is more complex now, but reflects trends in all the previous subset analysis.  Early years (2018-2019, 2021) are highest attended for non-course events regardless of request or format.  In the remaining years, including recent ones (2020, 2022-2025), requested events are highest (11), followed by non-requested hybrid or virtual events (7.4), with non-requested in person events lowest (4.9).
+Overall, requested and within-course workshops and hybrid/virtual workshops are more highly attended
+
+Early years (2018-2019, 2021) are highest attended for non-course events regardless of request or format. Spring and Fall semesters had differing attendance in those early years, but not in more recent years.  
+
+In the remaining years, mainly more recent ones (2020, 2022-2025), requested events are highest (11), followed by non-requested hybrid or virtual events (7.4), with non-requested in person events lowest (4.9).
 
 ```{r att_tree4, echo=FALSE, message = FALSE, warning = FALSE}
 att_tree4 <- ctree(Total.Attendees ~ 
@@ -141,22 +145,7 @@ plot(att_tree4)
 ```
 
 
-### Format (for all scheduled, non-requested workshops ever)
 
-Ignoring all other factors, the workshop format was not significantly different using a different statistical test, a visual analysis called notched box plots. The overlapping "notches" here show that there is no difference between median attendance for scheduled (not on request, not in a class) workshops by format.  This differs slightly from the analyses above, where we also account for topics and are clustering based on a different algorithm.
-
-```{r attendance_by_format_request, echo=FALSE, message = FALSE, warning = FALSE}
-attendance[attendance$Is.Course == "Not a course" &
-                             attendance$Requested. == "No",]%>%
-  ggplot(mapping = aes(x = Format,
-                       y = Total.Attendees))+
-  geom_boxplot(notch = TRUE) + 
-  labs(x = "Workshop (scheduled, non-requested) format",
-         y = "Total attendees per workshop"
-         )
-
-
-```
 
 ### Workshop attendance over time
 
@@ -192,17 +181,17 @@ attendance %>%
   
 ```
 
-The proportion of total people reached each calendar year in courses peaked in 2020, declined, and then has increased each calendar year since 2021, appearing to stabilize in 2024-2025.  It seems plausible that most people were only attending classes during 2020, peak Covid.
+When we examined whether proportionately we reach more people in or out of courses, we seem to have stabilized since 2022 at around one-third of our learners reached being in courses.  About a quarter of our workshops are now conducted in classes (@sec-offerings) but these reach about a third of our learners, suggesting these are a higher impact way to reach more people per staff time.
 
 ```{r, prop_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 # https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
 attendance %>%
   group_by(year,
            Is.Course) %>%
-  summarize(count_per_each = n()) %>%
+  summarize(total_reached = sum(Total.Attendees, na.rm = TRUE)) %>%
 ggplot(
        aes(x = year,
-           y = count_per_each,
+           y = total_reached,
            fill = Is.Course)) +
   geom_col(position = "fill")+
     scale_fill_viridis_d (aesthetics = "fill")+
