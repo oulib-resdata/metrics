@@ -7,7 +7,7 @@ documentclass: book
 github-repo: oulib-resdata/metrics
 
 book:
-  title: "Research Workshop Attendance, Marketing, and Satisfaction"
+  title: "Research Workshop Metrics"
   author: "C.M. Curry (STEM Services) and B. Narr (Metrics Coordinator)"
   search: true
   downloads: [pdf]
