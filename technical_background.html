@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Technical details – Research Workshop Attendance, Marketing, and Satisfaction</title>
+<title>Technical details – Research Workshop Metrics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -135,9 +135,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Research Workshop Attendance, Marketing, and Satisfaction</a> 
+      <a href="./">Research Workshop Metrics</a> 
         <div class="sidebar-tools-main">
-    <a href="./Research-Workshop-Attendance,-Marketing,-and-Satisfaction.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+    <a href="./Research-Workshop-Metrics.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
 </div>
     </div>
       </div>
@@ -200,8 +200,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./GIT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Version Control with Git/GitHub</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./VIZ101.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Concepts of Data-Driven Visualization</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Concepts of Data-Driven Visualization</span></span></a>
   </div>
 </li>
       </ul>
@@ -505,9 +511,9 @@ Attaching package: 'lubridate'</code></pre>
 <span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>attendance_outreach<span class="sc">$</span>Semester[attendance_outreach<span class="sc">$</span>month<span class="sc">&gt;</span><span class="dv">0</span><span class="sc">&amp;</span></span>
 <span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>                            attendance_outreach<span class="sc">$</span>month<span class="sc">&lt;</span><span class="dv">6</span>] <span class="ot">&lt;-</span> <span class="st">"Spring"</span></span>
 <span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>attendance_outreach<span class="sc">$</span>Semester[attendance_outreach<span class="sc">$</span>month<span class="sc">&gt;</span><span class="dv">5</span><span class="sc">&amp;</span></span>
-<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>                            attendance_outreach<span class="sc">$</span>month<span class="sc">&lt;</span><span class="dv">8</span>] <span class="ot">&lt;-</span> <span class="st">"Spring"</span></span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>                            attendance_outreach<span class="sc">$</span>month<span class="sc">&lt;</span><span class="dv">8</span>] <span class="ot">&lt;-</span> <span class="st">"Summer"</span></span>
 <span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>attendance_outreach<span class="sc">$</span>Semester[attendance_outreach<span class="sc">$</span>month<span class="sc">&gt;</span><span class="dv">7</span><span class="sc">&amp;</span></span>
-<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>                            attendance_outreach<span class="sc">$</span>month<span class="sc">&lt;=</span><span class="dv">12</span>] <span class="ot">&lt;-</span> <span class="st">"Spring"</span></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>                            attendance_outreach<span class="sc">$</span>month<span class="sc">&lt;=</span><span class="dv">12</span>] <span class="ot">&lt;-</span> <span class="st">"Fall"</span></span>
 <span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Courses</span></span>
@@ -541,9 +547,9 @@ Attaching package: 'lubridate'</code></pre>
 <span id="cb13-90"><a href="#cb13-90" aria-hidden="true" tabindex="-1"></a>attendance_courses<span class="sc">$</span>Semester[attendance_courses<span class="sc">$</span>month<span class="sc">&gt;</span><span class="dv">0</span><span class="sc">&amp;</span></span>
 <span id="cb13-91"><a href="#cb13-91" aria-hidden="true" tabindex="-1"></a>                            attendance_courses<span class="sc">$</span>month<span class="sc">&lt;</span><span class="dv">6</span>] <span class="ot">&lt;-</span> <span class="st">"Spring"</span></span>
 <span id="cb13-92"><a href="#cb13-92" aria-hidden="true" tabindex="-1"></a>attendance_courses<span class="sc">$</span>Semester[attendance_courses<span class="sc">$</span>month<span class="sc">&gt;</span><span class="dv">5</span><span class="sc">&amp;</span></span>
-<span id="cb13-93"><a href="#cb13-93" aria-hidden="true" tabindex="-1"></a>                            attendance_courses<span class="sc">$</span>month<span class="sc">&lt;</span><span class="dv">8</span>] <span class="ot">&lt;-</span> <span class="st">"Spring"</span></span>
+<span id="cb13-93"><a href="#cb13-93" aria-hidden="true" tabindex="-1"></a>                            attendance_courses<span class="sc">$</span>month<span class="sc">&lt;</span><span class="dv">8</span>] <span class="ot">&lt;-</span> <span class="st">"Summer"</span></span>
 <span id="cb13-94"><a href="#cb13-94" aria-hidden="true" tabindex="-1"></a>attendance_courses<span class="sc">$</span>Semester[attendance_courses<span class="sc">$</span>month<span class="sc">&gt;</span><span class="dv">7</span><span class="sc">&amp;</span></span>
-<span id="cb13-95"><a href="#cb13-95" aria-hidden="true" tabindex="-1"></a>                            attendance_courses<span class="sc">$</span>month<span class="sc">&lt;=</span><span class="dv">12</span>] <span class="ot">&lt;-</span> <span class="st">"Spring"</span></span>
+<span id="cb13-95"><a href="#cb13-95" aria-hidden="true" tabindex="-1"></a>                            attendance_courses<span class="sc">$</span>month<span class="sc">&lt;=</span><span class="dv">12</span>] <span class="ot">&lt;-</span> <span class="st">"Fall"</span></span>
 <span id="cb13-96"><a href="#cb13-96" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-97"><a href="#cb13-97" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-98"><a href="#cb13-98" aria-hidden="true" tabindex="-1"></a></span>
@@ -1259,7 +1265,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./VIZ101.html" class="pagination-link" aria-label="Concepts of Data-Driven Visualization">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Concepts of Data-Driven Visualization</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Concepts of Data-Driven Visualization</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
