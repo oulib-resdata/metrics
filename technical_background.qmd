@@ -212,9 +212,9 @@ attendance_outreach$hour <- as.numeric(attendance_outreach$hour)
 attendance_outreach$Semester[attendance_outreach$month>0&
                             attendance_outreach$month<6] <- "Spring"
 attendance_outreach$Semester[attendance_outreach$month>5&
-                            attendance_outreach$month<8] <- "Spring"
+                            attendance_outreach$month<8] <- "Summer"
 attendance_outreach$Semester[attendance_outreach$month>7&
-                            attendance_outreach$month<=12] <- "Spring"
+                            attendance_outreach$month<=12] <- "Fall"
 
 
 # Courses
@@ -248,9 +248,9 @@ attendance_courses$hour <- as.numeric(attendance_courses$hour)
 attendance_courses$Semester[attendance_courses$month>0&
                             attendance_courses$month<6] <- "Spring"
 attendance_courses$Semester[attendance_courses$month>5&
-                            attendance_courses$month<8] <- "Spring"
+                            attendance_courses$month<8] <- "Summer"
 attendance_courses$Semester[attendance_courses$month>7&
-                            attendance_courses$month<=12] <- "Spring"
+                            attendance_courses$month<=12] <- "Fall"
 
 
 
