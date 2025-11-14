@@ -81,6 +81,26 @@ ggplot(data = topics_desc,
 
 
 ```
+The proportion of workshops offered each calendar year in courses peaked in 2020, declined, and then has increased each calendar year since 2021, appearing to stabilize in 2024-2025 where we now offer about a quarter of workshops each year in courses.
+
+```{r, prop_offered_over_time, echo=FALSE, message = FALSE, warning = FALSE}
+# https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
+attendance %>%
+  group_by(year,
+           Is.Course) %>%
+  summarize(count_per_each = n()) %>%
+ggplot(
+       aes(x = year,
+           y = count_per_each,
+           fill = Is.Course)) +
+  geom_col(position = "fill")+
+    scale_fill_viridis_d (aesthetics = "fill")+
+  labs(y = "Proportion of workshops conducted",
+       x = "Calendar year",
+       fill = "Workshop offered in course")
+
+
+```
 
 ## Workshop staffing needs
 
