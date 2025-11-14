@@ -17,50 +17,82 @@ attendance <- read.csv("raw_data/processed_attendance_named.csv")
 
 ## Executive summary
 
-**From most recent data (2023-2025) for scheduled workshops, virtual and hybrid workshops have the highest attendance.**  A few topics have higher attendance than others.  A short 2023 analysis showed longer (presumably more detailed) event descriptions got higher attendance relative to title/date only short descriptions. 
+For workshops that we as librarians independently schedule,
+  - virtual and hybrid workshops have the highest attendance in the last two calendar years (2023-2025)
+  - a few topics have higher attendance than others reglardless of format
+  - more precise and detailed event descriptions seem to get higher attendance than title only descriptions.
 
-Otherwise, workshops requested by someone either standalone or in a course have the highest attendances.
+Otherwise, workshops requested by someone either standalone (such as by a department or research group) or within a course have the highest attendances.
 
 \newpage
 
-## Per-workshop attendance by format and request
-
-### Statistical analysis
+## Per-workshop attendance
 
 
-#### For last two years (2023-2025): Scheduled (not requested, not in a class) workshops
 
-For scheduled (non-course) workshops in 2023-2025, topic and format are impacting numbers a conditional inference tree analysis.  Virtual and hybrid workshops are grouped within most workshops.  A few workshops (INTROPY = Introduction to Python), NEWSAA=African American Newspapers, TIDY101=Introduction to Spreadsheets/Formatting Data for Analysis, and ZOTERO=Citation Management with Zotero) are format-agnostic for attendance.
+```{r}
+# Code to determine which workshops offered regularly, here equal to or more than 3 times
 
-The variables included were:
+topics_common_ctree <- attendance %>%
+  group_by(WorkshopCode) %>%
+  summarize(times_offered = n()) %>%
+  dplyr::filter(times_offered >= 3,
+                !is.na(WorkshopCode))
+  
 
--   format (in person vs virtual vs hybrid)
+```
 
--   calendar year (starts in January)
+### Most recent two years (2023-2025)
 
--   semester (spring, summer, or fall)
+#### Scheduled (not requested, not in a class) workshops
+
+This statistical analysis addresses what factors influence attendance in librarian-scheduled (non-course, not-patron requested) frequently offered (more than three times) workshops in 2023-2025.
+
+The variables significantly influencing attendance are
+
+- topic
+
+  - A few workshops (INTROPY = Introduction to Python), TIDY101=Introduction to Spreadsheets/Formatting Data for Analysis, and ZOTERO=Citation Management with Zotero) have an average of 15.6 attendees regardless of format
+
+- format
+
+  - Remaining workshops have slightly higher (virtual and hybrid with an average of 6.2) or lower (4.3) attendance based on format 
+
+
+All variables studied were:
 
 -   workshop topic
 
--   multi-day vs single day scheduling
+-   format (in person vs virtual vs hybrid)
+
+-   calendar year (starts in January): no significant splits
+
+-   semester (spring, summer, or fall): no significant splits
+
+-   multi-day vs single day scheduling: no significant splits
 
 ```{r att_tree, echo=FALSE, message = FALSE, warning = FALSE}
 library(ggplot2)    #for plots
 library(partykit)    #for ctree
+
+# variables to make this only do last two years
+
 this_year <- format(as.Date(Sys.Date(), format="%Y/%m/%d/"),"%Y")
 last_two_years <- as.numeric(this_year)-2
+
+# statistical analysis with conditional inference tree
 att_tree <- ctree(Total.Attendees ~ 
                     as.factor(Format) +
                     as.factor(year)+
                     as.factor(WorkshopCode) + 
                     as.factor(Is.this.visit.part.of.a.series.) +
                     as.factor(Semester),
-                   # hour,
                   data = attendance [
                     attendance$Is.Course == "Not a course" &
                       attendance$Requested. == "No"&
                       attendance$year <= this_year &
-                      attendance$year >= last_two_years,],
+                      attendance$year >= last_two_years &
+                      attendance$WorkshopCode %in% topics_common_ctree$WorkshopCode,],
                   na.action = na.omit
                   )
 
@@ -68,98 +100,29 @@ att_tree
 
 plot(att_tree)
 
-print(paste("Workshops from", last_two_years, "to", this_year, "(last two calendar years)"))
+print(paste("Scheduled workshops from", last_two_years, "to", this_year, "(last two calendar years)"))
 
 ```
-#### For last two years: All workshops (including visits to classes and requested workshops)
 
-When we examine all workshops (included on-request visits to classes and on-request workshops), we add the following variables:
+#### All workshops (including visits to classes and requested workshops)
+
+When we examine all workshops over all dates with data (included on-request visits to classes and on-request workshops, and uncommonly offered topics), we add the following variables:
 
 -   workshop was in a course
 
 -   requested or not
 
-Whether a workshop was requested (most of which are courses, where students are presumably required to attend) was the most dramatic factor in increased attendance numbers. For workshops not requested (our scheduled ones), virtual and hybrid workshops have the highest attendance.  For in person not requested, BBASH, INTROPY, INTROR, STORY, ZOTERO have the highest attendance.
-
-```{r att_tree2, echo=FALSE, message = FALSE, warning = FALSE}
-att_tree2 <- ctree(Total.Attendees ~ 
-                    as.factor(Format) +
-                    as.factor(year)+
-                    as.factor(WorkshopCode) + 
-                    as.factor(Is.this.visit.part.of.a.series.)+
-                    as.factor(Semester) +
-                    # hour +
-                    as.factor(Is.Course) +
-                    as.factor(Requested.)
-                  ,
-                  data = attendance[
-                      attendance$year <= this_year &
-                      attendance$year >= last_two_years,],
-                  na.action = na.omit
-                  )
-
-att_tree2
-
-plot(att_tree2)
-```
-
-#### For all time
-
-Scheduled non-requested workshops in 2018, 2019, 2021 with  multi-day scheduling had the highest attendance (aka Carpentries workshops).  In more recent years, hybrid and virtual had the highest attendance.
-
-
-The variables included were:
-
--   format (in person vs virtual vs hybrid)
-
--   calendar year (starts in January)
-
--   semester (spring, summer, or fall)
-
--   multi-day vs single day scheduling
-
-Workshop topic had to be excluded for too  many splits in the model.
-
-```{r att_tree3, echo=FALSE, message = FALSE, warning = FALSE}
-library(ggplot2)    #for plots
-library(partykit)    #for ctree
-att_tree3 <- ctree(Total.Attendees ~ 
-                    as.factor(Format) +
-                    as.factor(year)+
-                    # as.factor(WorkshopCode) + 
-                    as.factor(Is.this.visit.part.of.a.series.) +
-                    as.factor(Semester),
-                   # hour,
-                  data = attendance [
-                    attendance$Is.Course == "Not a course" &
-                      attendance$Requested. == "No",],
-                  na.action = na.omit
-                  )
-
-att_tree3
-
-plot(att_tree3)
-
-print(paste("Workshops from all data all time"))
-
-
-```
-When we examine all workshops (included on-request visits to classes and on-request workshops), we add the following variables:
-
--   workshop was in a course
-
--   requested or not
-
-The plot is more complex now, but reflects trends in all the previous subset analyses.  Early years are highest attended for non-requested events.  Requested and within-course workshops and hybrid/virtual workshops are more highly attended.
+We removed workshop topic as a variable to split on, because some topics were only offered once and so that variable is a less informative split.
+  
+Requested and within-course workshops and hybrid/virtual workshops are more highly attended. The plot is more complex now, but reflects trends in all the previous subset analysis.  Early years (2018-2019, 2021) are highest attended for non-course events regardless of request or format.  In the remaining years, including recent ones (2020, 2022-2025), requested events are highest (11), followed by non-requested hybrid or virtual events (7.4), with non-requested in person events lowest (4.9).
 
 ```{r att_tree4, echo=FALSE, message = FALSE, warning = FALSE}
 att_tree4 <- ctree(Total.Attendees ~ 
                     as.factor(Format) +
                     as.factor(year)+
-                    # as.factor(WorkshopCode) + 
-                    as.factor(Is.this.visit.part.of.a.series.)+
+                    #as.factor(WorkshopCode) + 
+                    #as.factor(Is.this.visit.part.of.a.series.)+
                     as.factor(Semester) +
-                    # hour +
                     as.factor(Is.Course) +
                     as.factor(Requested.)
                   ,
@@ -173,7 +136,7 @@ plot(att_tree4)
 ```
 
 
-### Format (for all workshops ever)
+### Format (for all scheduled, non-requested workshops ever)
 
 Ignoring all other factors, the workshop format was not significantly different using a different statistical test, a visual analysis called notched box plots. The overlapping "notches" here show that there is no difference between median attendance for scheduled (not on request, not in a class) workshops by format.  This differs slightly from the analyses above, where we also account for topics and are clustering based on a different algorithm.
 
@@ -183,7 +146,7 @@ attendance[attendance$Is.Course == "Not a course" &
   ggplot(mapping = aes(x = Format,
                        y = Total.Attendees))+
   geom_boxplot(notch = TRUE) + 
-  labs(x = "Workshop format",
+  labs(x = "Workshop (scheduled, non-requested) format",
          y = "Total attendees per workshop"
          )
 
