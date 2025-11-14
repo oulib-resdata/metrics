@@ -4,6 +4,9 @@ For aggregate workshop metrics, please read Attendance (@sec-attendance) or Mark
 
 ## Data sources
 
-For attendance data per workshp, we use only scheduled workshops (i.e., not in a course, not on request outside of a course) in these analyses as it has a statistically significant impact on attendance (@sec-attendance). We include only workshops with more than four sessions (two years).
+For attendance data per workshop, we use only scheduled workshops (i.e., not in a course, not on request outside of a course) in these analyses as it has a statistically significant impact on attendance (@sec-attendance). We include only workshops with more than two sessions.
 
+::: hidden
 For satisfaction, we include workshops in courses as well as scheduled.
+
+:::

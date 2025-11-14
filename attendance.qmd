@@ -18,9 +18,13 @@ attendance <- read.csv("raw_data/processed_attendance_named.csv")
 ## Executive summary
 
 For workshops that we as librarians independently schedule,
-  - virtual and hybrid workshops have the highest attendance in the last two calendar years (2023-2025)
-  - a few topics have higher attendance than others reglardless of format
-  - more precise and detailed event descriptions seem to get higher attendance than title only descriptions.
+
+  - for most topics, virtual and hybrid workshops have higher attendance (6.4) than in-person (4.3) in the last two calendar years (2023-2025)
+
+  - a few topics have higher attendance (15) than others regardless of format
+
+  - more detailed event descriptions seem to get higher attendance than title only descriptions
+
 
 Otherwise, workshops requested by someone either standalone (such as by a department or research group) or within a course have the highest attendances.
 
@@ -31,9 +35,10 @@ Otherwise, workshops requested by someone either standalone (such as by a depart
 
 
 ```{r}
-# Code to determine which workshops offered regularly, here equal to or more than 3 times
+# Code to determine which workshops offered regularly, here equal to or more than 3 times since two years past (2023-present)
 
 topics_common_ctree <- attendance %>%
+  dplyr::filter(year > 2022) %>%
   group_by(WorkshopCode) %>%
   summarize(times_offered = n()) %>%
   dplyr::filter(times_offered >= 3,
@@ -46,17 +51,17 @@ topics_common_ctree <- attendance %>%
 
 #### Scheduled (not requested, not in a class) workshops
 
-This statistical analysis addresses what factors influence attendance in librarian-scheduled (non-course, not-patron requested) frequently offered (more than three times) workshops in 2023-2025.
+This statistical analysis addresses what factors influence attendance in librarian-scheduled (non-course, not-patron requested) frequently offered (more than two times ever) workshops in 2023-2025.
 
 The variables significantly influencing attendance are
 
 - topic
 
-  - A few workshops (INTROPY = Introduction to Python), TIDY101=Introduction to Spreadsheets/Formatting Data for Analysis, and ZOTERO=Citation Management with Zotero) have an average of 15.6 attendees regardless of format
+  - A few workshops (TIDY101, VIZ101, ZOTERO) have an average of 15.0 attendees regardless of format
 
 - format
 
-  - Remaining workshops have slightly higher (virtual and hybrid with an average of 6.2) or lower (4.3) attendance based on format 
+  - Remaining workshops have slightly higher (virtual and hybrid with an average of 6.4) or lower (4.3) attendance based on format 
 
 
 All variables studied were:
