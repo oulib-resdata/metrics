@@ -6,9 +6,12 @@ options(tinytex.verbose = TRUE)
 
 ## Attendance
 
-**From most recent data (2023-2025) for scheduled workshops, virtual and hybrid workshops have the highest attendance.**  A few topics have higher attendance than others.  A short 2023 analysis showed longer (presumably more detailed) event descriptions got higher attendance relative to title/date only short descriptions. 
+For workshops that we as librarians independently schedule,
+  - virtual and hybrid workshops have the highest attendance in the last two calendar years (2023-2025)
+  - a few topics have higher attendance than others reglardless of format
+  - more precise and detailed event descriptions seem to get higher attendance than title only descriptions.
 
-Otherwise, workshops requested by someone either standalone or in a course have the highest attendances.
+Otherwise, workshops requested by someone either standalone (such as by a department or research group) or within a course have the highest attendances.
 
 {{< pagebreak >}}
 
