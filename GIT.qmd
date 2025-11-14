@@ -1,0 +1,72 @@
+# Version Control with Git/GitHub
+
+The materials for this workshop are available in [OSF]() and [GitHub]().
+
+
+```{r setup, include=FALSE}
+# FUNCTIONS AND LIBRARIES
+# have to load all data over again each document https://forum.posit.co/t/quarto-cant-find-r-objects/156848
+knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2)    #for plots
+library(tidyverse)  #for data munging including dates
+library(viridis)    #color scheme
+
+
+attendance_named <- read.csv("raw_data/processed_attendance_named.csv")
+
+```
+
+## Descriptive numbers
+How many times offered per semester, per year.  Number of different instructors.
+
+```{r}
+
+attendance_named %>%
+  dplyr::filter(WorkshopCode == "GIT") %>%
+  dplyr::count(Entered.By, Is.Course)
+
+```
+
+## Attendance in scheduled workshops
+
+### By Timing
+
+There are no obvious trends based on time of day or weekday with the current sample size.  In-class workshops do not record time of day and thus are not included.
+
+```{r}
+
+plot_time <- attendance_named %>% 
+  dplyr::filter(WorkshopCode == "GIT" & hour != 0) %>%
+  ggplot(mapping = aes(x = hour,
+                       y = Total.Attendees,
+                       color = wday,
+                       shape = wday)) +
+  geom_point() +
+  labs (y = "Total attendees per workshop",
+        x = "Hour of day (24 hr scale)",
+        fill = "Workshop offered in course")
+plot_time
+
+
+```
+
+### By semester and year
+
+This workshop is offered in both spring and fall semesters.
+
+```{r, echo = FALSE, warning=FALSE}
+
+plot_date <- attendance_named %>% 
+  dplyr::filter(WorkshopCode == "GIT") %>%
+  ggplot(mapping = aes(x = as.factor(year),
+                       y = Total.Attendees,
+                       fill = Semester)) +
+  geom_boxplot(notch = TRUE) +
+  labs (y = "Total attendees per workshop",
+        x = "Semester",
+        fill = "Workshop offered in course") +
+  facet_wrap(~Is.Course)
+plot_date
+
+```
+

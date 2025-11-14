@@ -25,6 +25,7 @@ book:
     - part: topic_details.qmd
       chapters:
         - topics.qmd
+        - GIT.qmd
         - VIZ101.qmd
 #   - references.qmd
     - technical_background.qmd
