@@ -20,13 +20,13 @@ Registered <- read.csv("raw_data/processed_Registered.csv")
 
 ## Executive summary
 
-**Our overall most effective marketing methods are emails, the OU Libraries website, word-of-mouth, and outreach to instructors.**
+Our overall most effective marketing methods are emails, the OU Libraries website, word-of-mouth, and outreach to instructors.
 
 This determination is made by combining what methods bring in high attendee counts (1) and what methods bring the highest ratio of attendance to registration (2).
 
-1. The top three marketing methods that bring in the highest counts of attendees who fill out our post-workshop surveys (hereafter, "attendees" and "attendance") are emails, word-of-mouth, and the OU Libraries website
+1. The top three marketing methods that bring in the highest counts of attendees who fill out our post-workshop surveys (hereafter, "attendees" and "attendance") are emails (including directly from UL), word-of-mouth (particularly supervisors and colleagues), and the OU Libraries website (which at the time of this analysis in fall 2025 featured 2-3 events from each upcoming week)
 
-2. The marketing methods with the highest response "intensities" (relative proportion of attendees) were class requirements (making liaison outreach to instructors critical), librarians emailing a departmental listserv directly (we have these permissions for at least two STEM departments to my knowledge), and the OU Libraries website.
+2. The marketing methods with the highest response "intensities" (relative proportion of attendees to registrant numbers) were class requirements (making liaison outreach to instructors critical), direct emails from OU Libraries, personal recommendations from a librarian, and announcement in class
 
 
 
@@ -72,7 +72,7 @@ marketing_breakdown_initial
 
 ### Marketing methods for selection "Other (please describe)" with at least two words
 
-These words suggest that professors, librarians, and previous workshops were included in methods that reached these attendees.  Later data cleaning to incorporate emails/professors/word-of-mouth into the existing categories could be useful.
+These words suggest that emailed campus newsletters (bulletin, insider, OSCER, Monday Memo), librarians, professors, and previous workshops were methods that reached these attendees.  Later data cleaning to incorporate emails/professors/word-of-mouth into the existing categories could be useful.
 
 ```{r other, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -145,7 +145,7 @@ We do not get 100% survey responses at our workshops.  However, I wanted to see 
 
 Below is a chart that represents this visually as a ratio of attendance to pre-registrant counts.  The vertical beige bar shows approximately where about the same proportion (i.e., 0.5 out of 1, or 50/100) of people who pre-registered (red) ended up actually attending and filling out a survey (black).
 
-Class requirements, direct emails from OU Libraries, personal recommendations from a librarian, and announcement in class are among the differentially effective ways to get people to attend vs register.
+Class requirements, direct emails from OU Libraries, personal recommendations from a librarian, and announcement in class are among top effective ways to get people to attend vs register.
 
 
 
@@ -168,7 +168,7 @@ chisq.test(table(all_marketing))
 
 ```{r effectiveness_figure, echo = FALSE}
 
-marketing_effectiveness <- ggplot(data = all_marketing,
+marketing_effectiveness <- ggplot(data = all_marketing[all_marketing$ReducedCategories!="Walk-in",],
        aes(x = ReducedCategories,
            fill = DataType))+
   geom_bar(
@@ -213,7 +213,7 @@ Thus, any method with some black has some attendance, and methods with larger am
 ## Marketing implementation details
 ### Email detail level and timing
 
-This subset study was conducted by B. Narr and Claire Curry in 2023 and has not been re-done.
+This subset study was conducted by B. Narr and Claire Curry in 2023 and has not been re-run with new data, as it involved hand-collecting data.
 
 ```{r email_code, include=FALSE}
 #emails <- read.csv("C:/Users/Brianna_Narr.ULHKH1JW3/Documents/EmailLengthStudyFinal.csv")
