@@ -40,7 +40,7 @@ These data for people who filled out a post-workshop survey (ie are confirmed to
 
 ```{r attendees, echo=FALSE, message = FALSE, warning = FALSE}
 marketing_breakdown_initial <- ggplot(data = postworkshopsurveys_named,
-       aes(x = ReducedCategories,
+       aes(x = reorder(ReducedCategories,ReducedCategories, length),
            fill = Did.you.pre.register.for.this.workshop.))+
   geom_bar()+
   theme(axis.text.x = element_text(angle = 0,
@@ -98,9 +98,10 @@ These data are from people who filled out the pre-registration form to attend a 
 
 ```{r all_registered, echo = FALSE, message = FALSE, warning = FALSE, include = TRUE}
 
+# reorder graph by top categories
 
 marketing_breakdown_registration <- ggplot(data = Registered,
-       aes(x = ReducedCategories))+
+       aes(x = reorder(ReducedCategories, ReducedCategories, length)))+
   geom_bar()+
   theme(axis.text.x = element_text(angle = 0,
                                    hjust = 1,
@@ -166,14 +167,18 @@ all_marketing <- rbind(registered_only,
 chisq.test(table(all_marketing))
 ```
 
-```{r effectiveness_figure, echo = FALSE}
 
-marketing_effectiveness <- ggplot(data = all_marketing[all_marketing$ReducedCategories!="Walk-in",],
-       aes(x = ReducedCategories,
-           fill = DataType))+
-  geom_bar(
-    position = "fill"
-    )+
+
+```{r effectivenessGraph}
+marketing_effectiveness <- all_marketing[all_marketing$ReducedCategories!="Walk-in",] %>%
+  group_by(ReducedCategories,
+           DataType) %>%
+  summarize(count_per_each = n()) %>%
+ggplot(
+       aes(x = reorder(x=ReducedCategories,-count_per_each),
+           y = count_per_each,
+           fill = DataType)) +
+    geom_col(position = "fill")+
   theme(axis.text.x = element_text(angle = 90,
                                    hjust = 1,
                                    vjust = 0.5,
