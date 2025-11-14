@@ -2,7 +2,6 @@
 
 The materials for this workshop are available in [OSF]() and [GitHub]().
 
-For aggregate workshop metrics, please read Attendance (@sec-attendance) or Marketing (@sec-marketing). For an overall description of how many topics and frequencies of offerings, see Offerings (@sec-offerings).
 
 ```{r setup, include=FALSE}
 # FUNCTIONS AND LIBRARIES
@@ -18,17 +17,17 @@ attendance_named <- read.csv("raw_data/processed_attendance_named.csv")
 ```
 
 ## Descriptive numbers
-How many times offered per semester, per year.  Number of different instructors.
+This section shows who is teaching the workshop and whether their sessions are in or out of a course.
 
 ```{r}
 
 attendance_named %>%
   dplyr::filter(WorkshopCode == "VIZ101") %>%
-  dplyr::count(Entered.By, )
+  dplyr::count(Entered.By, Is.Course)
 
 ```
 
-## Attendance
+## Attendance in scheduled workshops
 
 ### By Timing
 
@@ -54,36 +53,21 @@ plot_time
 
 ### By semester and year
 
-This workshop is offered only in spring semesters. More attendees come to in-class offerings.
+This workshop is offered in both spring and fall semesters. More attendees come to in-class offerings.
 
-```{r}
+```{r, echo = FALSE, warning=FALSE}
 
 plot_date <- attendance_named %>% 
   dplyr::filter(WorkshopCode == "VIZ101") %>%
   ggplot(mapping = aes(x = as.factor(year),
                        y = Total.Attendees,
-                       fill = Is.Course)) +
+                       fill = Semester)) +
   geom_boxplot(notch = TRUE) +
   labs (y = "Total attendees per workshop",
         x = "Semester",
         fill = "Workshop offered in course") +
-  facet_wrap(~Semester)
+  facet_wrap(~Is.Course)
 plot_date
 
 ```
-
-
-## Marketing
-
-### Over time
-
-### By semester
-
-
-
-## Satisfaction
-
-### Over time
-
-### By semester
 
