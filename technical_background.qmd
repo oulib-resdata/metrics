@@ -487,22 +487,6 @@ postworkshopsurveys_named$Valuable.for.Program <- factor(x = postworkshopsurveys
                                                              
                                                   ))
 
-
-# ###########
-# # Finally, the tidied feedback and attendance data are combined to compare feedback with per-workshop characteristics such as format of instruction.  This is a smaller dataset as not all the workshops appear to have been entered into LibInsights, where the attendance and format data are stored.
-# ###########
-# 
-# joined_post <- full_join(postworkshopsurveys_named, 
-#                          attendance_named,
-#                          by = c("Date", "WorkshopCode"))
-# # It is necessary to join by both date and workshop code as occasionally 2 or more people will teach on the same day in different events or classes.
-# # needs to be a full join because there are some courses not entered and vice versa.
-# 
-# # Filtering by NA is necessary because not everyone has entered their workshops into LibInsights and past workshops did not use the same feedback form, resulting in no attendance or format data to associate with the feedback or vice versa.  filtering by workshop code removes non-workshop course visits.
-# joined_attendance_post_clean <- joined_post %>%
-#   dplyr::filter(!is.na(WorkshopCode))
-# 
-# # Later data analysis will remove observations with no feedback automatically.
 ```
 
 

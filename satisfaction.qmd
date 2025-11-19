@@ -14,12 +14,69 @@ library(wordcloud)  #word clouds
 # Load custom function for "other" block
 source("scripts/ggwordcloud_analysis_complete_ou_colors.R")
 
-# # Fix join
-# joined_attendance_post_clean <- read.csv("raw_data/processed_joined_attendance_post_clean.csv")
 postworkshopsurveys_named <- read.csv("raw_data/processed_postworkshopsurveys_named.csv")
+attendance_named <- read.csv("raw_data/processed_attendance_named.csv")
 
 
 ```
+
+``` {r join_processes, echo = FALSE}
+
+
+# ###########
+# # The tidied feedback and attendance data are combined to compare feedback with per-workshop characteristics such as format of instruction.  This is a smaller dataset as not all the workshops appear to have been entered into LibInsights, where the attendance and format data are stored.
+# ###########
+# 
+
+# This gets scheduled only workshops that were not requested (not in a class, not outside of a class)
+
+# Excluding format-based questions in classes because the people have no choice there.
+
+unique_workshop_instances <- attendance_named %>%
+  dplyr::filter(Requested.=="No") %>%
+  dplyr::select(WorkshopCode,
+                Date,
+                Entered.By,
+                Total.Attendees,
+                Library.Division,
+                Number.of.Helpers,
+                Is.this.visit.part.of.a.series.,
+                Format,
+                year,
+                month,
+                day,
+                wday,
+                hour,
+                Semester
+                ) %>%
+  distinct() %>%
+  group_by(WorkshopCode,
+           Date, 
+           Format) %>%
+  summarize(per_date = n(),  # very rarely we have a workshop on same date with same name, split if too large for zoom
+            min_attendees = min(Total.Attendees), # just to show range
+            max_attendees = max(Total.Attendees), # just to show range
+            avg_attendees = mean(Total.Attendees),
+            sum_attendees = sum(Total.Attendees)  # on the rare case when we split a workshop into multiple sections, the sum is the number we want because it's the total total attendance.
+            )
+
+
+# adding a comment identifier is helpful to identify which are a many-to-many join relationship below from forming, even with left join.  as there are multiple entries with date and workshop code the same in na_omit. ideally the code above should stop by that.
+
+postworkshopsurveys_named$comment_id <- seq(1:nrow(postworkshopsurveys_named))
+
+
+# eliminate data that are not associated with a known workshop (Someone did not enter correctly)
+postworkshopsurveys_named_na_omit <- postworkshopsurveys_named %>% dplyr::filter(!is.na(WorkshopCode))
+
+joined_postworkshop_surveys <- left_join(postworkshopsurveys_named_na_omit, 
+                          unique_workshop_instances,
+                          by = c("Date", "WorkshopCode")) %>%
+  distinct()
+
+   
+```
+
 
 ## Executive summary
 **Feedback data show no difference in perception of workshop value by learners among formats (in person, hybrid, or virtual).**  Qualitative (word-cloud illustrations) feedback are generally positive.
@@ -35,7 +92,8 @@ In the future, we may check rankings vs length of course in hours.
 ```{r workshop_feedback_newknowledge, echo=FALSE, message = FALSE, warning = FALSE}
 library(ggplot2)    #for plots
 #joined_attendance_post_clean %>%
-postworkshopsurveys_named %>%
+joined_postworkshop_surveys %>%
+  dplyr::filter(!is.na(Using.New.Knowledge.))%>%
   ggplot(aes(x=Using.New.Knowledge., fill=Using.New.Knowledge.)) +
   geom_bar()+
   scale_fill_viridis_d (aesthetics = "fill") +
@@ -55,22 +113,26 @@ postworkshopsurveys_named %>%
 There was no significant difference in perception of learning new knowledge from the workshop among learning formats.
 ```{r workshop_feedback_newknowledge_statistics, echo=FALSE, message = FALSE, warning = FALSE}
 # run test for significance
-chi_newkno <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-           y = joined_attendance_post_clean$Using.New.Knowledge.,
-           simulate.p.value = TRUE)
+table(x = joined_postworkshop_surveys$Format,
+           y = joined_postworkshop_surveys$Using.New.Knowledge.)
 
+chi_newkno <- chisq.test(x = joined_postworkshop_surveys$Format,
+           y = joined_postworkshop_surveys$Using.New.Knowledge.,
+           simulate.p.value = TRUE)
+(chi_newkno)
 (workshop_feedback_chi_newkno_plot <- chi_newkno$p.value<=0.05)
 
 ```
 
 ```{r, workshop_feedback_newknowledge_plot, eval = workshop_feedback_chi_newkno_plot, include = workshop_feedback_chi_newkno_plot}
 # will only eval or include (ie plot) if test in previous chunk is significant
-joined_attendance_post_clean %>%
-  group_by(Location.of.Outreach,
+joined_postworkshop_surveys %>%
+  dplyr::filter(!is.na(Using.New.Knowledge.))%>%
+  group_by(Format,
            Using.New.Knowledge.) %>%
   summarize(count_per_feeling = n()) %>%
 ggplot(
-       aes(x = Location.of.Outreach,
+       aes(x = Format,
            y = count_per_feeling,
            fill = Using.New.Knowledge.)) +
   geom_col(position = "fill")+
@@ -84,7 +146,7 @@ ggplot(
 Most participants perceived the workshop as valuable towards their program of study.  Interestingly, "disagree" is never chosen by any of our several hundred respondents.
 
 ```{r workshop_feedback_valuableforprogram, echo=FALSE, message = FALSE, warning = FALSE}
-joined_attendance_post_clean %>%
+joined_postworkshop_surveys %>%
   mutate(Valuable.for.Program = fct_relevel(Valuable.for.Program,
                                             "Strongly agree",
                                             "Agree",
@@ -120,15 +182,15 @@ joined_attendance_post_clean %>%
   labs(y = "Number of survey respondents with this answer",
        x = "Response about value of workshop towards program of study",
        fill = "Agreement on value")+
-  facet_grid(~Location.of.Outreach)
+  facet_grid(~Format)
 
 ```
 
 There was no difference in perception of the material as "valuable to my program of study" between workshop formats (hybrid, online, or in person).
 ```{r, workshop_feedback_valuableforprogram_stats, include = TRUE}
 # run test for significance
-chi_program <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-           y = joined_attendance_post_clean$Valuable.for.Program,
+chi_program <- chisq.test(x = joined_postworkshop_surveys$Format,
+           y = joined_postworkshop_surveys$Valuable.for.Program,
            simulate.p.value = TRUE)
 
 (workshop_feedback_valuableforprogram_plot <- chi_program$p.value<=0.05)
@@ -156,7 +218,7 @@ ggplot(
 ### This workshop was valuable towards your career.
 Most participants perceived the workshop as valuable towards their career.
 ```{r workshop_feedback_valuableforcareer, echo=FALSE, message = FALSE, warning = FALSE}
-joined_attendance_post_clean %>%
+joined_postworkshop_surveys %>%
   mutate(Valuable.for.Career = fct_relevel(Valuable.for.Career, "Strongly agree", "Agree", "Somewhat agree", 
                                            "Neither agree nor disagree", "Somewhat disagree", "Disagree", 
                                            "Strongly disagree", "Not applicable", "No answer")) %>%
@@ -179,8 +241,8 @@ joined_attendance_post_clean %>%
 There was no difference in perception of the material as "valuable to my career" between workshop formats (hybrid, online, or in person).
 ```{r, workshop_feedback_valuableforcareer_stats, include = TRUE}
 # run test for significance
-chi_career <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-           y = joined_attendance_post_clean$Valuable.for.Career,
+chi_career <- chisq.test(x = joined_postworkshop_surveys$Format,
+           y = joined_postworkshop_surveys$Valuable.for.Career,
            simulate.p.value = TRUE)
 
 (workshop_feedback_valuableforcareer_plot <- chi_career$p.value<=0.05)
@@ -188,8 +250,8 @@ chi_career <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
 There was no difference among career levels (classifications) for perception of value towards their careers.
 ```{r, workshop_feedback_valuableforcareerclass_stats, include = TRUE}
 # run test for significance
-chi_careerclass <- chisq.test(x = joined_attendance_post_clean$Classification,
-           y = joined_attendance_post_clean$Valuable.for.Career,
+chi_careerclass <- chisq.test(x = joined_postworkshop_surveys$Classification,
+           y = joined_postworkshop_surveys$Valuable.for.Career,
            simulate.p.value = TRUE)
 
 (workshop_feedback_valuableforcareerclass_plot <- chi_careerclass$p.value<=0.05)
@@ -199,7 +261,7 @@ chi_careerclass <- chisq.test(x = joined_attendance_post_clean$Classification,
 More respondents felt the workshops were not applicable towards their teaching but were otherwise positive. As our workshops are research focused, this is probably reasonable.
 
 ```{r workshop_feedback_valuableforteaching, echo=FALSE, message = FALSE, warning = FALSE}
-joined_attendance_post_clean %>%
+joined_postworkshop_surveys %>%
   mutate(Valuable.for.Teaching = fct_relevel(Valuable.for.Teaching, "Strongly agree", "Agree", "Somewhat agree", 
                                              "Neither agree nor disagree", "Somewhat disagree", "Disagree", 
                                              "Strongly disagree", "Not applicable", "No answer")) %>%
@@ -223,8 +285,8 @@ joined_attendance_post_clean %>%
 There was no difference in perception of the material as "valuable to my teaching" between workshop formats (hybrid, online, or in person).
 ```{r, workshop_feedback_valuableforteaching_stats, include = TRUE}
 # run test for significance
-chi_teach <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-           y = joined_attendance_post_clean$Valuable.for.Teaching,
+chi_teach <- chisq.test(x = joined_postworkshop_surveys$Format,
+           y = joined_postworkshop_surveys$Valuable.for.Teaching,
            simulate.p.value = TRUE)
 
 (workshop_feedback_valuableforteach_plot <- chi_teach$p.value<=0.05)
@@ -235,7 +297,7 @@ chi_teach <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
 ### How do you rate your skills after learning about this workshop topic?
 We have a range of skill ratings after the workshop.  This could be an area for improvement but could also be dependent on whether we have targeted the right audience with the right level of materials.
 ```{r workshop_feedback_skills, echo=FALSE, message = FALSE, warning = FALSE}
-joined_attendance_post_clean %>%
+joined_postworkshop_surveys %>%
   mutate(Rate.Skills = fct_relevel(How.do.you.rate.your.skills.after.learning.abou..., "Need more support and assistance if implementing",
                                    "Can complete a related task independently but not to desired level",
                                    "Can complete a related task independently to desired level",
@@ -262,13 +324,14 @@ joined_attendance_post_clean %>%
 There was no difference in perception of future abilities to use skills from the workshop between formats (hybrid, online, or in person).
 ```{r, workshop_feedback_skills_stats, include = TRUE}
 # run test for significance
-chi_skills <- chisq.test(x = joined_attendance_post_clean$Location.of.Outreach,
-           y = joined_attendance_post_clean$How.do.you.rate.your.skills.after.learning.abou...,
+chi_skills <- chisq.test(x = joined_postworkshop_surveys$Format,
+           y = joined_postworkshop_surveys$How.do.you.rate.your.skills.after.learning.abou...,
            simulate.p.value = TRUE)
 
 (workshop_feedback_skills_plot <- chi_skills$p.value<=0.05)
 ```
 
+::: hidden-content
 
 ## Qualitative feedback (Wordcloud code)
 
@@ -395,5 +458,5 @@ wordcloud(words = commentsdf$word, freq = commentsdf$freq, min.freq = 5,
 ```
 
 
-
+:::
 
