@@ -79,47 +79,31 @@ joined_postworkshop_surveys <- left_join(postworkshopsurveys_named_na_omit,
 
 
 ## Executive summary
-**Feedback data show no difference in perception of workshop value by learners among formats (in person, hybrid, or virtual).**  Qualitative (word-cloud illustrations) feedback are generally positive.
+There was no statistically significant differences among perception of workshop value to teaching, research, or career by leaners among formats (in person, hybrid, or virtual) or classification (faculty, graduate student, etc).
+
 
 ## Quantitative questions
 
-For each question, we examine statistically and graphically (if differences were statistically significant) the rankings divided by instruction format (DSI request 2023/07), request/not, and course/outreach variables.
-In the future, we may check rankings vs length of course in hours.
-
-# TODO need to clean out NA for variables we test, as it errors out in the statistical test (graphs work and just automatically remove)
+For each question, we examine statistically and graphically (if differences were statistically significant) the rankings divided by instruction format (DSI request 2023/07).
 
 ### Do you anticipate that this new knowledge can be applied towards your work?
-```{r workshop_feedback_newknowledge, echo=FALSE, message = FALSE, warning = FALSE}
-library(ggplot2)    #for plots
-#joined_attendance_post_clean %>%
-joined_postworkshop_surveys %>%
-  dplyr::filter(!is.na(Using.New.Knowledge.))%>%
-  ggplot(aes(x=Using.New.Knowledge., fill=Using.New.Knowledge.)) +
-  geom_bar()+
-  scale_fill_viridis_d (aesthetics = "fill") +
-  theme(panel.background = element_rect(fill = "lightgray",
-                                        color = "white",
-                                        size = 0.5, linetype = "solid"),
-        panel.grid.major = element_line(size = 0.5, linetype = "solid",
-                                        color = "darkgray"),
-        panel.grid.minor = element_line(size = 0.25, linetype = "solid",
-                                        color = "darkgray"),
-        plot.title = element_text(size = 20, hjust = 0.5),
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12, angle = 90, hjust = 0.95, vjust = 0.2)
-  )
-```
 
 There was no significant difference in perception of learning new knowledge from the workshop among learning formats.
 ```{r workshop_feedback_newknowledge_statistics, echo=FALSE, message = FALSE, warning = FALSE}
 # run test for significance
-table(x = joined_postworkshop_surveys$Format,
-           y = joined_postworkshop_surveys$Using.New.Knowledge.)
 
-chi_newkno <- chisq.test(x = joined_postworkshop_surveys$Format,
-           y = joined_postworkshop_surveys$Using.New.Knowledge.,
-           simulate.p.value = TRUE)
+new_knowledge <- joined_postworkshop_surveys %>% dplyr::filter(Using.New.Knowledge.!="Not applicable")
+table(x = new_knowledge$Format,
+           y = new_knowledge$Using.New.Knowledge.)
+
+chi_newkno <- chisq.test(x = new_knowledge$Format,
+           y = new_knowledge$Using.New.Knowledge.,
+           simulate.p.value = FALSE)
 (chi_newkno)
+chi_newkno$expected # this shows that it accounts for the big differences in samples for virtual vs in person vs hybrid
+chi_newkno$observed
+
+
 (workshop_feedback_chi_newkno_plot <- chi_newkno$p.value<=0.05)
 
 ```
@@ -146,7 +130,7 @@ ggplot(
 Most participants perceived the workshop as valuable towards their program of study.  Interestingly, "disagree" is never chosen by any of our several hundred respondents.
 
 ```{r workshop_feedback_valuableforprogram, echo=FALSE, message = FALSE, warning = FALSE}
-joined_postworkshop_surveys %>%
+postworkshopsurveys_named %>%
   mutate(Valuable.for.Program = fct_relevel(Valuable.for.Program,
                                             "Strongly agree",
                                             "Agree",
@@ -181,8 +165,7 @@ joined_postworkshop_surveys %>%
   )+
   labs(y = "Number of survey respondents with this answer",
        x = "Response about value of workshop towards program of study",
-       fill = "Agreement on value")+
-  facet_grid(~Format)
+       fill = "Agreement on value")
 
 ```
 
@@ -195,25 +178,6 @@ chi_program <- chisq.test(x = joined_postworkshop_surveys$Format,
 
 (workshop_feedback_valuableforprogram_plot <- chi_program$p.value<=0.05)
 ```
-
-```{r, workshop_feedback_valuableforprogram_plot, eval = workshop_feedback_valuableforprogram_plot, include = workshop_feedback_valuableforprogram_plot}
-# will only eval or include (ie plot) if test in previous chunk is significant
-# count is WRONG summary  here, because we may  have more people in a given category
-# proportion of total for row?
-# https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
-joined_attendance_post_clean %>%
-  group_by(Location.of.Outreach,
-           Valuable.for.Program) %>%
-  summarize(count_per_feeling = n()) %>%
-ggplot(
-       aes(x = Location.of.Outreach,
-           y = count_per_feeling,
-           fill = Valuable.for.Program)) +
-  geom_col(position = "fill")+
-    scale_fill_viridis_d (aesthetics = "fill")
-```
-
-
 
 ### This workshop was valuable towards your career.
 Most participants perceived the workshop as valuable towards their career.
@@ -244,7 +208,8 @@ There was no difference in perception of the material as "valuable to my career"
 chi_career <- chisq.test(x = joined_postworkshop_surveys$Format,
            y = joined_postworkshop_surveys$Valuable.for.Career,
            simulate.p.value = TRUE)
-
+chi_career$expected
+chi_career$observed
 (workshop_feedback_valuableforcareer_plot <- chi_career$p.value<=0.05)
 ```
 There was no difference among career levels (classifications) for perception of value towards their careers.
@@ -331,7 +296,31 @@ chi_skills <- chisq.test(x = joined_postworkshop_surveys$Format,
 (workshop_feedback_skills_plot <- chi_skills$p.value<=0.05)
 ```
 
-::: hidden-content
+### All workshops
+
+There are no paths that change clusters of satisfactions to different clusters of format distributions.
+
+```{r satisfaction_vs_request, echo = FALSE}
+
+library(partykit)
+satisfaction_tree <- ctree(as.factor(Format) ~
+                             as.factor(Did.you.learn.something.new.today.) + 
+                             as.factor(How.do.you.rate.your.skills.after.learning.abou...) +
+                             as.factor(Valuable.for.Program) +
+                             as.factor(Valuable.for.Career) +
+                           as.factor(Valuable.for.Teaching),
+      data = joined_postworkshop_surveys %>% dplyr::filter(!is.na(Format)))
+
+
+
+plot(satisfaction_tree)
+
+```
+
+::: content-hidden
+
+TODO this needs fixed up to incorporate the current dataset instead of subsets as csvs
+
 
 ## Qualitative feedback (Wordcloud code)
 
