@@ -164,7 +164,7 @@ library(lubridate)
 attendance_outreach <- read.csv("raw_data/attendance_outreach.csv",
                                 header=TRUE,
                                 stringsAsFactors=FALSE)
-attendance_outreach$Is.Course <- "Not a course"
+attendance_outreach$Is.Course <- "Standalone"
 attendance_outreach$Requested.[is.na(attendance_outreach$Requested.)] <- "Unknown"
 attendance_outreach$Requested.[attendance_outreach$Requested.==""] <- "Unknown"
 

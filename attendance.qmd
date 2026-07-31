@@ -37,14 +37,14 @@ The total number of people reached has no strong trends between 2021-2024 and ha
 
 ```{r, total_reached_over_time, echo=FALSE, message = FALSE, warning = FALSE}
 
-(attendance_table <- attendance_named %>%
+attendance_table <- attendance_named %>%
   group_by(year, Is.Course) %>%
   summarize(total_reached = sum(Total.Attendees, na.rm = TRUE)) %>%
   bind_rows(summarise(.,
                       across(where(is.numeric), sum),
                       across(where(is.character), ~"Total")))%>% # https://stackoverflow.com/a/50322272
   pivot_wider(names_from =  year,
-              values_from = total_reached))
+              values_from = total_reached)
 
 
 attendance_table_long <- pivot_longer(data = attendance_table,
@@ -167,7 +167,7 @@ att_tree <- ctree(Total.Attendees ~
                     as.factor(Is.this.visit.part.of.a.series.) +
                     as.factor(Semester),
                   data = attendance_named [
-                    attendance_named$Is.Course == "Not a course" &
+                    attendance_named$Is.Course == "Standalone" &
                       attendance_named$Requested. == "No"&
                       attendance_named$year <= this_year &
                       attendance_named$year >= last_two_years &
