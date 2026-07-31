@@ -17,18 +17,92 @@ attendance_named <- read.csv("raw_data/processed_attendance_named.csv")
 
 ## Executive summary
 
-For workshops that we as librarians independently schedule,
+For workshops (whether requested by patrons, or scheduled independently by librarians), total people reached per year reached a new high in 2025.
 
-  - for most topics, virtual and hybrid workshops have higher attendance (6.4) than in-person (4.3) in the last two calendar years (2023-2025)
+Workshops requested by someone either standalone (such as by a department or research group) or within a course have the highest attendances.  For workshops that we as librarians independently schedule,
 
-  - a few topics have higher attendance (15) than others regardless of format
+  - for most topics, virtual and hybrid workshops have higher per-event attendance (6.4) than in-person (4.3) in the last two calendar years (2023-2025)
 
-  - more detailed event descriptions seem to get higher attendance than title only descriptions
+  - a few topics have higher per-event attendance (15) than others regardless of format
 
+  - more detailed event descriptions seem to get higher per-event attendance than title only descriptions
 
-Otherwise, workshops requested by someone either standalone (such as by a department or research group) or within a course have the highest attendances.
 
 \newpage
+
+
+## Total people reached
+
+The total number of people reached has no strong trends between 2021-2024 and has increased in 2025 to a new high.
+
+```{r, total_reached_over_time, echo=FALSE, message = FALSE, warning = FALSE}
+
+(attendance_table <- attendance_named %>%
+  group_by(year, Is.Course) %>%
+  summarize(total_reached = sum(Total.Attendees, na.rm = TRUE)) %>%
+  bind_rows(summarise(.,
+                      across(where(is.numeric), sum),
+                      across(where(is.character), ~"Total")))%>% # https://stackoverflow.com/a/50322272
+  pivot_wider(names_from =  year,
+              values_from = total_reached))
+
+
+attendance_table_long <- pivot_longer(data = attendance_table,
+                                      cols = `2018`:`2025`,
+                                      names_to = "year",
+                                      values_to = "people_reached")
+
+ggplot(data = attendance_table_long
+       ) +
+         geom_point(mapping = aes(x = as.numeric(year),
+                     y = people_reached,
+                     color = Is.Course,
+                     linetype = Is.Course,
+                     shape = Is.Course)) +
+  geom_path(mapping = aes(x = as.numeric(year),
+                     y = people_reached,
+                     color = Is.Course,
+                     linetype = Is.Course,
+                     shape = Is.Course)) +
+  geom_vline(xintercept = 2020,
+             color = "gray") +
+  # https://www.ou.edu/web/news_events/articles/news_2021/returning-to-in-person-work-on-the-norman-campus August 2021
+  geom_vline(xintercept = 2021.67, color = "gray")+
+  geom_text(mapping = aes(x = 2020.8, y = 650), label = "closure", color = "gray")+
+  theme_bw() +
+  theme_classic() +
+  labs(x = "Calendar year", y = "Total people reached per year")
+
+
+
+  
+```
+
+
+
+When we examined whether proportionately we reach more people in or out of courses, we seem to have stabilized since 2022 at around one-third of our learners reached being in courses.  About a quarter of our workshops are now conducted in classes (@sec-offerings) but these reach about a third of our learners, suggesting these are a higher impact way to reach more people per staff time.
+
+```{r, prop_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
+# https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
+attendance_named %>%
+  group_by(year,
+           Is.Course) %>%
+  summarize(total_reached = sum(Total.Attendees, na.rm = TRUE)) %>%
+ggplot(
+       aes(x = year,
+           y = total_reached,
+           fill = Is.Course)) +
+  geom_col(position = "fill")+
+    scale_fill_viridis_d (aesthetics = "fill")+
+  labs(y = "Proportion of people reached",
+       x = "Calendar year",
+       fill = "Workshop offered in course")
+
+
+```
+
+\newpage
+
 
 ## Per-workshop attendance
 
@@ -61,7 +135,7 @@ The variables significantly influencing attendance are
 
 - format
 
-  - Remaining workshops have slightly higher (virtual and hybrid with an average of 6.4) or lower (4.3) attendance based on format 
+  - Remaining workshops have slightly higher (virtual and hybrid with an average of 6.4) or lower (4.3 in person) attendance based on format 
 
 
 All variables studied were:
@@ -163,46 +237,6 @@ plot_time <- attendance_named %>%
 plot_time
 ```
 
-
-## Total people reached
-
-The total number of people reached has no strong trends between 2021-2024 and has increased in 2025 compared to 2024.
-
-```{r, total_reached_over_time, echo=FALSE, message = FALSE, warning = FALSE}
-
-attendance_named %>%
-  group_by(year, Is.Course) %>%
-  summarize(total_reached = sum(Total.Attendees, na.rm = TRUE)) %>%
-  bind_rows(summarise(.,
-                      across(where(is.numeric), sum),
-                      across(where(is.character), ~"Total")))%>% # https://stackoverflow.com/a/50322272
-  pivot_wider(names_from =  year,
-              values_from = total_reached)
-  
-```
-
-When we examined whether proportionately we reach more people in or out of courses, we seem to have stabilized since 2022 at around one-third of our learners reached being in courses.  About a quarter of our workshops are now conducted in classes (@sec-offerings) but these reach about a third of our learners, suggesting these are a higher impact way to reach more people per staff time.
-
-```{r, prop_attendance_over_time, echo=FALSE, message = FALSE, warning = FALSE}
-# https://r-graphics.org/recipe-bar-graph-proportional-stacked-bar
-attendance_named %>%
-  group_by(year,
-           Is.Course) %>%
-  summarize(total_reached = sum(Total.Attendees, na.rm = TRUE)) %>%
-ggplot(
-       aes(x = year,
-           y = total_reached,
-           fill = Is.Course)) +
-  geom_col(position = "fill")+
-    scale_fill_viridis_d (aesthetics = "fill")+
-  labs(y = "Proportion of people reached",
-       x = "Calendar year",
-       fill = "Workshop offered in course")
-
-
-```
-
-\newpage
 
 ::: content-hidden
 ## Workshop length vs attendance

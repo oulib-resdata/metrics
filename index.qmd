@@ -19,6 +19,8 @@ This determination is made by combining what methods bring in high attendee coun
 
 ## Attendance
 
+For all workshops (whether requested by patrons, or scheduled independently by librarians), total people reached per year reached a new high in 2025.
+
 For workshops that we as librarians independently schedule,
 
   - for most topics, virtual and hybrid workshops have higher attendance (6.4) than in-person (4.3) in the last two calendar years (2023-2025)
